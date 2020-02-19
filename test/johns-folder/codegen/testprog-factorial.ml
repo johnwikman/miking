@@ -9,6 +9,9 @@ let main =
     let tail s =
         (fun xs start len -> Array.sub xs (min ((Array.length xs) - 1) start) (min ((Array.length xs) - start) len)) (s) (1) (Array.length (s))
     in
+    let null l =
+        ( = ) (Array.length (l)) (0)
+    in
     let rec map f seq =
             if null (seq) then
                 [||]

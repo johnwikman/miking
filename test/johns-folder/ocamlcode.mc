@@ -28,15 +28,13 @@ let incr = lam indent. addi indent 4
 
 lang VarOCamlCode = VarAst
     sem ocamlcodegen (indent : Int) =
-    | TmVar x -> x
+    | TmVar x -> x.ident
 end
 
 lang AppOCamlCode = AppAst
     sem ocamlcodegen (indent : Int) =
     | TmApp t ->
-      let lhs = t.0 in
-      let rhs = t.1 in
-      strJoin "" [ocamlcodegen indent lhs, " ", "(", ocamlcodegen indent rhs, ")"]
+      strJoin "" [ocamlcodegen indent t.lhs, " ", "(", ocamlcodegen indent t.rhs, ")"]
 end
 
 lang FunOCamlCode = FunAst
@@ -44,7 +42,7 @@ lang FunOCamlCode = FunAst
     | TmLam t -> let _ = dprint t in error "Encountered an isolated lambda"
 end
 
-lang LetOCamlCode = LetAst
+lang LetOCamlCode = LetAst + FunAst
     sem ocamlcodegen (indent : Int) =
     | TmLet t ->
       -- Find all the chained lambdas
@@ -52,22 +50,20 @@ lang LetOCamlCode = LetAst
       --   acc.1: The trailing expression
       recursive let chainlambdas = lam acc. lam expr.
         match expr with TmLam t1 then
-          chainlambdas (concat acc [t1.0]) t1.2
+          chainlambdas (concat acc [t1.ident]) t1.body
         else
           (acc, expr)
       in
-      let argres = chainlambdas [] t.2 in
-      let name = t.0 in
+      let argres = chainlambdas [] t.body in
       let args = argres.0 in
       let letexpr = argres.1 in
-      let inexpr = t.3 in
-      strJoin "" ["let ", name, " ", strJoin " " args, " =", newline (incr indent),
+      strJoin "" ["let ", t.ident, " ", strJoin " " args, " =", newline (incr indent),
                   ocamlcodegen (incr indent) letexpr, newline indent,
                   "in", newline indent,
-                  ocamlcodegen indent inexpr]
+                  ocamlcodegen indent t.inexpr]
 end
 
-lang RecLetsOCamlCode = RecLetsAst
+lang RecLetsOCamlCode = RecLetsAst + FunAst
     sem ocamlcodegen (indent : Int) =
     | TmRecLets t ->
       -- Initiate a list with the code generated code
@@ -78,12 +74,12 @@ lang RecLetsOCamlCode = RecLetsAst
         else
           recursive let chainlambdas = lam acc. lam expr.
             match expr with TmLam t1 then
-              chainlambdas (concat acc [t1.0]) t1.2
+              chainlambdas (concat acc [t1.ident]) t1.body
             else
               (acc, expr)
           in
-          let argres = chainlambdas [] (head l).2 in
-          let name = (head l).0 in
+          let argres = chainlambdas [] (head l).body in
+          let name = (head l).ident in
           let args = argres.0 in
           let letexpr = argres.1 in
           let prefix = if null genacc then "let rec " else "    and " in
@@ -94,11 +90,9 @@ lang RecLetsOCamlCode = RecLetsAst
           in
           generatelets updatedgenacc (tail l)
       in
-      let recexprs = t.0 in
-      let inexpr = t.1 in
-      let list = concat (generatelets [] recexprs) [
+      let list = concat (generatelets [] t.bindings) [
         "in", newline indent,
-        ocamlcodegen indent inexpr
+        ocamlcodegen indent t.inexpr
       ]
       in
       strJoin "" list
@@ -109,7 +103,7 @@ lang ConstOCamlCode = ConstAst
     -- intentionally left blank
 
     sem ocamlcodegen (indent : Int) =
-    | TmConst c -> ocamlconstgen indent c
+    | TmConst c -> ocamlconstgen indent c.val
 end
 
 lang UnitOCamlCode = UnitAst
@@ -119,14 +113,14 @@ end
 
 lang IntOCamlCode = IntAst
     sem ocamlconstgen (indent : Int) =
-    | CInt i -> int2string i
+    | CInt i -> int2string i.val
 end
 
 lang ArithIntOCamlCode = ArithIntAst
     syn Const =
-    | CModi ()
-    | CDivi ()
-    | CNegi ()
+    | CModi {}
+    | CDivi {}
+    | CNegi {}
 
     sem ocamlconstgen (indent : Int) =
     | CAddi _ -> "( + )"
@@ -139,21 +133,18 @@ end
 
 lang BoolOCamlCode = BoolAst
     sem ocamlconstgen (indent : Int) =
-    | CBool b -> if b then "true" else "false"
+    | CBool b -> if b.val then "true" else "false"
     | CNot _ -> "not"
     | CAnd _ -> "( && )"
     | COr _ -> "( || )"
 
     sem ocamlcodegen (indent : Int) =
     | TmIf t ->
-      let cond = t.0 in
-      let thn = t.1 in
-      let els = t.2 in
       strJoin "" [
-        "if ", ocamlcodegen indent cond, " then", newline (incr indent),
-        ocamlcodegen (incr indent) thn, newline indent,
+        "if ", ocamlcodegen indent t.cond, " then", newline (incr indent),
+        ocamlcodegen (incr indent) t.thn, newline indent,
         "else", newline (incr indent),
-        ocamlcodegen (incr indent) els
+        ocamlcodegen (incr indent) t.els
       ]
 end
 
@@ -165,25 +156,25 @@ end
 
 lang CharOCamlCode = CharAst
     syn Const =
-    | CChar2int ()
-    | CInt2char ()
+    | CChar2int {}
+    | CInt2char {}
 
     sem ocamlconstgen (indent : Int) =
-    | CChar c -> if eqchar c (head "\n") then
+    | CChar c -> if eqchar c.val (head "\n") then
                    [head "'", head "\\", 'n', head "'"]
                  else
-                   [head "'", c, head "'"]
+                   [head "'", c.val, head "'"]
     | CChar2int _ -> "int_of_char"
     | CInt2char _ -> "char_of_int"
 end
 
 lang SeqOCamlCode = SeqAst
     syn Const =
-    | CLength ()
-    | CCons ()
-    | CConcat ()
-    | CSlice ()
-    | CReverse ()
+    | CLength {}
+    | CCons {}
+    | CConcat {}
+    | CSlice {}
+    | CReverse {}
 
     sem ocamlconstgen (indent : Int) =
     | CNth _ -> "Array.get"
@@ -192,27 +183,26 @@ lang SeqOCamlCode = SeqAst
     | CConcat _ -> "Array.append"
     | CSlice _ -> "(fun xs start len -> Array.sub xs (min ((Array.length xs) - 1) start) (min ((Array.length xs) - start) len))"
     | CReverse _ -> "List.rev"
-    | CSeq tms -> strJoin "" ["[|", strJoin "; " (map (ocamlcodegen indent) tms), "|]"]
+    | CSeq t -> strJoin "" ["[|", strJoin "; " (map (ocamlcodegen indent) t.tms), "|]"]
 
     sem ocamlcodegen (indent : Int) =
-    | TmSeq tms -> strJoin "" ["[|", strJoin "; " (map (ocamlcodegen indent) tms), "|]"]
+    | TmSeq t -> strJoin "" ["[|", strJoin "; " (map (ocamlcodegen indent) t.tms), "|]"]
 end
+
 lang TupleOCamlCode = TupleAst
     sem ocamlcodegen (indent : Int) =
-    | TmTuple tms -> strJoin "" ["(", strJoin ", " (map (ocamlcodegen indent) tms), ")"]
+    | TmTuple t -> strJoin "" ["(", strJoin ", " (map (ocamlcodegen indent) t.tms), ")"]
     | TmProj t ->
-      let tup = t.0 in
-      let n = t.1 in
       recursive let mkproj = lam acc. lam idx.
         if eqi idx (length [0,1,2]) then -- TEMP: We do not know the length of the tuple here, so we cannot project out of it!
           acc
-        else if eqi idx n then
+        else if eqi idx t.idx then
           concat acc ["x"]
         else
           concat acc ["_"]
       in
       let projfun = strJoin "" ["(fun t -> let (", strJoin "," (mkproj [] 0), ") = t in x)"] in
-      strJoin "" [projfun, " (", ocamlcodegen indent tup, ")"]
+      strJoin "" [projfun, " (", ocamlcodegen indent t.tup, ")"]
 end
 
 lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode +
@@ -220,16 +210,16 @@ lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode 
                       ArithIntOCamlCode + BoolOCamlCode + CmpOCamlCode + CharOCamlCode +
                       SeqOCamlCode + TupleOCamlCode
     syn Expr =
-    | TmMain Expr
+    | TmMain {body : Expr}
 
     syn Const =
-    | CPrint ()
+    | CPrint {}
 
     sem ocamlcodegen (indent : Int) =
     | TmMain t ->
       strJoin "" ["open Printf", "\n\n",
                   "let main =", newline (incr indent),
-                  ocamlcodegen (incr indent) t]
+                  ocamlcodegen (incr indent) t.body]
 
     sem ocamlconstgen (indent : Int) =
     | CPrint _ -> "(fun s -> printf \"%s\" (String.of_seq (Array.to_seq s)))"
@@ -239,44 +229,54 @@ mexpr
 use MExprOCamlCode in
 recursive let bind_ = lam letexpr. lam inexpr.
   match letexpr with TmLet t then
-    TmLet (t.0, t.1, t.2, bind_ t.3 inexpr)
+    TmLet {t with inexpr = bind_ t.inexpr inexpr}
   else match letexpr with TmRecLets t then
-    TmRecLets (t.0, bind_ t.1 inexpr)
+    TmRecLets {t with inexpr = bind_ t.inexpr inexpr}
   else
     inexpr
 in
 
+-- constants:
+let unit_ = TmConst {val = CUnit ()} in
+let int_ = lam i. TmConst {val = CInt {val = i}} in
+let char_ = lam c. TmConst {val = CChar {val = c}} in
+let var_ = lam ident. TmVar {ident = ident} in
+let seq_ = lam s. TmSeq {tms = s} in
+let str_ = lam s. seq_ (map char_ s) in
+
 -- macros:
-let app_ = lam lhs. lam rhs. TmApp (lhs, rhs) in
-let app1func_ = lam f. lam arg. app_ f arg in
-let app2func_ = lam f. lam lhs. lam rhs. (app_ (app_ f lhs) rhs) in
-let app3func_ = lam f. lam a. lam b. lam c. (app_ (app_ (app_ f a) b) c) in
-let let_ = lam ident. lam body. TmLet (ident, None (), body, TmConst (CUnit ())) in
-let reclets_ = lam bodies. TmRecLets (map (lam t. (t.0, None (), t.1)) bodies, TmConst (CUnit ())) in
-let lam_ = lam ident. lam body. TmLam (ident, None (), body) in
-let if_ = lam cond. lam thn. lam els. TmIf (cond, thn, els) in
-let int_ = lam i. TmConst (CInt i) in
-let char_ = lam c. TmConst (CChar c) in
-let var_ = lam ident. TmVar (ident) in
-let str_ = lam s. TmSeq (map char_ s) in
-let seq_ = lam s. TmSeq s in
+let app_ = lam lhs. lam rhs. TmApp {lhs = lhs, rhs = rhs} in
+let app1f_ = lam f. lam arg. app_ f arg in
+let app2f_ = lam f. lam lhs. lam rhs. app_ (app1f_ f lhs) rhs in
+let app3f_ = lam f. lam a. lam b. lam c. app_ (app2f_ f a b) c in
+let let_ = lam ident. lam body. TmLet {ident = ident, tpe = None (), body = body, inexpr = unit_} in
+let reclets_add = lam ident. lam body. lam reclets.
+  match reclets with TmRecLets t then
+    TmRecLets {t with bindings = cons {ident = ident, tpe = None (), body = body} t.bindings}
+  else
+    error "Must add reclet to a TmRecLets"
+in
+let reclets_empty = TmRecLets {bindings = [], inexpr = unit_} in
+let lam_ = lam ident. lam body. TmLam {ident = ident, tpe = None (), body = body} in
+let if_ = lam cond. lam thn. lam els. TmIf {cond = cond, thn = thn, els = els} in
+
 -- funcs:
-let print_ = app1func_ (TmConst (CPrint ())) in
-let int2char_ = app1func_ (TmConst (CInt2char ())) in
-let char2int_ = app1func_ (TmConst (CChar2int ())) in
-let length_ = app1func_ (TmConst (CLength ())) in
-let negi_ = app1func_ (TmConst (CNegi ())) in
-let lti_ = app2func_ (TmConst (CLti ())) in
-let eqi_ = app2func_ (TmConst (CEqi ())) in
-let addi_ = app2func_ (TmConst (CAddi ())) in
-let subi_ = app2func_ (TmConst (CSubi ())) in
-let muli_ = app2func_ (TmConst (CMuli ())) in
-let divi_ = app2func_ (TmConst (CDivi ())) in
-let modi_ = app2func_ (TmConst (CModi ())) in
-let cons_ = app2func_ (TmConst (CCons ())) in
-let nth_ = app2func_ (TmConst (CNth ())) in
-let concat_ = app2func_ (TmConst (CConcat ())) in
-let slice_ = app3func_ (TmConst (CSlice ())) in
+let print_ = app1f_ (TmConst {val = CPrint {}}) in
+let int2char_ = app1f_ (TmConst {val = CInt2char {}}) in
+let char2int_ = app1f_ (TmConst {val = CChar2int {}}) in
+let length_ = app1f_ (TmConst {val = CLength {}}) in
+let negi_ = app1f_ (TmConst {val = CNegi {}}) in
+let lti_ = app2f_ (TmConst {val = CLti {}}) in
+let eqi_ = app2f_ (TmConst {val = CEqi {}}) in
+let addi_ = app2f_ (TmConst {val = CAddi {}}) in
+let subi_ = app2f_ (TmConst {val = CSubi {}}) in
+let muli_ = app2f_ (TmConst {val = CMuli {}}) in
+let divi_ = app2f_ (TmConst {val = CDivi {}}) in
+let modi_ = app2f_ (TmConst {val = CModi {}}) in
+let cons_ = app2f_ (TmConst {val = CCons {}}) in
+let nth_ = app2f_ (TmConst {val = CNth {}}) in
+let concat_ = app2f_ (TmConst {val = CConcat {}}) in
+let slice_ = app3f_ (TmConst {val = CSlice {}}) in
 
 let func_head =
   let_ "head"
@@ -292,66 +292,81 @@ let func_tail =
                      (length_ (var_ "s"))))
 in
 
+let func_null =
+  let_ "null" (
+    lam_ "l" (
+      eqi_ (length_ (var_ "l")) (int_ 0)
+    )
+  )
+in
+
 let func_map =
-  reclets_ [
-    ("map",
-     lam_ "f" (lam_ "seq"
-                    (if_ (app_ (var_ "null")
-                               (var_ "seq"))
-                         (seq_ [])
-                         (cons_ (app_ (var_ "f")
-                                      (app_ (var_ "head")
-                                            (var_ "seq")))
-                                (app_ (app_ (var_ "map")
-                                            (var_ "f"))
-                                       (app_ (var_ "tail")
-                                             (var_ "seq")))))))
-  ]
+  reclets_add "map" (
+    lam_ "f" (lam_ "seq" (
+      if_ (app1f_ (var_ "null") (var_ "seq"))
+          (seq_ [])
+          (cons_ (app1f_ (var_ "f")
+                         (app1f_ (var_ "head") (var_ "seq")))
+                 (app2f_ (var_ "map")
+                         (var_ "f")
+                         (app1f_ (var_ "tail") (var_ "seq"))))
+    ))
+  ) (reclets_empty)
 in
 
 let func_int2string =
-  let_ "int2string"
-       (lam_ "n"
-             (bind_ (reclets_ [
-                       ("int2string_rechelper",
-                        lam_ "n"
-                             (if_ (lti_ (var_ "n") (int_ 10))
-                                  (seq_ [
-                                     int2char_ (addi_ (var_ "n")
-                                                      (char2int_ (char_ '0')))
-                                   ])
-                                   (bind_ (let_ "d" (seq_ [
-                                                       int2char_ (addi_ (modi_ (var_ "n")
-                                                                               (int_ 10))
-                                                                        (char2int_ (char_ '0')))
-                                                     ]))
-                                          (concat_ (app_ (var_ "int2string_rechelper")
-                                                         (divi_ (var_ "n") (int_ 10)))
-                                                   (var_ "d"))))
-                     )])
-                     (if_ (lti_ (var_ "n") (int_ 0))
-                          (cons_ (char_ '_')
-                                 (app_ (var_ "int2string_rechelper")
-                                       (negi_ (var_ "n"))))
-                          (app_ (var_ "int2string_rechelper") (var_ "n")))))
+  let_ "int2string" (
+    lam_ "n" (
+      let recs =
+        reclets_add "int2string_rechelper" (
+          lam_ "n" (
+            if_ (lti_ (var_ "n") (int_ 10))
+                (seq_ [
+                  int2char_ (addi_ (var_ "n")
+                                   (char2int_ (char_ '0')))
+                 ])
+                (let d =
+                  let_ "d" (
+                    seq_ [
+                      int2char_ (addi_ (modi_ (var_ "n") (int_ 10))
+                                       (char2int_ (char_ '0')))
+                    ]
+                  )
+                 in
+                 bind_ d (
+                  concat_ (app1f_ (var_ "int2string_rechelper")
+                                  (divi_ (var_ "n") (int_ 10)))
+                          (var_ "d")
+                ))
+          )
+        ) (reclets_empty)
+      in
+      bind_ recs (
+        if_ (lti_ (var_ "n") (int_ 0))
+            (cons_ (char_ '_')
+                   (app_ (var_ "int2string_rechelper")
+                         (negi_ (var_ "n"))))
+            (app_ (var_ "int2string_rechelper") (var_ "n"))
+      )
+    )
+  )
 in
 
 let func_factorial =
-  reclets_ [
-    ("factorial",
-     lam_ "n"
-          (if_ (eqi_ (var_ "n") (int_ 0))
-               (int_ 1)
-               (muli_ (var_ "n")
-                      (app_ (var_ "factorial")
-                            (subi_ (var_ "n") (int_ 1))))
-          )
-     )
-  ]
+  reclets_add "factorial" (
+    lam_ "n" (
+      if_ (eqi_ (var_ "n") (int_ 0))
+          (int_ 1)
+          (muli_ (var_ "n")
+                 (app_ (var_ "factorial")
+                       (subi_ (var_ "n") (int_ 1))))
+    )
+  ) (reclets_empty)
 in
 
 let prog = func_head in
 let prog = bind_ prog func_tail in
+let prog = bind_ prog func_null in
 let prog = bind_ prog func_map in
 let prog = bind_ prog func_int2string in
 let prog = bind_ prog func_factorial in
@@ -367,7 +382,7 @@ let prog = bind_ prog (let_ "printstr" (concat_ (str_ "factorial ")
                                                                            (str_ "\n")))))) in
 let prog = bind_ prog (let_ "_" (print_ (var_ "printstr"))) in
 
-let res = ocamlcodegen 0 (TmMain prog) in
+let res = ocamlcodegen 0 (TmMain {body = prog}) in
 
 let _ = print "\n\n" in
 let _ = print res in
