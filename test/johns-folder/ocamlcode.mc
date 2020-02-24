@@ -1,4 +1,5 @@
 -- OCaml code generator
+-- This assumes that Lambda lifting has been performed
 
 -- Has: 
 -- let int2string = lam i. ... in
@@ -21,98 +22,159 @@
 include "mexpr/ast.mc"
 include "string.mc"
 
-let spacing = lam indent. makeseq indent ' '
-let newline = lam indent. concat "\n" (spacing indent)
+type StringSet = [String]
 
-let incr = lam indent. addi indent 4
+let strset_new : StringSet = []
+let strset_in : String -> StringSet -> Bool = lam s. lam ss.
+    any (eqstr s) ss
+let strset_add : String -> StringSet -> StringSet = lam s. lam ss.
+    if strset_in s ss
+    then ss
+    else cons s ss
+let strset_union : StringSet -> StringSet -> StringSet = lam ss1. lam ss2.
+    foldl (lam ssacc. lam s. strset_add s ssacc) ss1 ss2
+
+-- ocamlcodegen return type
+-- opens: The open expressions such as in 'open Printf'
+-- ocamlcode: The main ocaml code
+-- externs: The external function definitions
+type CodegenRet = {opens       : StringSet,
+                   ocamlcode   : String,
+                   externs     : StringSet,
+                   devicefuncs : StringSet,
+                   hostfuncs   : StringSet}
+
+let cgr_new = {opens = strset_new,
+               ocamlcode = "",
+               externs = strset_new,
+               devicefuncs = strset_new,
+               hostfuncs = strset_new}
+let cgr_merge = lam newcode. lam cgrs.
+    let mergefun = lam acc. lam cgr.
+        {{{{acc with opens = strset_union cgr.opens acc.opens}
+                with externs = strset_union cgr.externs acc.externs}
+                with devicefuncs = strset_union cgr.devicefuncs acc.devicefuncs}
+                with hostfuncs = strset_union cgr.hostfuncs acc.hostfuncs}
+    in
+    {foldl mergefun cgr_new cgrs with ocamlcode = newcode}
+
+-- indent: The indentation level on the OCaml code
+-- env: Lookup for bound expressions.
+type CodegenState = {indent : Int,
+                     env    : [{key : String, value : Expr}]}
+
+let cgs_new = {indent = 0, env = []}
+let cgs_envAdd = lam key. lam value. lam state.
+    {state with env = cons {key = key, value = value} state.env}
+
+let spacing = lam state. makeseq state.indent ' '
+let newline = lam state. concat "\n" (spacing state)
+
+let incri = lam i. lam state. {state with indent = addi state.indent i}
+let incr = lam state. incri 4 state
+
 
 lang VarOCamlCode = VarAst
-    sem ocamlcodegen (indent : Int) =
-    | TmVar x -> x.ident
+    sem ocamlcodegen (state : CodegenState) =
+    | TmVar x -> {cgr_new with ocamlcode = x.ident}
 end
 
 lang AppOCamlCode = AppAst
-    sem ocamlcodegen (indent : Int) =
+    sem ocamlcodegen (state : CodegenState) =
     | TmApp t ->
-      strJoin "" [ocamlcodegen indent t.lhs, " ", "(", ocamlcodegen indent t.rhs, ")"]
+      let lhs = ocamlcodegen state t.lhs in
+      let rhs = ocamlcodegen state t.rhs in
+      let newcode = strJoin "" [lhs.ocamlcode, " (", rhs.ocamlcode, ")"] in
+      cgr_merge newcode [lhs, rhs]
 end
 
 lang FunOCamlCode = FunAst
-    sem ocamlcodegen (indent : Int) =
-    | TmLam t -> let _ = dprint t in error "Encountered an isolated lambda"
+    sem ocamlcodegen (state : CodegenState) =
+    | TmLam t -> let _ = dprint t in error "\nEncountered an isolated lambda in ocamlcodegen"
 end
 
-lang LetOCamlCode = LetAst + FunAst
-    sem ocamlcodegen (indent : Int) =
+lang LetOCamlCode = LetAst + FunAst + ConstAst + UnitAst
+    sem ocamlcodegen (state : CodegenState) =
     | TmLet t ->
       -- Find all the chained lambdas
-      --   acc.0: The variable names
-      --   acc.1: The trailing expression
+      --   ret.0: The variable names
+      --   ret.1: The trailing expression
+      --   ret.2: The new internal state
       recursive let chainlambdas = lam acc. lam expr.
         match expr with TmLam t1 then
-          chainlambdas (concat acc [t1.ident]) t1.body
+          chainlambdas (concat acc.0 [t1.ident], cgs_envAdd t1.ident (TmVar {ident = t1.ident}) acc.1) t1.body
         else
-          (acc, expr)
+          (acc.0, expr, acc.1)
       in
-      let argres = chainlambdas [] t.body in
+      let argres = chainlambdas ([], state) t.body in
       let args = argres.0 in
       let letexpr = argres.1 in
-      strJoin "" ["let ", t.ident, " ", strJoin " " args, " =", newline (incr indent),
-                  ocamlcodegen (incr indent) letexpr, newline indent,
-                  "in", newline indent,
-                  ocamlcodegen indent t.inexpr]
+      let internalstate = argres.2 in
+      -- Set the inexpr of bound expression to be CUnit as we only care about the body when
+      -- doing the lookup in the CUDA code
+      let instate = cgs_envAdd t.ident (TmLet {t with inexpr = TmConst {val = CUnit ()}}) state in
+      strJoin "" ["let ", t.ident, " ", strJoin " " args, " =", newline (incr state),
+                  ocamlcodegen (incr internalstate) letexpr, newline state,
+                  "in", newline state,
+                  ocamlcodegen instate t.inexpr]
 end
 
-lang RecLetsOCamlCode = RecLetsAst + FunAst
-    sem ocamlcodegen (indent : Int) =
+lang RecLetsOCamlCode = RecLetsAst + LetAst + FunAst + ConstAst + UnitAst
+    sem ocamlcodegen (state : CodegenState) =
     | TmRecLets t ->
-      -- Initiate a list with the code generated code
-      let list = ["let "] in
+      -- Create the instate which have access to all the bound expressions
+      -- in the recursive scope
+      let instate = foldl (lam st. lam b. cgs_envAdd b.ident (TmLet {ident = b.ident, tpe = b.tpe, body = b.body, inexpr = TmConst {val = CUnit ()}}) st) state t.bindings in
       recursive let generatelets = lam genacc. lam l.
         if null l then
           genacc
         else
+          -- Find all the chained lambdas
+          --   ret.0: The variable names
+          --   ret.1: The trailing expression
+          --   ret.2: The new internal state
           recursive let chainlambdas = lam acc. lam expr.
             match expr with TmLam t1 then
-              chainlambdas (concat acc [t1.ident]) t1.body
+              chainlambdas (concat acc.0 [t1.ident], cgs_envAdd t1.ident (TmVar {ident = t1.ident}) acc.1) t1.body
             else
-              (acc, expr)
+              (acc.0, expr, acc.1)
           in
-          let argres = chainlambdas [] (head l).body in
+          let argres = chainlambdas ([], instate) (head l).body in
           let name = (head l).ident in
           let args = argres.0 in
           let letexpr = argres.1 in
+          let internalstate = argres.2 in
           let prefix = if null genacc then "let rec " else "    and " in
           let updatedgenacc = concat genacc [
-            prefix, name, " ", strJoin " " args, " =", newline (addi 4 (incr indent)),
-            ocamlcodegen (addi 4 (incr indent)) letexpr, newline indent
+            prefix, name, " ", strJoin " " args, " =", newline (incri 4 (incr instate)),
+            ocamlcodegen (incri 4 (incr instate)) letexpr, newline instate
           ]
           in
           generatelets updatedgenacc (tail l)
       in
       let list = concat (generatelets [] t.bindings) [
-        "in", newline indent,
-        ocamlcodegen indent t.inexpr
+        "in", newline instate,
+        ocamlcodegen instate t.inexpr
       ]
       in
       strJoin "" list
 end
 
 lang ConstOCamlCode = ConstAst
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     -- intentionally left blank
 
-    sem ocamlcodegen (indent : Int) =
-    | TmConst c -> ocamlconstgen indent c.val
+    sem ocamlcodegen (state : CodegenState) =
+    | TmConst c -> ocamlconstgen state c.val
 end
 
 lang UnitOCamlCode = UnitAst
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     | CUnit -> "()"
 end
 
 lang IntOCamlCode = IntAst
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     | CInt i -> int2string i.val
 end
 
@@ -122,7 +184,7 @@ lang ArithIntOCamlCode = ArithIntAst
     | CDivi {}
     | CNegi {}
 
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     | CAddi _ -> "( + )"
     | CSubi _ -> "( - )"
     | CMuli _ -> "( * )"
@@ -132,24 +194,24 @@ lang ArithIntOCamlCode = ArithIntAst
 end
 
 lang BoolOCamlCode = BoolAst
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     | CBool b -> if b.val then "true" else "false"
     | CNot _ -> "not"
     | CAnd _ -> "( && )"
     | COr _ -> "( || )"
 
-    sem ocamlcodegen (indent : Int) =
+    sem ocamlcodegen (state : CodegenState) =
     | TmIf t ->
       strJoin "" [
-        "if ", ocamlcodegen indent t.cond, " then", newline (incr indent),
-        ocamlcodegen (incr indent) t.thn, newline indent,
-        "else", newline (incr indent),
-        ocamlcodegen (incr indent) t.els
+        "if ", ocamlcodegen state t.cond, " then", newline (incr state),
+        ocamlcodegen (incr state) t.thn, newline state,
+        "else", newline (incr state),
+        ocamlcodegen (incr state) t.els
       ]
 end
 
 lang CmpOCamlCode = CmpAst
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     | CEqi _ -> "( = )"
     | CLti _ -> "( < )"
 end
@@ -159,7 +221,7 @@ lang CharOCamlCode = CharAst
     | CChar2int {}
     | CInt2char {}
 
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     | CChar c -> if eqchar c.val (head "\n") then
                    [head "'", head "\\", 'n', head "'"]
                  else
@@ -176,22 +238,22 @@ lang SeqOCamlCode = SeqAst
     | CSlice {}
     | CReverse {}
 
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     | CNth _ -> "Array.get"
     | CLength _ -> "Array.length"
     | CCons _ -> "(fun x xs -> Array.append [|x|] xs)"
     | CConcat _ -> "Array.append"
     | CSlice _ -> "(fun xs start len -> Array.sub xs (min ((Array.length xs) - 1) start) (min ((Array.length xs) - start) len))"
     | CReverse _ -> "List.rev"
-    | CSeq t -> strJoin "" ["[|", strJoin "; " (map (ocamlcodegen indent) t.tms), "|]"]
+    | CSeq t -> strJoin "" ["[|", strJoin "; " (map (ocamlcodegen state) t.tms), "|]"]
 
-    sem ocamlcodegen (indent : Int) =
-    | TmSeq t -> strJoin "" ["[|", strJoin "; " (map (ocamlcodegen indent) t.tms), "|]"]
+    sem ocamlcodegen (state : CodegenState) =
+    | TmSeq t -> strJoin "" ["[|", strJoin "; " (map (ocamlcodegen state) t.tms), "|]"]
 end
 
 lang TupleOCamlCode = TupleAst
-    sem ocamlcodegen (indent : Int) =
-    | TmTuple t -> strJoin "" ["(", strJoin ", " (map (ocamlcodegen indent) t.tms), ")"]
+    sem ocamlcodegen (state : CodegenState) =
+    | TmTuple t -> strJoin "" ["(", strJoin ", " (map (ocamlcodegen state) t.tms), ")"]
     | TmProj t ->
       recursive let mkproj = lam acc. lam idx.
         if eqi idx (length [0,1,2]) then -- TEMP: We do not know the length of the tuple here, so we cannot project out of it!
@@ -202,7 +264,18 @@ lang TupleOCamlCode = TupleAst
           concat acc ["_"]
       in
       let projfun = strJoin "" ["(fun t -> let (", strJoin "," (mkproj [] 0), ") = t in x)"] in
-      strJoin "" [projfun, " (", ocamlcodegen indent t.tup, ")"]
+      strJoin "" [projfun, " (", ocamlcodegen state t.tup, ")"]
+end
+
+-- Syntax fragments
+lang CUDAOptOCamlCode
+    syn Expr =
+    | TmCUDAMapIntArray {elemPerThread : Int,
+                         func : Expr,
+                         array : Expr}
+
+    sem ocamlcodegen (state : CodegenState) =
+    | TmCUDAMapIntArray t -> error "Not yet implemented!"
 end
 
 lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode +
@@ -215,13 +288,13 @@ lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode 
     syn Const =
     | CPrint {}
 
-    sem ocamlcodegen (indent : Int) =
+    sem ocamlcodegen (state : CodegenState) =
     | TmMain t ->
       strJoin "" ["open Printf", "\n\n",
-                  "let main =", newline (incr indent),
-                  ocamlcodegen (incr indent) t.body]
+                  "let main =", newline (incr state),
+                  ocamlcodegen (incr state) t.body]
 
-    sem ocamlconstgen (indent : Int) =
+    sem ocamlconstgen (state : CodegenState) =
     | CPrint _ -> "(fun s -> printf \"%s\" (String.of_seq (Array.to_seq s)))"
 end
 
@@ -382,7 +455,7 @@ let prog = bind_ prog (let_ "printstr" (concat_ (str_ "factorial ")
                                                                            (str_ "\n")))))) in
 let prog = bind_ prog (let_ "_" (print_ (var_ "printstr"))) in
 
-let res = ocamlcodegen 0 (TmMain {body = prog}) in
+let res = ocamlcodegen cgs_new (TmMain {body = prog}) in
 
 let _ = print "\n\n" in
 let _ = print res in
