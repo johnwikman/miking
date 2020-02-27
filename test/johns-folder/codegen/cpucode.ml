@@ -1,6 +1,7 @@
-
-
 open Printf
+open Array
+
+external gpuhost_saxpy_int: int -> int -> int array -> int array = "gpuhost_saxpy_int"
 
 let main =
     let head s =
@@ -39,6 +40,15 @@ let main =
             else
                 ( * ) (n) (factorial (( - ) (n) (1)))
     in
+    let saxpy_int x y a =
+        ( + ) (( * ) (a) (x)) (y)
+    in
+    let mapcuda_saxpy_int x y arr =
+        gpuhost_saxpy_int x y arr
+    in
+    let printintln i =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (int2string (i)) ([|'\n'|]))
+    in
     let v  =
         10
     in
@@ -51,6 +61,16 @@ let main =
     let _  =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (printstr)
     in
+    let res  =
+        mapcuda_saxpy_int (17) (11) ([|15; 1|])
+    in
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'R'; 'e'; 's'; 'u'; 'l'; 't'; ' '; 'o'; 'f'; ' '; 's'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; '\n'|])
+    in
+    let _  =
+        printintln (Array.get (res) (0))
+    in
+    let _  =
+        printintln (Array.get (res) (1))
+    in
     ()
-
-
