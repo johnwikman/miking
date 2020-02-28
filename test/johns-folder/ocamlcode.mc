@@ -1,20 +1,6 @@
 -- OCaml code generator
 -- This assumes that Lambda lifting has been performed and all identifiers are globally unique...
 
--- Has: 
--- let int2string = lam i. ... in
--- recursive let factorial = lam n.
---     if eqi n 0 then 1 else (muli n (factorial (subi n 1)))
--- in
--- print (int2string (factorial 5))
---
---
--- Want:
--- open Printf
--- let int2string i = ...
--- in
--- let rec factorial n = if n == 0 then 1 else n * (factorial (n - 1)) in
--- printf (int2string (factorial 5))
 --
 -- What needs to happen:
 --  The lambdas need to appear on the left side of the equals sign
@@ -348,6 +334,7 @@ lang SeqOCamlCode = SeqAst
     | CConcat {}
     | CSlice {}
     | CReverse {}
+    | CMakeseq {}
 
     sem ocamlconstgen (state : CodegenState) =
     | CNth _ -> {{cgr_new with code = "Array.get"}
@@ -360,8 +347,10 @@ lang SeqOCamlCode = SeqAst
                              with opens = strset_add "Array" strset_new}
     | CSlice _ -> {{cgr_new with code = "(fun xs start len -> Array.sub xs (min ((Array.length xs) - 1) start) (min ((Array.length xs) - start) len))"}
                             with opens = strset_add "Array" strset_new}
-    | CReverse _ -> {{cgr_new with code = "List.rev"}
-                              with opens = strset_add "List" strset_new}
+    | CReverse _ -> {{cgr_new with code = "(fun xs -> Array.of_list (List.rev (Array.to_list xs)))"}
+                              with opens = strset_add "Array" (strset_add "List" strset_new)}
+    | CMakeseq _ -> {{cgr_new with code = "Array.make"}
+                              with opens = strset_add "Array" strset_new}
     | CSeq t ->
       let cgrs = map (ocamlcodegen state) t.tms in
       let newcode = strJoin "" ["[|", strJoin "; " (map (lam cgr. cgr.code) cgrs), "|]"] in
@@ -379,6 +368,7 @@ lang SeqOCamlCode = SeqAst
     | CConcat _ -> "concat"
     | CSlice _ -> "slice"
     | CReverse _ -> "reverse"
+    | CMakeseq _ -> "makeseq"
 end
 
 lang TupleOCamlCode = TupleAst
@@ -635,6 +625,7 @@ let cons_ = app2f_ (TmConst {val = CCons {}}) in
 let nth_ = app2f_ (TmConst {val = CNth {}}) in
 let concat_ = app2f_ (TmConst {val = CConcat {}}) in
 let slice_ = app3f_ (TmConst {val = CSlice {}}) in
+let makeseq_ = app2f_ (TmConst {val = CMakeseq {}}) in
 
 let cuda_mapintarray_ = lam ept. lam f. lam arr.
     TmCUDAMapIntArray {elemPerThread = ept, func = f, array = arr} in
