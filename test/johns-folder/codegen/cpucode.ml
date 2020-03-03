@@ -43,11 +43,23 @@ let main =
     let saxpy_int x y a =
         ( + ) (( * ) (a) (x)) (y)
     in
-    let mapcuda_saxpy_int x y arr =
-        gpuhost_saxpy_int x y arr
+    let printintln i =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (int2string (i)) ([|'\n'|]))
+    in
+    let rec factorial n =
+            if ( = ) (n) (0) then
+                1
+            else
+                ( * ) (n) (factorial (( - ) (n) (1)))
+    in
+    let saxpy_int x y a =
+        ( + ) (( * ) (a) (x)) (y)
     in
     let printintln i =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (int2string (i)) ([|'\n'|]))
+    in
+    let mapcuda_saxpy_int x y arr =
+        gpuhost_saxpy_int x y arr
     in
     let v  =
         10

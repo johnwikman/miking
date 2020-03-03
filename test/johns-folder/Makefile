@@ -1,7 +1,7 @@
 .PHONY: build upload
 
 
-SOURCE=ocamlcode.mc
+SOURCE=main.mc
 
 build:
 	miking run $(SOURCE)

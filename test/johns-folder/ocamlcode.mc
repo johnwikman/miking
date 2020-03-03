@@ -78,7 +78,7 @@ let mapi = lam f. lam arr.
   in
   mapi_helper 0 arr
 
-lang VarOCamlCode = VarAst + LetAst
+lang VarOCamlCode = VarAst + LetAst + FunAst + ArithTypeAst
     sem ocamlcodegen (state : CodegenState) =
     | TmVar x -> {cgr_new with code = x.ident}
 
@@ -88,13 +88,17 @@ lang VarOCamlCode = VarAst + LetAst
         match find (lam e. eqstr key e.key) state.env with Some t then
           t.value
         else
+          let errstr = strJoin "" ["Could not find a binding for \"", key, "\""] in
+          error errstr
           -- If not bound, probably an argument. We know since we have done the
           -- lambda lifting that identifiers cannot be shadowed.
-          TmVar {ident = key}
+          --TmVar {ident = key}
       in
       let v = cgs_envLookup x.ident state in
       match v with TmLet t then
         cudacodegen state v
+      else match v with TmLam t then
+        {cgr_new with code = t.ident}
       else match v with TmVar t then
         {cgr_new with code = t.ident}
       else
@@ -145,7 +149,7 @@ lang LetOCamlCode = LetAst + FunAst + ConstAst + UnitAst
       --   ret.2: The new internal state
       recursive let chainlambdas = lam acc. lam expr.
         match expr with TmLam t1 then
-          chainlambdas (concat acc.0 [t1.ident], cgs_envAdd t1.ident (TmVar {ident = t1.ident}) acc.1) t1.body
+          chainlambdas (concat acc.0 [t1.ident], cgs_envAdd t1.ident (TmLam t1) acc.1) t1.body
         else
           (acc.0, expr, acc.1)
       in
@@ -168,18 +172,20 @@ lang LetOCamlCode = LetAst + FunAst + ConstAst + UnitAst
       -- Find all the chained lambdas
       --   ret.0: The variable names
       --   ret.1: The trailing expression
+      --   ret.2: The new internal state
       recursive let chainlambdas = lam acc. lam expr.
         match expr with TmLam t1 then
-          chainlambdas (concat acc [t1.ident]) t1.body
+          chainlambdas (concat acc.0 [t1.ident], cgs_envAdd t1.ident (TmLam t1) acc.1) t1.body
         else
-          (acc, expr)
+          (acc.0, expr, acc.1)
       in
-      let argres = chainlambdas [] t.body in
+      let argres = chainlambdas ([], state) t.body in
       let args = argres.0 in
       let letexpr = argres.1 in
+      let internalstate = argres.2 in
       let ty = state.cudagentype in
 
-      let cudaret = cudacodegen state letexpr in
+      let cudaret = cudacodegen internalstate letexpr in
 
       let devicebody = strJoin "" [
         "__device__ ", ty, " gpudevice_", t.ident, "(", strJoin ", " (map (lam s. concat ty (cons ' ' s)) args), ")\n",
@@ -206,7 +212,7 @@ lang RecLetsOCamlCode = RecLetsAst + LetAst + FunAst + ConstAst + UnitAst
           --   ret.2: The new internal state
           recursive let chainlambdas = lam acc. lam expr.
             match expr with TmLam t1 then
-              chainlambdas (concat acc.0 [t1.ident], cgs_envAdd t1.ident (TmVar {ident = t1.ident}) acc.1) t1.body
+              chainlambdas (concat acc.0 [t1.ident], cgs_envAdd t1.ident (TmLam t1) acc.1) t1.body
             else
               (acc.0, expr, acc.1)
           in
@@ -573,230 +579,3 @@ let codegen =
     let cuda = strJoin "\n\n" [includes, hostprototypes, devicecode, globalcode, hostcode] in
     -- Return code
     (ocaml, cuda)
-mexpr
-use MExprOCamlCode in
-recursive let bind_ = lam letexpr. lam inexpr.
-  match letexpr with TmLet t then
-    TmLet {t with inexpr = bind_ t.inexpr inexpr}
-  else match letexpr with TmRecLets t then
-    TmRecLets {t with inexpr = bind_ t.inexpr inexpr}
-  else
-    inexpr
-in
-
--- constants:
-let unit_ = TmConst {val = CUnit ()} in
-let int_ = lam i. TmConst {val = CInt {val = i}} in
-let char_ = lam c. TmConst {val = CChar {val = c}} in
-let var_ = lam ident. TmVar {ident = ident} in
-let seq_ = lam s. TmSeq {tms = s} in
-let str_ = lam s. seq_ (map char_ s) in
-
--- macros:
-let app_ = lam lhs. lam rhs. TmApp {lhs = lhs, rhs = rhs} in
-let app1f_ = lam f. lam arg. app_ f arg in
-let app2f_ = lam f. lam lhs. lam rhs. app_ (app1f_ f lhs) rhs in
-let app3f_ = lam f. lam a. lam b. lam c. app_ (app2f_ f a b) c in
-let let_ = lam ident. lam body. TmLet {ident = ident, tpe = None (), body = body, inexpr = unit_} in
-let reclets_add = lam ident. lam body. lam reclets.
-  match reclets with TmRecLets t then
-    TmRecLets {t with bindings = cons {ident = ident, tpe = None (), body = body} t.bindings}
-  else
-    error "Must add reclet to a TmRecLets"
-in
-let reclets_empty = TmRecLets {bindings = [], inexpr = unit_} in
-let lam_ = lam ident. lam body. TmLam {ident = ident, tpe = None (), body = body} in
-let if_ = lam cond. lam thn. lam els. TmIf {cond = cond, thn = thn, els = els} in
-
--- funcs:
-let print_ = app1f_ (TmConst {val = CPrint {}}) in
-let int2char_ = app1f_ (TmConst {val = CInt2char {}}) in
-let char2int_ = app1f_ (TmConst {val = CChar2int {}}) in
-let length_ = app1f_ (TmConst {val = CLength {}}) in
-let negi_ = app1f_ (TmConst {val = CNegi {}}) in
-let lti_ = app2f_ (TmConst {val = CLti {}}) in
-let eqi_ = app2f_ (TmConst {val = CEqi {}}) in
-let addi_ = app2f_ (TmConst {val = CAddi {}}) in
-let subi_ = app2f_ (TmConst {val = CSubi {}}) in
-let muli_ = app2f_ (TmConst {val = CMuli {}}) in
-let divi_ = app2f_ (TmConst {val = CDivi {}}) in
-let modi_ = app2f_ (TmConst {val = CModi {}}) in
-let cons_ = app2f_ (TmConst {val = CCons {}}) in
-let nth_ = app2f_ (TmConst {val = CNth {}}) in
-let concat_ = app2f_ (TmConst {val = CConcat {}}) in
-let slice_ = app3f_ (TmConst {val = CSlice {}}) in
-let makeseq_ = app2f_ (TmConst {val = CMakeseq {}}) in
-
-let cuda_mapintarray_ = lam ept. lam f. lam arr.
-    TmCUDAMapIntArray {elemPerThread = ept, func = f, array = arr} in
-
-let func_head =
-  let_ "head"
-       (lam_ "s"
-             (nth_ (var_ "s") (int_ 0)))
-in
-
-let func_tail =
-  let_ "tail"
-       (lam_ "s"
-             (slice_ (var_ "s")
-                     (int_ 1)
-                     (length_ (var_ "s"))))
-in
-
-let func_null =
-  let_ "null" (
-    lam_ "l" (
-      eqi_ (length_ (var_ "l")) (int_ 0)
-    )
-  )
-in
-
-let func_map =
-  reclets_add "map" (
-    lam_ "f" (lam_ "seq" (
-      if_ (app1f_ (var_ "null") (var_ "seq"))
-          (seq_ [])
-          (cons_ (app1f_ (var_ "f")
-                         (app1f_ (var_ "head") (var_ "seq")))
-                 (app2f_ (var_ "map")
-                         (var_ "f")
-                         (app1f_ (var_ "tail") (var_ "seq"))))
-    ))
-  ) (reclets_empty)
-in
-let func_map_native =
-  let_ "map" (var_ "Array.map")
-in
-
-let func_int2string =
-  let_ "int2string" (
-    lam_ "n" (
-      let recs =
-        reclets_add "int2string_rechelper" (
-          lam_ "n" (
-            if_ (lti_ (var_ "n") (int_ 10))
-                (seq_ [
-                  int2char_ (addi_ (var_ "n")
-                                   (char2int_ (char_ '0')))
-                 ])
-                (let d =
-                  let_ "d" (
-                    seq_ [
-                      int2char_ (addi_ (modi_ (var_ "n") (int_ 10))
-                                       (char2int_ (char_ '0')))
-                    ]
-                  )
-                 in
-                 bind_ d (
-                  concat_ (app1f_ (var_ "int2string_rechelper")
-                                  (divi_ (var_ "n") (int_ 10)))
-                          (var_ "d")
-                ))
-          )
-        ) (reclets_empty)
-      in
-      bind_ recs (
-        if_ (lti_ (var_ "n") (int_ 0))
-            (cons_ (char_ '_')
-                   (app_ (var_ "int2string_rechelper")
-                         (negi_ (var_ "n"))))
-            (app_ (var_ "int2string_rechelper") (var_ "n"))
-      )
-    )
-  )
-in
-
-let func_factorial =
-  reclets_add "factorial" (
-    lam_ "n" (
-      if_ (eqi_ (var_ "n") (int_ 0))
-          (int_ 1)
-          (muli_ (var_ "n")
-                 (app_ (var_ "factorial")
-                       (subi_ (var_ "n") (int_ 1))))
-    )
-  ) (reclets_empty)
-in
-
-let func_saxpy_int =
-  let_ "saxpy_int" (
-    lam_ "x" (
-      lam_ "y" (
-        lam_ "a" (
-          addi_ (muli_ (var_ "a")
-                       (var_ "x"))
-                (var_ "y")
-        )
-      )
-    )
-  )
-in
-
-let func_mapcuda_saxpy_int =
-  let_ "mapcuda_saxpy_int" (
-    lam_ "x" (
-      lam_ "y" (
-        lam_ "arr" (
-          cuda_mapintarray_ 32
-                            (app2f_ (var_ "saxpy_int")
-                                    (var_ "x")
-                                    (var_ "y"))
-                            (var_ "arr")
-        )
-      )
-    )
-  )
-in
-
-let func_printintln =
-  let_ "printintln" (
-    lam_ "i" (
-      print_ (concat_ (app_ (var_ "int2string")
-                            (var_ "i"))
-                      (str_ "\n"))
-    )
-  )
-in
-
-let prog = func_head in
-let prog = bind_ prog func_tail in
-let prog = bind_ prog func_null in
-let prog = bind_ prog func_map in
-let prog = bind_ prog func_int2string in
-let prog = bind_ prog func_factorial in
-let prog = bind_ prog func_saxpy_int in
-let prog = bind_ prog func_mapcuda_saxpy_int in
-let prog = bind_ prog func_printintln in
-let prog = bind_ prog (let_ "v" (int_ 10)) in
-let prog = bind_ prog (let_ "res" (app_ (var_ "factorial")
-                                        (var_ "v"))) in
-let prog = bind_ prog (let_ "printstr" (concat_ (str_ "factorial ")
-                                                (concat_ (app_ (var_ "int2string")
-                                                               (var_ "v"))
-                                                         (concat_ (str_ " = ")
-                                                                  (concat_ (app_ (var_ "int2string")
-                                                                                 (var_ "res"))
-                                                                           (str_ "\n")))))) in
-let prog = bind_ prog (let_ "_" (print_ (var_ "printstr"))) in
-
-let prog = bind_ prog (let_ "res" (app3f_ (var_ "mapcuda_saxpy_int")
-                                          (int_ 17)
-                                          (int_ 11)
-                                          (seq_ [int_ 15, int_ 1]))) in
-
-let prog = bind_ prog (let_ "_" (print_ (str_ "Result of saxpy 17 11 [15, 1]\n"))) in
-let prog = bind_ prog (let_ "_" (app_ (var_ "printintln")
-                                      (nth_ (var_ "res") (int_ 0)))) in
-let prog = bind_ prog (let_ "_" (app_ (var_ "printintln")
-                                      (nth_ (var_ "res") (int_ 1)))) in
-
-let res = codegen prog in
-
-let _ = print (pprintCode 0 prog) in
-let _ = print "\n" in
-
-let _ = writeFile "codegen/cpucode.ml" res.0 in
-let _ = writeFile "codegen/gpucode.cpp" res.1 in
-
-()
