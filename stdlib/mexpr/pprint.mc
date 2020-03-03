@@ -240,8 +240,8 @@ lang TypePrettyPrint = DynTypeAst + UnitTypeAst + CharTypeAst + SeqTypeAst +
                        TupleTypeAst + RecordTypeAst + DataTypeAst + ArithTypeAst +
                        BoolTypeAst + AppTypeAst + FunAst + DataPrettyPrint
     sem getTypeStringCode (indent : Int) =
-    | TyArrow t -> strJoin "" ["(", getTypeStringCode indent t.from, ") -> (",
-                               getTypeStringCode indent t.to, ")"]
+    | TyArrow t -> strJoin "" ["(", getTypeStringCode indent t.from, ") -> ",
+                               getTypeStringCode indent t.to, ""]
     | TyDyn _ -> "Dyn"
     | TyUnit _ -> "()"
     | TyChar _ -> "Char"
