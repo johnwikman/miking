@@ -5,7 +5,10 @@
 -- What needs to happen:
 --  The lambdas need to appear on the left side of the equals sign
 
+include "mexpr/pprint.mc"
 include "codegen-common.mc"
+include "codegen-cuda.mc"
+include "codegen-types.mc"
 
 lang VarCGOCaml = MExprCGExt
     sem codegenOCaml (state : CodegenState) =
@@ -97,7 +100,7 @@ lang RecLetsCGOCaml = MExprCGExt
       cgr_merge newcode [genret, inret]
 end
 
-lang ConstCGOCaml = ConstAst
+lang ConstCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     -- intentionally left blank
 
@@ -105,17 +108,17 @@ lang ConstCGOCaml = ConstAst
     | TmConst c -> ocamlconstgen state c.val
 end
 
-lang UnitCGOCaml = UnitAst
+lang UnitCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CUnit _ -> {cgr_new with code = "()"}
 end
 
-lang IntCGOCaml = IntAst
+lang IntCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CInt i -> {cgr_new with code = int2string i.val}
 end
 
-lang ArithIntOCamlCode = ArithIntCGExt
+lang ArithIntCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CAddi _ -> {cgr_new with code = "( + )"}
     | CSubi _ -> {cgr_new with code = "( - )"}
@@ -125,7 +128,7 @@ lang ArithIntOCamlCode = ArithIntCGExt
     | CNegi _ -> {cgr_new with code = "( ~- )"}
 end
 
-lang BoolOCamlCode = BoolAst
+lang BoolCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CBool b -> {cgr_new with code = if b.val then "true" else "false"}
     | CNot _ -> {cgr_new with code = "not"}
@@ -143,13 +146,13 @@ lang BoolOCamlCode = BoolAst
       cgr_merge newcode [cond, thn, els]
 end
 
-lang CmpOCamlCode = CmpAst
+lang CmpCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CEqi _ -> {cgr_new with code = "( = )"}
     | CLti _ -> {cgr_new with code = "( < )"}
 end
 
-lang CharOCamlCode = CharCGExt
+lang CharCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CChar c ->
       let cstr = if eqchar c.val (head "\n") then
@@ -162,7 +165,7 @@ lang CharOCamlCode = CharCGExt
     | CInt2char _ -> {cgr_new with code = "char_of_int"}
 end
 
-lang SeqOCamlCode = SeqCGExt
+lang SeqCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CNth _ -> {{cgr_new with code = "Array.get"}
                           with opens = strset_add "Array" strset_new}
@@ -190,7 +193,7 @@ lang SeqOCamlCode = SeqCGExt
       cgr_merge newcode cgrs
 end
 
-lang TupleOCamlCode = TupleAst
+lang TupleCGOCaml = MExprCGExt
     sem codegenOCaml (state : CodegenState) =
     | TmTuple t ->
       let cgrs = map (codegenOCaml state) t.tms in
@@ -201,9 +204,8 @@ lang TupleOCamlCode = TupleAst
 end
 
 -- Syntax fragments
-lang CUDAOCamlCode = VarAst + AppAst + ConstAst + IntAst + FunAst +
-                     SeqTypeAst + ArithTypeAst + CUDACGExt
-    sem codegenFindExprType (state : CodegenState) =
+lang CUDACGOCaml = MExprCGExt
+    sem codegenGetExprType (state : CodegenState) =
     -- Intentionally left blank
 
     sem codegenCUDA (state : CodegenState) =
@@ -259,9 +261,9 @@ lang CUDAOCamlCode = VarAst + AppAst + ConstAst + IntAst + FunAst +
       let res = extract_args [] t.func in
       let args = res.0 in
       let hostfuncname = concat "gpuhost_" res.1 in
-      let argtypes = map (codegenFindExprType state) args in
-      let arrtype = codegenFindExprType state t.array in
-      let funrettype = findarrow_endtpe (codegenFindExprType state (TmVar {ident = res.1})) in
+      let argtypes = map (codegenGetExprType state) args in
+      let arrtype = codegenGetExprType state t.array in
+      let funrettype = findarrow_endtpe (codegenGetExprType state (TmVar {ident = res.1})) in
 
       -- Must map an a sequence of something
       let arrtype = match arrtype with TySeq t1 then arrtype else error "TmCUDAMap: must map a sequence" in
@@ -278,11 +280,7 @@ lang CUDAOCamlCode = VarAst + AppAst + ConstAst + IntAst + FunAst +
                 with externs = strset_add externdef cudaret.externs}
 end
 
-lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode +
-                      RecLetsOCamlCode + ConstOCamlCode + UnitOCamlCode + IntOCamlCode +
-                      ArithIntOCamlCode + BoolOCamlCode + CmpOCamlCode + CharOCamlCode +
-                      SeqOCamlCode + TupleOCamlCode + CUDAOptOCamlCode + MExprPrettyPrint + MainCGExt
-
+lang MainGCOCaml = MExprCGExt
     sem codegenOCaml (state : CodegenState) =
     | TmMain t ->
       let mainret = codegenOCaml (cgsincr state) t.body in
@@ -294,8 +292,14 @@ lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode 
                             with opens = strset_add "Printf" strset_new}
 end
 
+lang MExprCGOCaml = VarCGOCaml + AppCGOCaml + FunCGOCaml + LetCGOCaml +
+                    RecLetsCGOCaml + ConstCGOCaml + UnitCGOCaml + IntCGOCaml +
+                    ArithIntCGOCaml + BoolCGOCaml + CmpCGOCaml + CharCGOCaml +
+                    SeqCGOCaml + TupleCGOCaml + CUDACGOCaml + MainGCOCaml +
+                    MExprCGType + MExprCGCUDA + MExprPrettyPrint
+
 let codegen =
-    use MExprOCamlCode in
+    use MExprCGOCaml in
     lam ast.
     let res = codegenOCaml cgs_new (TmMain {body = ast}) in
     -- OCaml Code

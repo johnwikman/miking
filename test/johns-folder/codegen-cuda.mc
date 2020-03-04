@@ -2,6 +2,13 @@
 
 include "codegen-common.mc"
 
+let mapi = lam f. lam seq.
+  recursive let work = lam i. lam f. lam seq.
+      if null seq then []
+      else cons (f i (head seq)) (work (addi i 1) f (tail seq))
+  in
+  work 0 f seq
+
 lang VarCGCUDA = MExprCGExt
     sem codegenCUDA (state : CodegenState) =
     | TmVar x ->
@@ -116,6 +123,9 @@ lang ArithIntCGCUDA = MExprCGExt
 end
 
 lang CUDACGCUDA = MExprCGExt
+    sem codegenGetExprType (state : CodegenState) =
+    -- Intentionally left blank
+
     -- Generate C++ host functions that interfaces with the OCaml types
     sem codegenCUDA (state : CodegenState) =
     | TmCUDAMap t ->
@@ -127,13 +137,13 @@ lang CUDACGCUDA = MExprCGExt
           else match e with TmVar t1 then
             (acc, t1.ident)
           else
-            error "cudacodegen: TmCUDAMap: Mapped function is not lifted! (Expected TmVar)"
+            error "codegenCUDA: TmCUDAMap: Mapped function is not lifted! (Expected TmVar)"
       in
       let type2string = lam tpe.
         let perror = lam _.
           let _ = dprint tpe in
           let _ = print "\n" in
-          error "cudacodegen: TmCUDAMap: type2string: Above type is invalid."
+          error "codegenCUDA: TmCUDAMap: type2string: Above type is invalid."
         in
         match tpe with TyInt () then
           "int "
@@ -147,7 +157,7 @@ lang CUDACGCUDA = MExprCGExt
         let perror = lam _.
           let _ = dprint tpe in
           let _ = print "\n" in
-          error "cudacodegen: TmCUDAMap: argconv: Above type is invalid."
+          error "codegenCUDA: TmCUDAMap: argconv: Above type is invalid."
         in
         match tpe with TyInt () then
           strJoin "" ["Int_val(", name, ")"]
@@ -157,8 +167,8 @@ lang CUDACGCUDA = MExprCGExt
       in
       let res = extract_args [] t.func in
       let args = res.0 in
-      let argtypes = map (codegenFindExprType state) args in
-      let arrtype = codegenFindExprType state t.array in
+      let argtypes = map (codegenGetExprType state) args in
+      let arrtype = codegenGetExprType state t.array in
       let mappedfuncname = res.1 in
       let hostfuncname = concat "gpuhost_" mappedfuncname in
       let globalfuncname = concat "gpuglobal_" mappedfuncname in
@@ -177,7 +187,7 @@ lang CUDACGCUDA = MExprCGExt
 
 
       -- Generate code for the mapped function
-      let cudaret = cudacodegen {state with cudagentype = "int"} (TmVar {ident = mappedfuncname}) in
+      let cudaret = codegenCUDA {state with cudagentype = "int"} (TmVar {ident = mappedfuncname}) in
 
       -- Generate the global device body
       let globalbody = strJoin "" [
@@ -236,3 +246,7 @@ lang CUDACGCUDA = MExprCGExt
                  with hostprototypes = strset_add prototype strset_new}
                  with hostfuncs = strset_add hostbody strset_new}
 end
+
+lang MExprCGCUDA = VarCGCUDA + AppCGCUDA + FunCGCUDA + LetCGCUDA +
+                   RecLetsCGCUDA + ConstCGCUDA + IntCGCUDA +
+                   ArithIntCGCUDA + CUDACGCUDA

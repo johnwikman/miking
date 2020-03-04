@@ -5,7 +5,7 @@ include "stdlib.mc"
 include "testlib.mc"
 
 mexpr
-use MExprOCamlCode in
+use MExprCGOCaml in
 let func_printintln =
   let_ "printintln" (
     lam_ "i" (
