@@ -487,7 +487,7 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst + FunAst +
           error "cudacodegen: TmCUDAMap: type2string: Above type is invalid."
         in
         match tpe with TyInt () then
-          "int"
+          "int "
         else match tpe with TySeq t1 then
           match t1.tpe with TyInt () then
             "value *"
