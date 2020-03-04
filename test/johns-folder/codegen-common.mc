@@ -63,3 +63,71 @@ let cgsnewline = lam state. concat "\n" (cgsspacing state)
 
 let cgsincri = lam i. lam state. {state with indent = addi state.indent i}
 let cgsincr = lam state. cgsincri 4 state
+
+lang ArithIntCGExt = ArithIntAst
+    syn Const =
+    | CModi {}
+    | CDivi {}
+    | CNegi {}
+
+    sem getConstStringCode (indent : Int) =
+    | CModi _ -> "modi"
+    | CDivi _ -> "divi"
+    | CNegi _ -> "negi"
+end
+
+lang CharCGExt = CharAst
+    syn Const =
+    | CChar2int {}
+    | CInt2char {}
+
+    sem getConstStringCode (indent : Int) =
+    | CChar2int _ -> "char2int"
+    | CInt2char _ -> "int2char"
+end
+
+lang SeqCGExt = SeqAst
+    syn Const =
+    | CLength {}
+    | CCons {}
+    | CConcat {}
+    | CSlice {}
+    | CReverse {}
+    | CMakeseq {}
+
+    sem getConstStringCode (indent : Int) =
+    | CLength _ -> "length"
+    | CCons _ -> "cons"
+    | CConcat _ -> "concat"
+    | CSlice _ -> "slice"
+    | CReverse _ -> "reverse"
+    | CMakeseq _ -> "makeseq"
+end
+
+lang CUDACGExt
+    syn Expr =
+    | TmCUDAMap {elemPerThread : Int,
+                 func : Expr,
+                 array : Expr}
+
+    sem pprintCode (indent : Int) =
+    | TmCUDAMap t ->
+      strJoin "" [
+        "cudaMap ", int2string t.elemPerThread,
+        " (", pprintCode indent t.func, ")",
+        " (", pprintCode indent t.array, ")"
+      ]
+end
+
+lang MainCGExt
+    syn Expr =
+    | TmMain {body : Expr}
+
+    syn Const =
+    | CPrint {}
+
+    sem getConstStringCode (indent : Int) =
+    | CPrint _ -> "print"
+end
+
+lang MExprCGExt = MExprAst + ArithIntCGExt + CharCGExt + SeqCGExt + CUDACGExt + MainCGExt

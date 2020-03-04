@@ -260,12 +260,7 @@ lang IntOCamlCode = IntAst
     | CInt i -> {cgr_new with code = int2string i.val}
 end
 
-lang ArithIntOCamlCode = ArithIntAst
-    syn Const =
-    | CModi {}
-    | CDivi {}
-    | CNegi {}
-
+lang ArithIntOCamlCode = ArithIntCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CAddi _ -> {cgr_new with code = "( + )"}
     | CSubi _ -> {cgr_new with code = "( - )"}
@@ -281,11 +276,6 @@ lang ArithIntOCamlCode = ArithIntAst
                            with devicefuncs = strset_add "__device__ int gpu_subi(int x, int y) {return x - y;}" strset_new}
     | CMuli _ -> {{cgr_new with code = "gpu_muli"}
                            with devicefuncs = strset_add "__device__ int gpu_muli(int x, int y) {return x * y;}" strset_new}
-
-    sem getConstStringCode (indent : Int) =
-    | CModi _ -> "modi"
-    | CDivi _ -> "divi"
-    | CNegi _ -> "negi"
 end
 
 lang BoolOCamlCode = BoolAst
@@ -312,11 +302,7 @@ lang CmpOCamlCode = CmpAst
     | CLti _ -> {cgr_new with code = "( < )"}
 end
 
-lang CharOCamlCode = CharAst
-    syn Const =
-    | CChar2int {}
-    | CInt2char {}
-
+lang CharOCamlCode = CharCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CChar c ->
       let cstr = if eqchar c.val (head "\n") then
@@ -327,21 +313,9 @@ lang CharOCamlCode = CharAst
       {cgr_new with code = cstr}
     | CChar2int _ -> {cgr_new with code = "int_of_char"}
     | CInt2char _ -> {cgr_new with code = "char_of_int"}
-
-    sem getConstStringCode (indent : Int) =
-    | CChar2int _ -> "char2int"
-    | CInt2char _ -> "int2char"
 end
 
-lang SeqOCamlCode = SeqAst
-    syn Const =
-    | CLength {}
-    | CCons {}
-    | CConcat {}
-    | CSlice {}
-    | CReverse {}
-    | CMakeseq {}
-
+lang SeqOCamlCode = SeqCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CNth _ -> {{cgr_new with code = "Array.get"}
                           with opens = strset_add "Array" strset_new}
@@ -367,14 +341,6 @@ lang SeqOCamlCode = SeqAst
       let cgrs = map (ocamlcodegen state) t.tms in
       let newcode = strJoin "" ["[|", strJoin "; " (map (lam cgr. cgr.code) cgrs), "|]"] in
       cgr_merge newcode cgrs
-
-    sem getConstStringCode (indent : Int) =
-    | CLength _ -> "length"
-    | CCons _ -> "cons"
-    | CConcat _ -> "concat"
-    | CSlice _ -> "slice"
-    | CReverse _ -> "reverse"
-    | CMakeseq _ -> "makeseq"
 end
 
 lang TupleOCamlCode = TupleAst
@@ -388,13 +354,8 @@ lang TupleOCamlCode = TupleAst
 end
 
 -- Syntax fragments
-lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst + FunAst +
-                        SeqTypeAst + ArithTypeAst
-    syn Expr =
-    -- A map of a function that only takes integer arguments and returns an integer argument
-    | TmCUDAMap {elemPerThread : Int,
-                 func : Expr,
-                 array : Expr}
+lang CUDAOCamlCode = VarAst + AppAst + ConstAst + IntAst + FunAst +
+                     SeqTypeAst + ArithTypeAst + CUDACGExt
 
     sem codegenFindExprType (state : CodegenState) =
     -- Intentionally left blank
@@ -586,25 +547,12 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst + FunAst +
       {{{cudaret with globalfuncs = strset_add globalbody strset_new}
                  with hostprototypes = strset_add prototype strset_new}
                  with hostfuncs = strset_add hostbody strset_new}
-
-      sem pprintCode (indent : Int) =
-      | TmCUDAMap t ->
-        strJoin "" [
-          "cudaMap ", int2string t.elemPerThread,
-          " (", pprintCode indent t.func, ")",
-          " (", pprintCode indent t.array, ")"
-        ]
 end
 
 lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode +
                       RecLetsOCamlCode + ConstOCamlCode + UnitOCamlCode + IntOCamlCode +
                       ArithIntOCamlCode + BoolOCamlCode + CmpOCamlCode + CharOCamlCode +
-                      SeqOCamlCode + TupleOCamlCode + CUDAOptOCamlCode + MExprPrettyPrint
-    syn Expr =
-    | TmMain {body : Expr}
-
-    syn Const =
-    | CPrint {}
+                      SeqOCamlCode + TupleOCamlCode + CUDAOptOCamlCode + MExprPrettyPrint + MainCGExt
 
     sem ocamlcodegen (state : CodegenState) =
     | TmMain t ->
@@ -649,9 +597,6 @@ lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode 
     sem ocamlconstgen (state : CodegenState) =
     | CPrint _ -> {{cgr_new with code = "(fun s -> printf \"%s\" (String.of_seq (Array.to_seq s)))"}
                             with opens = strset_add "Printf" strset_new}
-
-    sem getConstStringCode (indent : Int) =
-    | CPrint _ -> "print"
 end
 
 let codegen =
