@@ -388,15 +388,19 @@ lang TupleOCamlCode = TupleAst
 end
 
 -- Syntax fragments
-lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
+lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst + FunAst +
+                        SeqTypeAst + ArithTypeAst
     syn Expr =
     -- A map of a function that only takes integer arguments and returns an integer argument
-    | TmCUDAMapIntArray {elemPerThread : Int,
-                         func : Expr,
-                         array : Expr}
+    | TmCUDAMap {elemPerThread : Int,
+                 func : Expr,
+                 array : Expr}
+
+    sem codegenFindExprType (state : CodegenState) =
+    -- Intentionally left blank
 
     sem ocamlcodegen (state : CodegenState) =
-    | TmCUDAMapIntArray t ->
+    | TmCUDAMap t ->
       -- acc: List of applied arguments
       -- e: Expression to extract
       recursive let extract_args: [Expr] -> Expr -> ([Expr], String) = lam acc. lam e.
@@ -405,13 +409,13 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
           else match e with TmVar t1 then
             (acc, t1.ident)
           else
-            error "TmCUDAMapIntArray: Mapped function is not lifted! (Expected TmVar)"
+            error "TmCUDAMap: Mapped function is not lifted! (Expected TmVar)"
       in
       let arg2string = lam arg.
         let perror = lam _.
           let _ = dprint arg in
           let _ = print "\n" in
-          error "TmCUDAMapIntArray: Above argument is invalid."
+          error "TmCUDAMap: Above argument is invalid."
         in
         match arg with TmConst t1 then
           match t1.val with CInt i then
@@ -423,21 +427,49 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
         else
           perror ()
       in
+      recursive let type2string = lam tpe.
+        let perror = lam _.
+          let _ = dprint tpe in
+          let _ = print "\n" in
+          error "TmCUDAMap: Above type is invalid."
+        in
+        match tpe with TyInt () then
+          "int"
+        else match tpe with TySeq t1 then
+          strJoin " " [type2string t1.tpe, "array"]
+        else
+          perror ()
+      in
+      recursive let findarrow_endtpe = lam tpe.
+        match tpe with TyArrow t1 then
+          findarrow_endtpe t1.to
+        else
+          tpe
+      in
       let res = extract_args [] t.func in
       let args = res.0 in
       let hostfuncname = concat "gpuhost_" res.1 in
+      let argtypes = map (codegenFindExprType state) args in
+      let arrtype = codegenFindExprType state t.array in
+      let funrettype = findarrow_endtpe (codegenFindExprType state (TmVar {ident = res.1})) in
+
+      -- Must map an a sequence of something
+      let arrtype = match arrtype with TySeq t1 then arrtype else error "TmCUDAMap: must map a sequence" in
+
+      let rettype = TySeq {tpe = funrettype} in
+
       let externdef =
         strJoin "" ["external ", hostfuncname, ": ",
-                    strJoin " -> " (concat (map (lam _. "int") args) ["int array", "int array"]),
+                    strJoin " -> " (map type2string (concat argtypes [arrtype, rettype])),
                     " = \"", hostfuncname, "\""]
       in
-      let cudaret = cudacodegen state (TmCUDAMapIntArray t) in
+      let cudaret = cudacodegen state (TmCUDAMap t) in
       {{cudaret with code = strJoin " " [hostfuncname, strJoin " " (map arg2string args), arg2string t.array]}
                 with externs = strset_add externdef cudaret.externs}
 
     -- Generate C++ host functions that interfaces with the OCaml types
     sem cudacodegen (state : CodegenState) =
-    | TmCUDAMapIntArray t ->
+    | TmCUDAMap t ->
       -- acc: List of applied arguments
       -- e: Expression to extract
       recursive let extract_args: [Expr] -> Expr -> ([Expr], String) = lam acc. lam e.
@@ -446,21 +478,49 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
           else match e with TmVar t1 then
             (acc, t1.ident)
           else
-            error "TmCUDAMapIntArray: Mapped function is not lifted! (Expected TmVar)"
+            error "cudacodegen: TmCUDAMap: Mapped function is not lifted! (Expected TmVar)"
+      in
+      let type2string = lam tpe.
+        let perror = lam _.
+          let _ = dprint tpe in
+          let _ = print "\n" in
+          error "cudacodegen: TmCUDAMap: type2string: Above type is invalid."
+        in
+        match tpe with TyInt () then
+          "int"
+        else match tpe with TySeq t1 then
+          match t1.tpe with TyInt () then
+            "value *"
+          else perror ()
+        else perror ()
+      in
+      let argconv = lam name. lam tpe.
+        let perror = lam _.
+          let _ = dprint tpe in
+          let _ = print "\n" in
+          error "cudacodegen: TmCUDAMap: argconv: Above type is invalid."
+        in
+        match tpe with TyInt () then
+          strJoin "" ["Int_val(", name, ")"]
+        else match tpe with TySeq t1 then
+          name
+        else perror ()
       in
       let res = extract_args [] t.func in
       let args = res.0 in
+      let argtypes = map (codegenFindExprType state) args in
+      let arrtype = codegenFindExprType state t.array in
       let mappedfuncname = res.1 in
       let hostfuncname = concat "gpuhost_" mappedfuncname in
       let globalfuncname = concat "gpuglobal_" mappedfuncname in
       let devicefuncname = concat "gpudevice_" mappedfuncname in
-      let intargs = mapi (lam i. lam _. concat "arg" (int2string i)) args in
-      let intargsconved = map (lam s. strJoin "" ["Int_val(", s, ")"]) intargs in
+      let argnames = mapi (lam i. lam _. concat "arg" (int2string i)) args in
+      let argsconved = zipWith argconv argnames argtypes in
       let inarr = "inarr" in
       let outarr = "outarr" in
       let cuda_inarr = concat "cuda_" inarr in
       let cuda_outarr = concat "cuda_" outarr in
-      let numargs = addi (length intargs) 1 in
+      let numargs = addi (length argnames) 1 in
       if gti numargs 5 then
         let _ = print (strJoin "" ["Number of arguments to ", hostfuncname, ": ", int2string numargs]) in
         error "Number of arguments cannot exceed 5."
@@ -472,7 +532,7 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
 
       -- Generate the global device body
       let globalbody = strJoin "" [
-        "__global__ void ", globalfuncname, "(", strJoin ", " (concat (map (concat "int ") intargs)
+        "__global__ void ", globalfuncname, "(", strJoin ", " (concat (map (concat "int ") argnames)
                                                                       (map (concat "value *") [inarr, outarr])),
                                                  ", int n)\n",
         "{\n",
@@ -483,7 +543,7 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
         "\t\tend = n;\n\n",
         "\tfor (i = start; i < end; ++i) {\n",
         "\t\tint v = Int_val(", inarr, "[i]);\n",
-        "\t\t", outarr, "[i] = Val_int(", devicefuncname, "(", strJoin ", " (concat intargs ["v"]), "));\n",
+        "\t\t", outarr, "[i] = Val_int(", devicefuncname, "(", strJoin ", " (concat argnames ["v"]), "));\n",
         "\t}\n",
         "}"
       ] in
@@ -491,7 +551,7 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
       -- Generate the prototype
       let prototype = strJoin "" [
         "value ", hostfuncname, "(",
-        strJoin ", " (map (concat "value ") (concat intargs [inarr])),
+        strJoin ", " (map (concat "value ") (concat argnames [inarr])),
         ")"
       ] in
       -- Generate the host body
@@ -500,7 +560,7 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
         "\n{\n",
         -- The CAML interface for the parameters
         "\tCAMLparam", int2string numargs, "(",
-           strJoin ", " (concat intargs [inarr]), ");\n",
+           strJoin ", " (concat argnames [inarr]), ");\n",
         "\tCAMLlocal1(", outarr, ");\n",
         "\tint n = Wosize_val(", inarr, ");\n\n",
         "\tvalue *cuda_", inarr, ";\n",
@@ -510,7 +570,7 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
         "\tcudaMemcpy(cuda_", inarr, ", Op_val(", inarr, "), n * sizeof(value), cudaMemcpyHostToDevice);\n\n",
         "\t", globalfuncname, "<<<1,(n + ", int2string (subi t.elemPerThread 1),
                               ") / ", int2string t.elemPerThread, ">>>(",
-                              strJoin ", " (concat intargsconved [cuda_inarr, cuda_outarr, "n"]), ");\n",
+                              strJoin ", " (concat argsconved [cuda_inarr, cuda_outarr, "n"]), ");\n",
         "\t", outarr, " = caml_alloc(n, Tag_val(", inarr, "));\n",
         "\tcudaDeviceSynchronize();\n\n",
         "\t// The ", outarr, " must reside on the minor heap for the following cudaMemcpy to succeed.\n",
@@ -528,9 +588,9 @@ lang CUDAOptOCamlCode = VarAst + AppAst + ConstAst + IntAst
                  with hostfuncs = strset_add hostbody strset_new}
 
       sem pprintCode (indent : Int) =
-      | TmCUDAMapIntArray t ->
+      | TmCUDAMap t ->
         strJoin "" [
-          "cudaMapIntArray ", int2string t.elemPerThread,
+          "cudaMap ", int2string t.elemPerThread,
           " (", pprintCode indent t.func, ")",
           " (", pprintCode indent t.array, ")"
         ]
@@ -551,6 +611,40 @@ lang MExprOCamlCode = VarOCamlCode + AppOCamlCode + FunOCamlCode + LetOCamlCode 
       let mainret = ocamlcodegen (cgsincr state) t.body in
       let newcode = strJoin "" ["let main =", cgsnewline (cgsincr state), mainret.code] in
       cgr_merge newcode [mainret]
+
+    sem codegenFindExprType (state : CodegenState) =
+    | TmConst c -> codegenFindConstType state c.val
+    | TmLet t ->
+      let getsome = lam opt. match opt with Some t then t else let _ = dprint (TmLet t) in error "No tpe" in
+      getsome t.tpe
+    | TmLam t ->
+      let getsome = lam opt. match opt with Some t then t else let _ = dprint (TmLam t) in error "No tpe" in
+      getsome t.tpe
+    | TmVar x ->
+      let perror = lam _.
+        error (strJoin "" ["codegenFindExprType: identifier \"", x.ident, "\" could not be associated with a type."])
+      in
+      let cgs_envLookup = lam key. lam state.
+        match find (lam e. eqstr key e.key) state.env with Some t then
+          t.value
+        else
+          error (strJoin "" ["Could not find a binding for \"", key, "\""])
+      in
+      let getsome = lam opt. match opt with Some t then t else perror () in
+      let v = cgs_envLookup x.ident state in
+      match v with TmLet t then
+        getsome t.tpe
+      else match v with TmLam t then
+        getsome t.tpe
+      else perror ()
+
+    sem codegenFindConstType (state : CodegenState) =
+    | CInt _ -> TyInt ()
+    | CChar _ -> TyChar ()
+    | CSeq t -> if gti (length t.tms) 0 then
+                  TySeq {tpe = codegenFindExprType state (head t.tms)}
+                else
+                  TySeq {tpe = TyDyn ()}
 
     sem ocamlconstgen (state : CodegenState) =
     | CPrint _ -> {{cgr_new with code = "(fun s -> printf \"%s\" (String.of_seq (Array.to_seq s)))"}

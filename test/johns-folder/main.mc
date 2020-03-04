@@ -48,7 +48,7 @@ let res = codegen prog in
 let _ = print (pprintCode 0 prog) in
 let _ = print "\n" in
 
-let _ = writeFile "codegen/cpucode.ml" res.0 in
-let _ = writeFile "codegen/gpucode.cpp" res.1 in
+let _ = writeFile "target/cpucode.ml" res.0 in
+let _ = writeFile "target/gpucode.cpp" res.1 in
 
 ()

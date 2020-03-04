@@ -185,4 +185,4 @@ let makeseq_ = use MExprOCamlCode in
 -- cuda macros --
 let cuda_mapintarray_ = use MExprOCamlCode in
   lam ept. lam f. lam arr.
-  TmCUDAMapIntArray {elemPerThread = ept, func = f, array = arr}
+  TmCUDAMap {elemPerThread = ept, func = f, array = arr}
