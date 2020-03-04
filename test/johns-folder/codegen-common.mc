@@ -130,4 +130,8 @@ lang MainCGExt
     | CPrint _ -> "print"
 end
 
-lang MExprCGExt = MExprAst + ArithIntCGExt + CharCGExt + SeqCGExt + CUDACGExt + MainCGExt
+lang MExprCGExt = MExprAst + ArithIntCGExt + CharCGExt + SeqCGExt +
+                  CUDACGExt + MainCGExt +
+                  DynTypeAst + UnitTypeAst + CharTypeAst + SeqTypeAst +
+                  TupleTypeAst + RecordTypeAst + DataTypeAst + ArithTypeAst +
+                  BoolTypeAst + AppTypeAst
