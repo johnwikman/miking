@@ -165,11 +165,19 @@ lang CUDACGCUDA = MExprCGExt
           name
         else perror ()
       in
+      let cgs_envLookup = lam key. lam state.
+        match find (lam e. eqstr key e.key) state.env with Some t then
+          t.value
+        else
+          let errstr = strJoin "" ["Could not find a binding for \"", key, "\""] in
+          error errstr
+      in
       let res = extract_args [] t.func in
       let args = res.0 in
       let argtypes = map (codegenGetExprType state) args in
       let arrtype = codegenGetExprType state t.array in
       let mappedfuncname = res.1 in
+      let mappedfunctype = codegenGetExprType state (cgs_envLookup mappedfuncname state) in
       let hostfuncname = concat "gpuhost_" mappedfuncname in
       let globalfuncname = concat "gpuglobal_" mappedfuncname in
       let devicefuncname = concat "gpudevice_" mappedfuncname in
@@ -187,7 +195,7 @@ lang CUDACGCUDA = MExprCGExt
 
 
       -- Generate code for the mapped function
-      let cudaret = codegenCUDA {state with cudagentype = "int"} (TmVar {ident = mappedfuncname}) in
+      let cudaret = codegenCUDA state (TmVar {ident = mappedfuncname}) in
 
       -- Generate the global device body
       let globalbody = strJoin "" [

@@ -12,7 +12,7 @@ __device__ int gpu_addi(int x, int y) {return x + y;}
 
 __device__ int gpu_muli(int x, int y) {return x * y;}
 
-__device__ int gpudevice_saxpy_int(int x, int y, int a)
+__device__ none gpudevice_saxpy_int(none x, none y, none a)
 {
 	return gpu_addi(gpu_muli(a, x), y);
 }
