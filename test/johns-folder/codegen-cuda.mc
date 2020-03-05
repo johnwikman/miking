@@ -28,6 +28,24 @@ end
 lang AppCGCUDA = MExprCGExt
     sem codegenCUDA (state : CodegenState) =
     | TmApp t ->
+      let nthCheck =
+        let perror = lam _.
+          let _ = dprint (TmApp t) in
+          let _ = print "\n" in
+          error "codegenCUDA: TmApp: nthCheck: Invalid array access."
+        in
+        match t.lhs with TmApp t1 then
+          match t1.lhs with TmConst c then
+            match c.val with CNth _ then
+              -- We are performing an array access!
+              match t1.rhs with TmVar t2 then
+                let idxcgr = codegenCUDA state t.rhs in
+                Some ({idxcgr with code = strJoin "" [t2.ident, "[", idxcgr.code, "]"]})
+              else perror ()
+            else None ()
+          else None ()
+        else None ()
+      in
       recursive let unwrap_app = lam cgr. lam argacc. lam e.
         match e with TmApp t1 then
           let rhscgr = codegenCUDA state t1.rhs in
@@ -36,6 +54,10 @@ lang AppCGCUDA = MExprCGExt
           let lhscgr = codegenCUDA state e in
           (cgr_merge "" [cgr, lhscgr], cons lhscgr.code argacc)
       in
+      -- First check if we are performing an array access
+      match nthCheck with Some tcgr then
+        tcgr
+      else -- continue
       let ret = unwrap_app cgr_new [] (TmApp t) in
       let cgr = ret.0 in
       let func = head ret.1 in
@@ -129,6 +151,49 @@ lang ArithIntCGCUDA = MExprCGExt
                            with devicefuncs = strset_add "__device__ int gpu_muli(int x, int y) {return x * y;}" strset_new}
 end
 
+-- acc: List of applied arguments
+-- e: Expression to extract
+recursive let extract_args: [Expr] -> Expr -> ([Expr], String) = use MExprCGExt in
+  lam acc. lam e.
+  let perror = lam _.
+    let _ = dprint e in
+    let _ = print "\n" in
+    error "extract_args: Mapped function is not lifted! (Expected TmVar)"
+  in
+    match e with TmApp t1 then
+      extract_args (cons t1.rhs acc) t1.lhs
+    else match e with TmVar t1 then
+      (acc, t1.ident)
+    else
+      perror ()
+end
+
+let typeOCaml2CUDA = use MExprCGExt in
+  lam name. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "typeOCaml2CUDA: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" ["Int_val(", name, ")"]
+  else match tpe with TySeq t1 then
+    name
+  else perror ()
+
+let typeCUDA2OCaml = use MExprCGExt in
+  lam name. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "typeCUDA2OCaml: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" ["Val_int(", name, ")"]
+  else match tpe with TySeq t1 then
+    name
+  else perror ()
+
 lang CUDACGCUDA = MExprCGExt
     sem codegenGetExprType (state : CodegenState) =
     -- Intentionally left blank
@@ -136,40 +201,6 @@ lang CUDACGCUDA = MExprCGExt
     -- Generate C++ host functions that interfaces with the OCaml types
     sem codegenCUDA (state : CodegenState) =
     | TmCUDAMap t ->
-      -- acc: List of applied arguments
-      -- e: Expression to extract
-      recursive let extract_args: [Expr] -> Expr -> ([Expr], String) = lam acc. lam e.
-          match e with TmApp t1 then
-            extract_args (cons t1.rhs acc) t1.lhs
-          else match e with TmVar t1 then
-            (acc, t1.ident)
-          else
-            error "codegenCUDA: TmCUDAMap: Mapped function is not lifted! (Expected TmVar)"
-      in
-      let typeOCaml2CUDA = lam name. lam tpe.
-        let perror = lam _.
-          let _ = dprint tpe in
-          let _ = print "\n" in
-          error "codegenCUDA: TmCUDAMap: typeOCaml2CUDA: Above type is invalid."
-        in
-        match tpe with TyInt () then
-          strJoin "" ["Int_val(", name, ")"]
-        else match tpe with TySeq t1 then
-          name
-        else perror ()
-      in
-      let typeCUDA2OCaml = lam name. lam tpe.
-        let perror = lam _.
-          let _ = dprint tpe in
-          let _ = print "\n" in
-          error "codegenCUDA: TmCUDAMap: typeCUDA2OCaml: Above type is invalid."
-        in
-        match tpe with TyInt () then
-          strJoin "" ["Val_int(", name, ")"]
-        else match tpe with TySeq t1 then
-          name
-        else perror ()
-      in
       let res = extract_args [] t.func in
       let args = res.0 in
       let argtypes = map (codegenGetExprType state) args in

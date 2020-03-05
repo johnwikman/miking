@@ -5,19 +5,19 @@
 #include <stdlib.h>
 
 extern "C" {
-	value gpuhost_saxpy_int(value arg0, value arg1, value inarr);
+	value gpuhost_saxpy_int_single(value arg0, value arg1, value inarr);
 }
 
 __device__ int gpu_addi(int x, int y) {return x + y;}
 
 __device__ int gpu_muli(int x, int y) {return x * y;}
 
-__device__ int gpudevice_saxpy_int(int x, int y, int a)
+__device__ int gpudevice_saxpy_int_single(int x, int y, int a)
 {
 	return gpu_addi(gpu_muli(a, x), y);
 }
 
-__global__ void gpuglobal_saxpy_int(int arg0, int arg1, value *inarr, value *outarr, int n)
+__global__ void gpuglobal_saxpy_int_single(int arg0, int arg1, value *inarr, value *outarr, int n)
 {
 	int i;
 	int start = threadIdx.x;
@@ -27,11 +27,11 @@ __global__ void gpuglobal_saxpy_int(int arg0, int arg1, value *inarr, value *out
 
 	for (i = start; i < end; ++i) {
 		int v = Int_val(inarr[i]);
-		outarr[i] = Val_int(gpudevice_saxpy_int(arg0, arg1, v));
+		outarr[i] = Val_int(gpudevice_saxpy_int_single(arg0, arg1, v));
 	}
 }
 
-value gpuhost_saxpy_int(value arg0, value arg1, value inarr)
+value gpuhost_saxpy_int_single(value arg0, value arg1, value inarr)
 {
 	CAMLparam3(arg0, arg1, inarr);
 	CAMLlocal1(outarr);
@@ -43,7 +43,7 @@ value gpuhost_saxpy_int(value arg0, value arg1, value inarr)
 	cudaMalloc(&cuda_outarr, n * sizeof(value));
 	cudaMemcpy(cuda_inarr, Op_val(inarr), n * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_saxpy_int<<<1,(n + 31) / 32>>>(Int_val(arg0), Int_val(arg1), cuda_inarr, cuda_outarr, n);
+	gpuglobal_saxpy_int_single<<<1,(n + 31) / 32>>>(Int_val(arg0), Int_val(arg1), cuda_inarr, cuda_outarr, n);
 	outarr = caml_alloc(n, Tag_val(inarr));
 	cudaDeviceSynchronize();
 
