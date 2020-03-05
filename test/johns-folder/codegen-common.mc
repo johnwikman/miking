@@ -50,19 +50,26 @@ let cgr_merge = lam newcode. lam cgrs.
 
 -- indent: The indentation level on the OCaml code
 -- env: Lookup for bound expressions.
-type CodegenState = {indent      : Int,
-                     env         : [{key : String, value : Expr}],
-                     cudagentype : String}
+type CodegenState = {indent : Int,
+                     env    : [{key : String, value : Expr}]}
 
-let cgs_new = {indent = 0, env = [], cudagentype = "none"}
+let cgs_new = {indent = 0, env = []}
 let cgs_envAdd = lam key. lam value. lam state.
     {state with env = cons {key = key, value = value} state.env}
+let cgs_envLookup = lam key. lam state.
+    match find (lam e. eqstr key e.key) state.env with Some t then
+      t.value
+    else
+      let errstr = strJoin "" ["Could not find a binding for \"", key, "\""] in
+      error errstr
 
 let cgsspacing = lam state. makeseq state.indent ' '
 let cgsnewline = lam state. concat "\n" (cgsspacing state)
 
 let cgsincri = lam i. lam state. {state with indent = addi state.indent i}
 let cgsincr = lam state. cgsincri 4 state
+
+
 
 lang ArithIntCGExt = ArithIntAst
     syn Const =

@@ -239,19 +239,6 @@ lang CUDACGOCaml = MExprCGExt
         else
           perror ()
       in
-      recursive let type2string = lam tpe.
-        let perror = lam _.
-          let _ = dprint tpe in
-          let _ = print "\n" in
-          error "TmCUDAMap: Above type is invalid."
-        in
-        match tpe with TyInt () then
-          "int"
-        else match tpe with TySeq t1 then
-          strJoin " " [type2string t1.tpe, "array"]
-        else
-          perror ()
-      in
       recursive let findarrow_endtpe = lam tpe.
         match tpe with TyArrow t1 then
           findarrow_endtpe t1.to
@@ -272,7 +259,7 @@ lang CUDACGOCaml = MExprCGExt
 
       let externdef =
         strJoin "" ["external ", hostfuncname, ": ",
-                    strJoin " -> " (map type2string (concat argtypes [arrtype, rettype])),
+                    strJoin " -> " (map type2ocamlstring (concat argtypes [arrtype, rettype])),
                     " = \"", hostfuncname, "\""]
       in
       let cudaret = codegenCUDA state (TmCUDAMap t) in

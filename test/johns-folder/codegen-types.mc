@@ -68,3 +68,53 @@ end
 
 lang MExprCGType = VarCGType + LetCGType + FunCGType + ConstCGType +
                    IntCGType + CharCGType + SeqCGType
+
+-- Helper functions
+let type2cudastr = use MExprCGType in
+    lam tpe.
+    let perror = lam _.
+      let _ = dprint tpe in
+      let _ = print "\n" in
+      error "type2cudastr: Above type is invalid."
+    in
+    match tpe with TyInt () then
+      "int "
+    else match tpe with TySeq t1 then
+      match t1.tpe with TyInt () then
+        "value *"
+      else perror ()
+    else perror ()
+
+recursive let type2ocamlstring = use MExprCGType in
+    lam tpe.
+    let perror = lam _.
+      let _ = dprint tpe in
+      let _ = print "\n" in
+      error "type2ocamlstring: Above type is invalid."
+    in
+    match tpe with TyInt () then
+      "int"
+    else match tpe with TySeq t1 then
+      strJoin " " [type2ocamlstring t1.tpe, "array"]
+    else
+      perror ()
+end
+
+recursive let getRetType = use MExprCGType in
+    lam tpe.
+    match tpe with TyArrow t then
+      getRetType t.to
+    else
+      tpe
+end
+
+let getSeqType = use MExprCGType in
+    lam tpe.
+    let perror = lam _.
+      let _ = dprint tpe in
+      let _ = print "\n" in
+      error "getSeqType: Above type is not a seq."
+    in
+    match tpe with TySeq t then
+      t.tpe
+    else perror ()
