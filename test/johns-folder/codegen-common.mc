@@ -69,7 +69,13 @@ let cgsnewline = lam state. concat "\n" (cgsspacing state)
 let cgsincri = lam i. lam state. {state with indent = addi state.indent i}
 let cgsincr = lam state. cgsincri 4 state
 
+lang FloatCGExt
+    syn Const =
+    | CFloat {val : Float}
 
+    sem getConstStringCode (indent : Int) =
+    | CFloat f -> float2string f.val
+end
 
 lang ArithIntCGExt = ArithIntAst
     syn Const =
@@ -81,6 +87,20 @@ lang ArithIntCGExt = ArithIntAst
     | CModi _ -> "modi"
     | CDivi _ -> "divi"
     | CNegi _ -> "negi"
+end
+
+lang ArithFloatCGExt
+    syn Const =
+    | CAddf {}
+    | CSubf {}
+    | CMulf {}
+    | CDivf {}
+
+    sem getConstStringCode (indent : Int) =
+    | CAddf _ -> "addf"
+    | CSubf _ -> "subf"
+    | CMulf _ -> "mulf"
+    | CDivf _ -> "divf"
 end
 
 lang CharCGExt = CharAst
@@ -111,16 +131,26 @@ lang SeqCGExt = SeqAst
     | CMakeseq _ -> "makeseq"
 end
 
+lang ArithTypeCGExt
+    syn Type =
+    | TyFloat {}
+
+    sem getTypeStringCode (indent : Int) =
+    | TyFloat _ -> "Float"
+end
+
 lang CUDACGExt
     syn Expr =
     | TmCUDAMap {elemPerThread : Int,
+                 includeIndexArg : Bool,
                  func : Expr,
                  array : Expr}
 
     sem pprintCode (indent : Int) =
     | TmCUDAMap t ->
+      let suffix = if t.includeIndexArg then "i" else "" in
       strJoin "" [
-        "cudaMap ", int2string t.elemPerThread,
+        "cudaMap", suffix, " ", int2string t.elemPerThread,
         " (", pprintCode indent t.func, ")",
         " (", pprintCode indent t.array, ")"
       ]
@@ -137,8 +167,9 @@ lang MainCGExt
     | CPrint _ -> "print"
 end
 
-lang MExprCGExt = MExprAst + ArithIntCGExt + CharCGExt + SeqCGExt +
-                  CUDACGExt + MainCGExt +
+lang MExprCGExt = MExprAst + FloatCGExt + ArithIntCGExt + ArithFloatCGExt +
+                  CharCGExt + SeqCGExt + ArithTypeCGExt + CUDACGExt +
+                  MainCGExt +
                   DynTypeAst + UnitTypeAst + CharTypeAst + SeqTypeAst +
                   TupleTypeAst + RecordTypeAst + DataTypeAst + ArithTypeAst +
                   BoolTypeAst + AppTypeAst

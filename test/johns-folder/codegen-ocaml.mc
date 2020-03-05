@@ -118,6 +118,11 @@ lang IntCGOCaml = MExprCGExt
     | CInt i -> {cgr_new with code = int2string i.val}
 end
 
+lang FloatCGOCaml = MExprCGExt
+    sem ocamlconstgen (state : CodegenState) =
+    | CFloat f -> {cgr_new with code = float2string f.val}
+end
+
 lang ArithIntCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CAddi _ -> {cgr_new with code = "( + )"}
@@ -126,6 +131,14 @@ lang ArithIntCGOCaml = MExprCGExt
     | CDivi _ -> {cgr_new with code = "( / )"}
     | CModi _ -> {cgr_new with code = "( mod )"}
     | CNegi _ -> {cgr_new with code = "( ~- )"}
+end
+
+lang ArithFloatCGOCaml = MExprCGExt
+    sem ocamlconstgen (state : CodegenState) =
+    | CAddf _ -> {cgr_new with code = "( +. )"}
+    | CSubf _ -> {cgr_new with code = "( -. )"}
+    | CMulf _ -> {cgr_new with code = "( *. )"}
+    | CDivf _ -> {cgr_new with code = "( /. )"}
 end
 
 lang BoolCGOCaml = MExprCGExt
@@ -281,9 +294,10 @@ end
 
 lang MExprCGOCaml = VarCGOCaml + AppCGOCaml + FunCGOCaml + LetCGOCaml +
                     RecLetsCGOCaml + ConstCGOCaml + UnitCGOCaml + IntCGOCaml +
-                    ArithIntCGOCaml + BoolCGOCaml + CmpCGOCaml + CharCGOCaml +
-                    SeqCGOCaml + TupleCGOCaml + CUDACGOCaml + MainGCOCaml +
-                    MExprCGType + MExprCGCUDA + MExprPrettyPrint
+                    ArithIntCGOCaml + FloatCGOCaml + ArithFloatCGOCaml +
+                    BoolCGOCaml + CmpCGOCaml + CharCGOCaml + SeqCGOCaml +
+                    TupleCGOCaml + CUDACGOCaml + MainGCOCaml + MExprCGType +
+                    MExprCGCUDA + MExprPrettyPrint
 
 let codegen =
     use MExprCGOCaml in

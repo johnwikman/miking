@@ -6,6 +6,7 @@
 
 extern "C" {
 	value gpuhost_saxpy_int_single(value arg0, value arg1, value inarr);
+	value gpuhost_id_ignore2nd(value inarr);
 }
 
 __device__ int gpu_addi(int x, int y) {return x + y;}
@@ -17,10 +18,15 @@ __device__ int gpudevice_saxpy_int_single(int x, int y, int a)
 	return gpu_addi(gpu_muli(a, x), y);
 }
 
+__device__ int gpudevice_id_ignore2nd(int x, int y)
+{
+	return x;
+}
+
 __global__ void gpuglobal_saxpy_int_single(int arg0, int arg1, value *inarr, value *outarr, int n)
 {
 	int i;
-	int start = threadIdx.x;
+	int start = threadIdx.x * 32;
 	int end = start + 32;
 	if (end > n)
 		end = n;
@@ -28,6 +34,20 @@ __global__ void gpuglobal_saxpy_int_single(int arg0, int arg1, value *inarr, val
 	for (i = start; i < end; ++i) {
 		int v = Int_val(inarr[i]);
 		outarr[i] = Val_int(gpudevice_saxpy_int_single(arg0, arg1, v));
+	}
+}
+
+__global__ void gpuglobal_id_ignore2nd(value *inarr, value *outarr, int n)
+{
+	int i;
+	int start = threadIdx.x * 16;
+	int end = start + 16;
+	if (end > n)
+		end = n;
+
+	for (i = start; i < end; ++i) {
+		int v = Int_val(inarr[i]);
+		outarr[i] = Val_int(gpudevice_id_ignore2nd(i, v));
 	}
 }
 
@@ -47,10 +67,30 @@ value gpuhost_saxpy_int_single(value arg0, value arg1, value inarr)
 	outarr = caml_alloc(n, Tag_val(inarr));
 	cudaDeviceSynchronize();
 
-	// The outarr must reside on the minor heap for the following cudaMemcpy to succeed.
-	// (Possible garbage collector issues otherwise...)
-	// (Though should never be any issues since neither the previous or new value are blocks...)
-	CAMLassert(Is_young((value) outarr));
+	cudaMemcpy(Op_val(outarr), cuda_outarr, n * sizeof(value), cudaMemcpyDeviceToHost);
+
+	cudaFree(cuda_inarr);
+	cudaFree(cuda_outarr);
+
+	CAMLreturn(outarr);
+}
+
+value gpuhost_id_ignore2nd(value inarr)
+{
+	CAMLparam1(inarr);
+	CAMLlocal1(outarr);
+	int n = Wosize_val(inarr);
+
+	value *cuda_inarr;
+	value *cuda_outarr;
+	cudaMalloc(&cuda_inarr, n * sizeof(value));
+	cudaMalloc(&cuda_outarr, n * sizeof(value));
+	cudaMemcpy(cuda_inarr, Op_val(inarr), n * sizeof(value), cudaMemcpyHostToDevice);
+
+	gpuglobal_id_ignore2nd<<<1,(n + 15) / 16>>>(cuda_inarr, cuda_outarr, n);
+	outarr = caml_alloc(n, Tag_val(inarr));
+	cudaDeviceSynchronize();
+
 	cudaMemcpy(Op_val(outarr), cuda_outarr, n * sizeof(value), cudaMemcpyDeviceToHost);
 
 	cudaFree(cuda_inarr);

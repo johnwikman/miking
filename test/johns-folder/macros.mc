@@ -22,6 +22,10 @@ let int_ = use MExprCGOCaml in
   lam i.
   TmConst {val = CInt {val = i}}
 
+let float_ = use MExprCGOCaml in
+  lam i.
+  TmConst {val = CFloat {val = i}}
+
 let char_ = use MExprCGOCaml in
   lam c.
   TmConst {val = CChar {val = c}}
@@ -82,6 +86,9 @@ let tycon_ = use MExprCGOCaml in
 
 let tyint_ = use MExprCGOCaml in
   TyInt ()
+
+let tyfloat_ = use MExprCGOCaml in
+  TyFloat ()
 
 let tybool_ = use MExprCGOCaml in
   TyBool ()
@@ -167,6 +174,18 @@ let divi_ = use MExprCGOCaml in
 let modi_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CModi ()})
 
+let addf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CAddf ()})
+
+let subf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CSubf ()})
+
+let mulf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CMulf ()})
+
+let divf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CDivf ()})
+
 let cons_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CCons ()})
 
@@ -183,6 +202,10 @@ let makeseq_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CMakeseq ()})
 
 -- cuda macros --
-let cuda_mapintarray_ = use MExprCGOCaml in
+let cudamap_ = use MExprCGOCaml in
   lam ept. lam f. lam arr.
-  TmCUDAMap {elemPerThread = ept, func = f, array = arr}
+  TmCUDAMap {elemPerThread = ept, includeIndexArg = false, func = f, array = arr}
+
+let cudamapi_ = use MExprCGOCaml in
+  lam ept. lam f. lam arr.
+  TmCUDAMap {elemPerThread = ept, includeIndexArg = true, func = f, array = arr}

@@ -194,6 +194,19 @@ let typeCUDA2OCaml = use MExprCGExt in
     name
   else perror ()
 
+let assignIdxCUDA2OCaml = use MExprCGExt in
+  lam lhsname. lam lhsidx. lam rhs. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "assignIdxCUDA2OCaml: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" [lhsname, "[", lhsidx, "] = Val_int(", rhs, ")"]
+  else match tpe with TyFloat () then
+    strJoin "" ["((double *) ", lhsname, ")[", lhsidx, "] = ", rhs]
+  else perror ()
+
 lang CUDACGCUDA = MExprCGExt
     sem codegenGetExprType (state : CodegenState) =
     -- Intentionally left blank
@@ -230,6 +243,10 @@ lang CUDACGCUDA = MExprCGExt
       -- Generate code for the mapped function
       let cudaret = codegenCUDA state (TmVar {ident = mappedfuncname}) in
 
+      -- Arguments to be applied that were generated in the global init function
+      let genargs = ["v"] in
+      let genargs = if t.includeIndexArg then cons "i" genargs else genargs in
+
       -- Generate the global device body
       let globalbody = strJoin "" [
         "__global__ void ", globalfuncname, "(", strJoin ", " (concat argstyped
@@ -237,15 +254,17 @@ lang CUDACGCUDA = MExprCGExt
                                                  ", int n)\n",
         "{\n",
         "\tint i;\n",
-        "\tint start = threadIdx.x;\n",
+        "\tint start = threadIdx.x * ", int2string t.elemPerThread, ";\n",
         "\tint end = start + ", int2string t.elemPerThread, ";\n",
         "\tif (end > n)\n",
         "\t\tend = n;\n\n",
         "\tfor (i = start; i < end; ++i) {\n",
         "\t\t", type2cudastr mappedrettype, "v = ", typeOCaml2CUDA (strJoin "" [inarr, "[i]"]) (getSeqType arrtype), ";\n",
-        "\t\t", outarr, "[i] = ", typeCUDA2OCaml (strJoin "" [devicefuncname, "(", strJoin ", " (concat argnames ["v"]), ")"])
-                                                 mappedrettype,
-                               ";\n",
+        "\t\t", assignIdxCUDA2OCaml outarr
+                                    "i"
+                                    (strJoin "" [devicefuncname, "(", strJoin ", " (concat argnames genargs), ")"])
+                                    mappedrettype,
+                ";\n",
         "\t}\n",
         "}"
       ] in
@@ -275,10 +294,6 @@ lang CUDACGCUDA = MExprCGExt
                               strJoin ", " (concat argsconved [cuda_inarr, cuda_outarr, "n"]), ");\n",
         "\t", outarr, " = caml_alloc(n, Tag_val(", inarr, "));\n",
         "\tcudaDeviceSynchronize();\n\n",
-        "\t// The ", outarr, " must reside on the minor heap for the following cudaMemcpy to succeed.\n",
-        "\t// (Possible garbage collector issues otherwise...)\n",
-        "\t// (Though should never be any issues since neither the previous or new value are blocks...)\n",
-        "\tCAMLassert(Is_young((value) ", outarr, "));\n",
         "\tcudaMemcpy(Op_val(", outarr, "), ", cuda_outarr, ", n * sizeof(value), cudaMemcpyDeviceToHost);\n\n",
         "\tcudaFree(", cuda_inarr, ");\n",
         "\tcudaFree(", cuda_outarr, ");\n\n",

@@ -17,7 +17,7 @@ let func_printintln =
 in
 
 let prog = stdlib_ in
-let prog = bind_ prog testlib_ in
+--let prog = bind_ prog testlib_ in
 let prog = bind_ prog testlibcuda_ in
 let prog = bind_ prog func_printintln in
 let prog = bind_ prog (let_ "v" (tyint_) (int_ 10)) in
@@ -37,11 +37,16 @@ let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (app3f_ (var_ "mapcuda_saxpy_i
                                                           (int_ 11)
                                                           (seq_ [int_ 15, int_ 1]))) in
 
-let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "Result of saxpy 17 11 [15, 1]\n"))) in
-let prog = bind_ prog (let_ "_" (tyunit_) (app_ (var_ "printintln")
-                                                (nth_ (var_ "res") (int_ 0)))) in
-let prog = bind_ prog (let_ "_" (tyunit_) (app_ (var_ "printintln")
-                                                (nth_ (var_ "res") (int_ 1)))) in
+let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
+                                                  (str_ "saxpy 17 11 [15, 1] result")
+                                                  (var_ "res"))) in
+
+let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (app1f_ (var_ "mapcuda_id_ignore2nd")
+                                                          (makeseq_ (int_ 70) (int_ 0)))) in
+
+let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
+                                                  (str_ "mapcuda_id_ignore2nd result")
+                                                  (var_ "res"))) in
 
 let res = codegen prog in
 

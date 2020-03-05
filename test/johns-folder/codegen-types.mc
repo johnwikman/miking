@@ -50,6 +50,11 @@ lang IntCGType = MExprCGExt
     | CInt _ -> TyInt ()
 end
 
+lang FloatCGType = MExprCGExt
+    sem codegenGetConstType (state : CodegenState) =
+    | CFloat _ -> TyFloat ()
+end
+
 lang CharCGType = MExprCGExt
     sem codegenGetConstType (state : CodegenState) =
     | CChar _ -> TyChar ()
@@ -67,7 +72,7 @@ lang SeqCGType = MExprCGExt
 end
 
 lang MExprCGType = VarCGType + LetCGType + FunCGType + ConstCGType +
-                   IntCGType + CharCGType + SeqCGType
+                   IntCGType + FloatCGType + CharCGType + SeqCGType
 
 -- Helper functions
 let type2cudastr = use MExprCGType in
@@ -79,6 +84,8 @@ let type2cudastr = use MExprCGType in
     in
     match tpe with TyInt () then
       "int "
+    else match tpe with TyInt () then
+      "double "
     else match tpe with TySeq t1 then
       match t1.tpe with TyInt () then
         "value *"
@@ -94,6 +101,8 @@ recursive let type2ocamlstring = use MExprCGType in
     in
     match tpe with TyInt () then
       "int"
+    else match tpe with TyFloat () then
+      "float"
     else match tpe with TySeq t1 then
       strJoin " " [type2ocamlstring t1.tpe, "array"]
     else
