@@ -32,6 +32,7 @@ let prog = bind_ prog (let_ "printstr" (tystr_) (concat_ (str_ "factorial ")
                                                                                     (str_ "\n")))))) in
 let prog = bind_ prog (let_ "_" (tyunit_) (print_ (var_ "printstr"))) in
 
+-- SAXPY
 let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (app3f_ (var_ "mapcuda_saxpy_int")
                                                           (int_ 17)
                                                           (int_ 11)
@@ -41,11 +42,25 @@ let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
                                                   (str_ "saxpy 17 11 [15, 1] result")
                                                   (var_ "res"))) in
 
+-- ID (cudaMapi)
 let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (app1f_ (var_ "mapcuda_id_ignore2nd")
                                                           (makeseq_ (int_ 70) (int_ 0)))) in
 
 let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
                                                   (str_ "mapcuda_id_ignore2nd result")
+                                                  (var_ "res"))) in
+
+-- Factorial (cudaMapi)
+let prog = bind_ prog (let_ "factidx" (tyarrows_ [tyint_, tyint_, tyint_]) (
+                            lam_ "i" tyint_ (lam_ "ignored_arg" tyint_ (
+                                 app1f_ (var_ "factorial") (var_ "i"))))) in
+
+let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudamapi_ 8
+                                                             (var_ "factidx")
+                                                             (makeseq_ (int_ 16) (int_ 0)))) in
+
+let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
+                                                  (str_ "cudaMapi factidx result")
                                                   (var_ "res"))) in
 
 let res = codegen prog in

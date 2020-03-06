@@ -22,29 +22,32 @@ let strset_union : StringSet -> StringSet -> StringSet = lam ss1. lam ss2.
 -- externs: The external function definitions (OCaml Code)
 -- devicefuncs: Code that make up the GPU functions (CUDA C++ Code)
 -- hostfuncs: Code that starts the GPU functions (CUDA C++)
-type CodegenRet = {opens          : StringSet,
-                   code           : String,
-                   externs        : StringSet,
-                   devicefuncs    : StringSet,
-                   globalfuncs    : StringSet,
-                   hostprototypes : StringSet,
-                   hostfuncs      : StringSet}
+type CodegenRet = {opens            : StringSet,
+                   code             : String,
+                   externs          : StringSet,
+                   deviceprototypes : StringSet,
+                   devicefuncs      : StringSet,
+                   globalfuncs      : StringSet,
+                   hostprototypes   : StringSet,
+                   hostfuncs        : StringSet}
 
 let cgr_new = {opens = strset_new,
                code = "",
                externs = strset_new,
+               deviceprototypes = strset_new,
                devicefuncs = strset_new,
                globalfuncs = strset_new,
                hostprototypes = strset_new,
                hostfuncs = strset_new}
 let cgr_merge = lam newcode. lam cgrs.
     let mergefun = lam acc. lam cgr.
-        {{{{{{acc with opens = strset_union cgr.opens acc.opens}
-                  with externs = strset_union cgr.externs acc.externs}
-                  with devicefuncs = strset_union cgr.devicefuncs acc.devicefuncs}
-                  with globalfuncs = strset_union cgr.globalfuncs acc.globalfuncs}
-                  with hostprototypes = strset_union cgr.hostprototypes acc.hostprototypes}
-                  with hostfuncs = strset_union cgr.hostfuncs acc.hostfuncs}
+        {{{{{{{acc with opens = strset_union cgr.opens acc.opens}
+                   with externs = strset_union cgr.externs acc.externs}
+                   with deviceprototypes = strset_union cgr.deviceprototypes acc.deviceprototypes}
+                   with devicefuncs = strset_union cgr.devicefuncs acc.devicefuncs}
+                   with globalfuncs = strset_union cgr.globalfuncs acc.globalfuncs}
+                   with hostprototypes = strset_union cgr.hostprototypes acc.hostprototypes}
+                   with hostfuncs = strset_union cgr.hostfuncs acc.hostfuncs}
     in
     {foldl mergefun cgr_new cgrs with code = newcode}
 
@@ -68,6 +71,15 @@ let cgsnewline = lam state. concat "\n" (cgsspacing state)
 
 let cgsincri = lam i. lam state. {state with indent = addi state.indent i}
 let cgsincr = lam state. cgsincri 4 state
+
+lang RecLetsCGExt = RecLetsAst
+    -- Reference to a TmRecLets statement, should never be part of the original
+    -- AST.
+    syn Expr =
+    | TmRecLetsRef {ident : String,
+                    tpe   : Option,
+                    body  : Expr}
+end
 
 lang FloatCGExt
     syn Const =
@@ -167,9 +179,9 @@ lang MainCGExt
     | CPrint _ -> "print"
 end
 
-lang MExprCGExt = MExprAst + FloatCGExt + ArithIntCGExt + ArithFloatCGExt +
-                  CharCGExt + SeqCGExt + ArithTypeCGExt + CUDACGExt +
-                  MainCGExt +
+lang MExprCGExt = MExprAst + RecLetsCGExt+ FloatCGExt + ArithIntCGExt +
+                  ArithFloatCGExt + CharCGExt + SeqCGExt + ArithTypeCGExt +
+                  CUDACGExt + MainCGExt +
                   DynTypeAst + UnitTypeAst + CharTypeAst + SeqTypeAst +
                   TupleTypeAst + RecordTypeAst + DataTypeAst + ArithTypeAst +
                   BoolTypeAst + AppTypeAst

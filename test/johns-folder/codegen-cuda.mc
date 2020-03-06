@@ -10,11 +10,17 @@ let mapi = lam f. lam seq.
   in
   work 0 f seq
 
+let hostname = lam s. concat "gpuhost_" s
+let gblname = lam s. concat "gpuglobal_" s
+let devname = lam s. concat "gpudevice_" s
+
 lang VarCGCUDA = MExprCGExt
     sem codegenCUDA (state : CodegenState) =
     | TmVar x ->
       let v = cgs_envLookup x.ident state in
       match v with TmLet t then
+        codegenCUDA state v
+      else match v with TmRecLetsRef t then
         codegenCUDA state v
       else match v with TmLam t then
         {cgr_new with code = t.ident}
@@ -105,27 +111,34 @@ lang LetCGCUDA = MExprCGExt
       let types = arrowtype_unfold (codegenGetExprType state (TmLet t)) [] in
       let rettype = head types in
       let rettypestr = type2cudastr rettype in
-      
+  
       let argtypes = reverse (tail types) in
       let argdecls = zipWith concat (map type2cudastr argtypes) args in
 
       let cudaret = codegenCUDA internalstate letexpr in
 
+      let prototype = strJoin "" [
+        "__device__ ", rettypestr, devname t.ident, "(", strJoin ", " argdecls, ")"
+      ] in
+
       let devicebody = strJoin "" [
-        "__device__ ", rettypestr, "gpudevice_", t.ident, "(", strJoin ", " argdecls, ")\n",
+        prototype, "\n",
         "{\n",
         "\treturn ", cudaret.code, ";\n",
         "}"
       ] in
-      {cudaret with devicefuncs = strset_add devicebody cudaret.devicefuncs}
+      {{{cudaret with code = devname t.ident}
+                 with deviceprototypes = strset_add prototype cudaret.deviceprototypes}
+                 with devicefuncs = strset_add devicebody cudaret.devicefuncs}
 end
 
 lang RecLetsCGCUDA = MExprCGExt
     sem codegenCUDA (state : CodegenState) =
-    | TmRecLets t ->
-      let _ = dprint (TmRecLets t) in
-      let _ = print "\n" in
-      error "TmRecLets not yet implemented in codegenCUDA"
+    | TmRecLetsRef t ->
+      -- Add ourselves as a variable to make sure that we do not get stuck
+      -- in an infinite loop.
+      let instate = cgs_envAdd t.ident (TmVar {ident = devname t.ident}) state in
+      codegenCUDA instate (TmLet {ident = t.ident, tpe = t.tpe, body = t.body, inexpr = TmConst {val = CUnit ()}})
 end
 
 lang ConstCGCUDA = MExprCGExt
@@ -136,6 +149,14 @@ lang ConstCGCUDA = MExprCGExt
     | TmConst c -> codegenConstCUDA state c.val
 end
 
+-- Generate a constant function
+let genconstfun = lam typeprefix. lam name. lam argdecls. lam body.
+    let prototype = strJoin "" [typeprefix, " ", name, argdecls] in
+    let fullfunc = strJoin " " [prototype, body] in
+    {{{cgr_new with code = name}
+               with deviceprototypes = strset_add prototype strset_new}
+               with devicefuncs = strset_add fullfunc strset_new}
+
 lang IntCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
     | CInt i -> {cgr_new with code = int2string i.val}
@@ -143,12 +164,31 @@ end
 
 lang ArithIntCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
-    | CAddi _ -> {{cgr_new with code = "gpu_addi"}
-                           with devicefuncs = strset_add "__device__ int gpu_addi(int x, int y) {return x + y;}" strset_new}
-    | CSubi _ -> {{cgr_new with code = "gpu_subi"}
-                           with devicefuncs = strset_add "__device__ int gpu_subi(int x, int y) {return x - y;}" strset_new}
-    | CMuli _ -> {{cgr_new with code = "gpu_muli"}
-                           with devicefuncs = strset_add "__device__ int gpu_muli(int x, int y) {return x * y;}" strset_new}
+    | CAddi _ -> genconstfun "__device__ int" "gpu_addi" "(int x, int y)" "{return x + y;}"
+    | CSubi _ -> genconstfun "__device__ int" "gpu_subi" "(int x, int y)" "{return x - y;}"
+    | CMuli _ -> genconstfun "__device__ int" "gpu_muli" "(int x, int y)" "{return x * y;}"
+end
+
+lang BoolCGCUDA = MExprCGExt
+    sem codegenConstCUDA (state : CodegenState) =
+    | CBool b -> {cgr_new with code = if b.val then "true" else "false"}
+    | CNot _ -> genconstfun "__device__ bool" "gpu_not" "(bool a)" "{return !a;}"
+    | CAnd _ -> genconstfun "__device__ bool" "gpu_and" "(bool a, bool b)" "{return a && b;}"
+    | COr _ -> genconstfun "__device__ bool" "gpu_or" "(bool a, bool b)" "{return a || b;}"
+
+    sem codegenCUDA (state : CodegenState) =
+    | TmIf t ->
+      let condcgr = codegenCUDA state t.cond in
+      let thncgr = codegenCUDA state t.thn in
+      let elscgr = codegenCUDA state t.els in
+      let code = strJoin "" ["(", condcgr.code, ") ? (", thncgr.code, ") : (", elscgr.code, ")"] in
+      cgr_merge code [condcgr, thncgr, elscgr]
+end
+
+lang CmpCGCUDA = MExprCGExt
+    sem codegenConstCUDA (state : CodegenState) =
+    | CEqi _ -> genconstfun "__device__ bool" "gpu_eqi" "(int x, int y)" "{return x == y;}"
+    | CLti _ -> genconstfun "__device__ bool" "gpu_lti" "(int x, int y)" "{return x < y;}"
 end
 
 -- acc: List of applied arguments
@@ -226,9 +266,12 @@ lang CUDACGCUDA = MExprCGExt
       let mappedfunctype = codegenGetExprType state (cgs_envLookup mappedfuncname state) in
       let mappedrettype = getRetType mappedfunctype in
 
-      let hostfuncname = concat "gpuhost_" mappedfuncname in
-      let globalfuncname = concat "gpuglobal_" mappedfuncname in
-      let devicefuncname = concat "gpudevice_" mappedfuncname in
+      -- Generate code for the mapped function
+      let cudaret = codegenCUDA state (TmVar {ident = mappedfuncname}) in
+
+      let hostfuncname = hostname mappedfuncname in
+      let globalfuncname = gblname mappedfuncname in
+      let devicefuncname = cudaret.code in
       let inarr = "inarr" in
       let outarr = "outarr" in
       let cuda_inarr = concat "cuda_" inarr in
@@ -240,10 +283,7 @@ lang CUDACGCUDA = MExprCGExt
       else -- carry on
 
 
-      -- Generate code for the mapped function
-      let cudaret = codegenCUDA state (TmVar {ident = mappedfuncname}) in
-
-      -- Arguments to be applied that were generated in the global init function
+      -- Arguments to be applied that were generated in the global CUDA function
       let genargs = ["v"] in
       let genargs = if t.includeIndexArg then cons "i" genargs else genargs in
 
@@ -307,4 +347,5 @@ end
 
 lang MExprCGCUDA = VarCGCUDA + AppCGCUDA + FunCGCUDA + LetCGCUDA +
                    RecLetsCGCUDA + ConstCGCUDA + IntCGCUDA +
-                   ArithIntCGCUDA + CUDACGCUDA
+                   ArithIntCGCUDA + BoolCGCUDA + CmpCGCUDA +
+                   CUDACGCUDA

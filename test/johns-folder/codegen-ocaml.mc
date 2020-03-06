@@ -65,7 +65,7 @@ lang RecLetsCGOCaml = MExprCGExt
     | TmRecLets t ->
       -- Create the instate which have access to all the bound expressions
       -- in the recursive scope
-      let instate = foldl (lam st. lam b. cgs_envAdd b.ident (TmLet {ident = b.ident, tpe = b.tpe, body = b.body, inexpr = TmConst {val = CUnit ()}}) st) state t.bindings in
+      let instate = foldl (lam st. lam b. cgs_envAdd b.ident (TmRecLetsRef b) st) state t.bindings in
       recursive let generatelets = lam genacc. lam l.
         if null l then
           genacc
@@ -224,6 +224,9 @@ lang CUDACGOCaml = MExprCGExt
     sem codegenCUDA (state : CodegenState) =
     -- Intentionally left blank
 
+    sem ocamlconstgen (state : CodegenState) =
+    -- Intentionally left blank
+
     sem codegenOCaml (state : CodegenState) =
     | TmCUDAMap t ->
       -- acc: List of applied arguments
@@ -235,22 +238,6 @@ lang CUDACGOCaml = MExprCGExt
             (acc, t1.ident)
           else
             error "TmCUDAMap: Mapped function is not lifted! (Expected TmVar)"
-      in
-      let arg2string = lam arg.
-        let perror = lam _.
-          let _ = dprint arg in
-          let _ = print "\n" in
-          error "TmCUDAMap: Above argument is invalid."
-        in
-        match arg with TmConst t1 then
-          match t1.val with CInt i then
-            int2string i
-          else
-            perror ()
-        else match arg with TmVar t1 then
-          t1.ident
-        else
-          perror ()
       in
       recursive let findarrow_endtpe = lam tpe.
         match tpe with TyArrow t1 then
@@ -265,6 +252,10 @@ lang CUDACGOCaml = MExprCGExt
       let arrtype = codegenGetExprType state t.array in
       let funrettype = findarrow_endtpe (codegenGetExprType state (TmVar {ident = res.1})) in
 
+      let argcgr = map (codegenOCaml state) args in
+      let argcgr = concat argcgr [codegenOCaml state t.array] in
+      let argcode = strJoin " " (map (lam r. strJoin "" ["(", r.code, ")"]) argcgr) in
+
       -- Must map an a sequence of something
       let arrtype = match arrtype with TySeq t1 then arrtype else error "TmCUDAMap: must map a sequence" in
 
@@ -275,9 +266,10 @@ lang CUDACGOCaml = MExprCGExt
                     strJoin " -> " (map type2ocamlstring (concat argtypes [arrtype, rettype])),
                     " = \"", hostfuncname, "\""]
       in
-      let cudaret = codegenCUDA state (TmCUDAMap t) in
-      {{cudaret with code = strJoin " " [hostfuncname, strJoin " " (map arg2string args), arg2string t.array]}
-                with externs = strset_add externdef cudaret.externs}
+      let cudacgr = codegenCUDA state (TmCUDAMap t) in
+      let retcgr = cgr_merge "" (cons cudacgr argcgr) in
+      {{retcgr with code = strJoin " " [hostfuncname, argcode]}
+               with externs = strset_add externdef retcgr.externs}
 end
 
 lang MainGCOCaml = MExprCGExt
@@ -312,9 +304,10 @@ let codegen =
                           "caml/mlvalues.h", "stdio.h", "stdlib.h"] in
     let includes = strJoin "\n" (map (lam s. strJoin "" ["#include <", s, ">"]) includeheaders) in
     let hostprototypes = strJoin "\n" ["extern \"C\" {", strJoin "\n" (map (lam s. strJoin "" ["\t", s, ";"]) res.hostprototypes), "}"] in
+    let deviceprototypes = strJoin "\n" (map (lam s. concat s ";") res.deviceprototypes) in
     let devicecode = strJoin "\n\n" res.devicefuncs in
     let globalcode = strJoin "\n\n" res.globalfuncs in
     let hostcode = strJoin "\n\n" res.hostfuncs in
-    let cuda = strJoin "\n\n" [includes, hostprototypes, devicecode, globalcode, hostcode] in
+    let cuda = strJoin "\n\n" [includes, hostprototypes, deviceprototypes, devicecode, globalcode, hostcode] in
     -- Return code
     (ocaml, cuda)

@@ -8,18 +8,29 @@ lang VarCGType = MExprCGExt
       let perror = lam _.
         error (strJoin "" ["codegenGetExprType: identifier \"", x.ident, "\" could not be associated with a type."])
       in
-      let cgs_envLookup = lam key. lam state.
-        match find (lam e. eqstr key e.key) state.env with Some t then
-          t.value
-        else
-          error (strJoin "" ["Could not find a binding for \"", key, "\""])
-      in
       let getsome = lam opt. match opt with Some t then t else perror () in
       let v = cgs_envLookup x.ident state in
       match v with TmLet t then
         getsome t.tpe
       else match v with TmLam t then
         getsome t.tpe
+      else perror ()
+end
+
+lang AppCGType = MExprCGExt
+    sem codegenGetExprType (state : CodegenState) =
+    | TmApp t ->
+      let perror = lam _.
+        let _ = dprint (TmApp t) in
+        let _ = print "\n" in
+        error "codegenGetExprType: Could not find a type for the above function application."
+      in
+      match t.lhs with TmApp t1 then
+        match t1.lhs with TmConst c1 then
+          match c1.val with CMakeseq _ then
+            TySeq {tpe = codegenGetExprType state t.rhs}
+          else perror ()
+        else perror ()
       else perror ()
 end
 
@@ -71,8 +82,9 @@ lang SeqCGType = MExprCGExt
                   TySeq {tpe = TyDyn ()}
 end
 
-lang MExprCGType = VarCGType + LetCGType + FunCGType + ConstCGType +
-                   IntCGType + FloatCGType + CharCGType + SeqCGType
+lang MExprCGType = VarCGType + AppCGType + LetCGType + FunCGType +
+                   ConstCGType + IntCGType + FloatCGType + CharCGType +
+                   SeqCGType
 
 -- Helper functions
 let type2cudastr = use MExprCGType in

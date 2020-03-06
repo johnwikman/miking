@@ -3,6 +3,7 @@ open Array
 
 external gpuhost_saxpy_int_single: int -> int -> int array -> int array = "gpuhost_saxpy_int_single"
 external gpuhost_id_ignore2nd: int array -> int array = "gpuhost_id_ignore2nd"
+external gpuhost_factidx: int array -> int array = "gpuhost_factidx"
 
 let main =
     let head s =
@@ -93,10 +94,10 @@ let main =
         printloop (0)
     in
     let mapcuda_saxpy_int x y arr =
-        gpuhost_saxpy_int_single x y arr
+        gpuhost_saxpy_int_single (x) (y) (arr)
     in
     let mapcuda_id_ignore2nd arr =
-        gpuhost_id_ignore2nd  arr
+        gpuhost_id_ignore2nd (arr)
     in
     let v  =
         10
@@ -121,5 +122,14 @@ let main =
     in
     let _  =
         printintarr ([|'m'; 'a'; 'p'; 'c'; 'u'; 'd'; 'a'; '_'; 'i'; 'd'; '_'; 'i'; 'g'; 'n'; 'o'; 'r'; 'e'; '2'; 'n'; 'd'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
+    in
+    let factidx i ignored_arg =
+        factorial (i)
+    in
+    let res  =
+        gpuhost_factidx (Array.make (16) (0))
+    in
+    let _  =
+        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'a'; 'c'; 't'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     ()
