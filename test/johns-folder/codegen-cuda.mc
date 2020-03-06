@@ -151,7 +151,7 @@ end
 
 -- Generate a constant function
 let genconstfun = lam typeprefix. lam name. lam argdecls. lam body.
-    let prototype = strJoin "" [typeprefix, " ", name, argdecls] in
+    let prototype = strJoin "" ["__device__ inline ", typeprefix, " ", name, argdecls] in
     let fullfunc = strJoin " " [prototype, body] in
     {{{cgr_new with code = name}
                with deviceprototypes = strset_add prototype strset_new}
@@ -164,25 +164,25 @@ end
 
 lang ArithIntCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
-    | CAddi _ -> genconstfun "__device__ int" "gpu_addi" "(int x, int y)" "{return x + y;}"
-    | CSubi _ -> genconstfun "__device__ int" "gpu_subi" "(int x, int y)" "{return x - y;}"
-    | CMuli _ -> genconstfun "__device__ int" "gpu_muli" "(int x, int y)" "{return x * y;}"
+    | CAddi _ -> genconstfun "int" "gpu_addi" "(int x, int y)" "{return x + y;}"
+    | CSubi _ -> genconstfun "int" "gpu_subi" "(int x, int y)" "{return x - y;}"
+    | CMuli _ -> genconstfun "int" "gpu_muli" "(int x, int y)" "{return x * y;}"
 end
 
 lang ArithFloatCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
-    | CAddf _ -> genconstfun "__device__ double" "gpu_addf" "(double x, double y)" "{return x + y;}"
-    | CSubf _ -> genconstfun "__device__ double" "gpu_subf" "(double x, double y)" "{return x - y;}"
-    | CMulf _ -> genconstfun "__device__ double" "gpu_mulf" "(double x, double y)" "{return x * y;}"
-    | CDivf _ -> genconstfun "__device__ double" "gpu_divf" "(double x, double y)" "{return x / y;}"
+    | CAddf _ -> genconstfun "double" "gpu_addf" "(double x, double y)" "{return x + y;}"
+    | CSubf _ -> genconstfun "double" "gpu_subf" "(double x, double y)" "{return x - y;}"
+    | CMulf _ -> genconstfun "double" "gpu_mulf" "(double x, double y)" "{return x * y;}"
+    | CDivf _ -> genconstfun "double" "gpu_divf" "(double x, double y)" "{return x / y;}"
 end
 
 lang BoolCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
     | CBool b -> {cgr_new with code = if b.val then "true" else "false"}
-    | CNot _ -> genconstfun "__device__ bool" "gpu_not" "(bool a)" "{return !a;}"
-    | CAnd _ -> genconstfun "__device__ bool" "gpu_and" "(bool a, bool b)" "{return a && b;}"
-    | COr _ -> genconstfun "__device__ bool" "gpu_or" "(bool a, bool b)" "{return a || b;}"
+    | CNot _ -> genconstfun "bool" "gpu_not" "(bool a)" "{return !a;}"
+    | CAnd _ -> genconstfun "bool" "gpu_and" "(bool a, bool b)" "{return a && b;}"
+    | COr _ -> genconstfun "bool" "gpu_or" "(bool a, bool b)" "{return a || b;}"
 
     sem codegenCUDA (state : CodegenState) =
     | TmIf t ->
@@ -195,8 +195,8 @@ end
 
 lang CmpCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
-    | CEqi _ -> genconstfun "__device__ bool" "gpu_eqi" "(int x, int y)" "{return x == y;}"
-    | CLti _ -> genconstfun "__device__ bool" "gpu_lti" "(int x, int y)" "{return x < y;}"
+    | CEqi _ -> genconstfun "bool" "gpu_eqi" "(int x, int y)" "{return x == y;}"
+    | CLti _ -> genconstfun "bool" "gpu_lti" "(int x, int y)" "{return x < y;}"
 end
 
 -- acc: List of applied arguments

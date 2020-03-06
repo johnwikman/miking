@@ -21,18 +21,18 @@ extern "C" {
 
 __device__ int gpudevice_saxpy_int_single(int x, int y, int a);
 __device__ double gpudevice_saxpy_float_single(double x, double y, double a);
-__device__ double gpu_mulf(double x, double y);
-__device__ double gpu_addf(double x, double y);
+__device__ inline double gpu_mulf(double x, double y);
+__device__ inline double gpu_addf(double x, double y);
 __device__ int gpudevice_id_ignore2nd(int x, int y);
 __device__ int gpudevice_factidx(int i, int ignored_arg);
 __device__ int gpudevice_factorial(int n);
-__device__ int gpu_subi(int x, int y);
-__device__ int gpu_muli(int x, int y);
+__device__ inline int gpu_subi(int x, int y);
+__device__ inline int gpu_muli(int x, int y);
 __device__ int gpudevice_fibidx(int i, int ignored_arg);
 __device__ int gpudevice_fib(int n);
 __device__ int gpudevice_fib_helper(int i, int n, int prev, int current);
-__device__ bool gpu_eqi(int x, int y);
-__device__ int gpu_addi(int x, int y);
+__device__ inline bool gpu_eqi(int x, int y);
+__device__ inline int gpu_addi(int x, int y);
 
 __device__ int gpudevice_saxpy_int_single(int x, int y, int a)
 {
@@ -44,9 +44,9 @@ __device__ double gpudevice_saxpy_float_single(double x, double y, double a)
 	return gpu_addf(gpu_mulf(a, x), y);
 }
 
-__device__ double gpu_mulf(double x, double y) {return x * y;}
+__device__ inline double gpu_mulf(double x, double y) {return x * y;}
 
-__device__ double gpu_addf(double x, double y) {return x + y;}
+__device__ inline double gpu_addf(double x, double y) {return x + y;}
 
 __device__ int gpudevice_id_ignore2nd(int x, int y)
 {
@@ -63,9 +63,9 @@ __device__ int gpudevice_factorial(int n)
 	return (gpu_eqi(n, 0)) ? (1) : (gpu_muli(n, gpudevice_factorial(gpu_subi(n, 1))));
 }
 
-__device__ int gpu_subi(int x, int y) {return x - y;}
+__device__ inline int gpu_subi(int x, int y) {return x - y;}
 
-__device__ int gpu_muli(int x, int y) {return x * y;}
+__device__ inline int gpu_muli(int x, int y) {return x * y;}
 
 __device__ int gpudevice_fibidx(int i, int ignored_arg)
 {
@@ -82,9 +82,9 @@ __device__ int gpudevice_fib_helper(int i, int n, int prev, int current)
 	return (gpu_eqi(i, n)) ? (current) : (gpudevice_fib_helper(gpu_addi(i, 1), n, current, gpu_addi(prev, current)));
 }
 
-__device__ bool gpu_eqi(int x, int y) {return x == y;}
+__device__ inline bool gpu_eqi(int x, int y) {return x == y;}
 
-__device__ int gpu_addi(int x, int y) {return x + y;}
+__device__ inline int gpu_addi(int x, int y) {return x + y;}
 
 __global__ void gpuglobal_saxpy_int_single(int arg0, int arg1, value *inarr, value *outarr, int n)
 {
