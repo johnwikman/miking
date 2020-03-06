@@ -77,10 +77,20 @@ let func_int2string =
     )
   )
 
+let func_float2string =
+  let_ "float2string" (tyarrow_ tyfloat_ tystr_) (
+    lam_ "f" (tyfloat_) (
+      app1f_ (var_ "Array.of_seq")
+             (app1f_ (var_ "String.to_seq")
+                     (app1f_ (var_ "string_of_float") (var_ "f")))
+    )
+  )
+
 let stdlib_ = bindall_ [
 	func_head,
 	func_tail,
 	func_null,
 	func_map,
-	func_int2string
+	func_int2string,
+  func_float2string
 ]

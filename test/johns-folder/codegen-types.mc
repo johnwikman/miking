@@ -96,10 +96,12 @@ let type2cudastr = use MExprCGType in
     in
     match tpe with TyInt () then
       "int "
-    else match tpe with TyInt () then
+    else match tpe with TyFloat () then
       "double "
     else match tpe with TySeq t1 then
       match t1.tpe with TyInt () then
+        "value *"
+      else match t1.tpe with TyFloat () then
         "value *"
       else perror ()
     else perror ()

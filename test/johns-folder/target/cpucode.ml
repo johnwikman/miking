@@ -2,8 +2,10 @@ open Printf
 open Array
 
 external gpuhost_saxpy_int_single: int -> int -> int array -> int array = "gpuhost_saxpy_int_single"
+external gpuhost_saxpy_float_single: float -> float -> float array -> float array = "gpuhost_saxpy_float_single"
 external gpuhost_id_ignore2nd: int array -> int array = "gpuhost_id_ignore2nd"
 external gpuhost_factidx: int array -> int array = "gpuhost_factidx"
+external gpuhost_fibidx: int array -> int array = "gpuhost_fibidx"
 
 let main =
     let head s =
@@ -36,6 +38,9 @@ let main =
         else
             int2string_rechelper (n)
     in
+    let float2string f =
+        Array.of_seq (String.to_seq (string_of_float (f)))
+    in
     let id x =
         x
     in
@@ -44,6 +49,15 @@ let main =
                 1
             else
                 ( * ) (n) (factorial (( - ) (n) (1)))
+    in
+    let rec fib_helper i n prev current =
+            if ( = ) (i) (n) then
+                current
+            else
+                fib_helper (( + ) (i) (1)) (n) (current) (( + ) (prev) (current))
+    in
+    let fib n =
+        fib_helper (0) (n) (1) (0)
     in
     let saxpy_int_single x y a =
         ( + ) (( * ) (a) (x)) (y)
@@ -93,8 +107,44 @@ let main =
         in
         printloop (0)
     in
+    let printfloatarr name arr =
+        let rec printloop i =
+                if ( = ) (i) (Array.length (arr)) then
+                    ()
+                else
+                    let _  =
+                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; ' '; ' '; ' '|])
+                    in
+                    let _  =
+                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (int2string (i))
+                    in
+                    let _  =
+                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
+                    in
+                    let _  =
+                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (float2string (Array.get (arr) (i)))
+                    in
+                    let _  =
+                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+                    in
+                    printloop (( + ) (i) (1))
+        in
+        let _  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'C'; 'o'; 'n'; 't'; 'e'; 'n'; 't'; 's'; ' '; 'o'; 'f'; ' '|])
+        in
+        let _  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (name)
+        in
+        let _  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; '\n'|])
+        in
+        printloop (0)
+    in
     let mapcuda_saxpy_int x y arr =
         gpuhost_saxpy_int_single (x) (y) (arr)
+    in
+    let mapcuda_saxpy_float x y arr =
+        gpuhost_saxpy_float_single (x) (y) (arr)
     in
     let mapcuda_id_ignore2nd arr =
         gpuhost_id_ignore2nd (arr)
@@ -118,6 +168,12 @@ let main =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     let res  =
+        mapcuda_saxpy_float (1.70e+1) (1.100000e+1) ([|1.50e+1; 1.0e-0|])
+    in
+    let _  =
+        printfloatarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; '.'; '0'; ' '; '1'; '1'; '.'; '0'; ' '; '['; '1'; '5'; '.'; '0'; ','; ' '; '1'; '.'; '0'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
+    in
+    let res  =
         mapcuda_id_ignore2nd (Array.make (70) (0))
     in
     let _  =
@@ -131,5 +187,14 @@ let main =
     in
     let _  =
         printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'a'; 'c'; 't'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
+    in
+    let fibidx i ignored_arg =
+        fib (i)
+    in
+    let res  =
+        gpuhost_fibidx (Array.make (48) (0))
+    in
+    let _  =
+        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'i'; 'b'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     ()

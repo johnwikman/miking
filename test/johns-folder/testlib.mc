@@ -20,6 +20,37 @@ let func_factorial =
     )
   ) (reclets_empty)
 
+-- NOTE: THIS SHOULD BE PART OF THE FIB FUNCTION, PRELIFTED UNTIL THE LAMBDA LIFTING IS SORTED OUT
+let func_fibhelper =
+  reclets_add "fib_helper" (tyarrows_ [tyint_, tyint_, tyint_, tyint_, tyint_]) (
+    lam_ "i" (tyint_) (
+      lam_ "n" (tyint_) (
+        lam_ "prev" (tyint_) (
+          lam_ "current" (tyint_) (
+            if_ (eqi_ (var_ "i") (var_ "n"))
+                (var_ "current")
+                (app4f_ (var_ "fib_helper")
+                        (addi_ (var_ "i") (int_ 1))
+                        (var_ "n")
+                        (var_ "current")
+                        (addi_ (var_ "prev") (var_ "current")))
+          )
+        )
+      )
+    )
+  ) (reclets_empty)
+
+let func_fib =
+  let_ "fib" (tyarrow_ tyint_ tyint_) (
+    lam_ "n" (tyint_) (
+      app4f_ (var_ "fib_helper")
+             (int_ 0)
+             (var_ "n")
+             (int_ 1)
+             (int_ 0)
+    )
+  )
+
 let func_saxpy_int_single =
   let_ "saxpy_int_single" (tyarrows_ [tyint_, tyint_, tyint_, tyint_]) (
     lam_ "x" (tyint_) (
@@ -68,6 +99,21 @@ let func_mapcuda_saxpy_int =
         lam_ "arr" (tyseq_ tyint_) (
           cudamap_ 32
                    (app2f_ (var_ "saxpy_int_single")
+                           (var_ "x")
+                           (var_ "y"))
+                   (var_ "arr")
+        )
+      )
+    )
+  )
+
+let func_mapcuda_saxpy_float =
+  let_ "mapcuda_saxpy_float" (tyarrows_ [tyfloat_, tyfloat_, tyseq_ tyfloat_, tyseq_ tyfloat_]) (
+    lam_ "x" (tyfloat_) (
+      lam_ "y" (tyfloat_) (
+        lam_ "arr" (tyseq_ tyfloat_) (
+          cudamap_ 32
+                   (app2f_ (var_ "saxpy_float_single")
                            (var_ "x")
                            (var_ "y"))
                    (var_ "arr")
@@ -149,19 +195,52 @@ let func_printintarr =
     )
   )
 
+let func_printfloatarr =
+  let_ "printfloatarr" (tyarrows_ [tystr_, tyseq_ tyfloat_, tyunit_]) (
+    lam_ "name" (tystr_) (
+      lam_ "arr" (tyseq_ tyfloat_) (
+        let printloop =
+          reclets_add "printloop" (tyarrow_ tyint_ tyunit_) (
+            lam_ "i" (tyint_) (
+              if_ (eqi_ (var_ "i") (length_ (var_ "arr")))
+                  (unit_)
+                  (bind_ (bindall_ [
+                    let_ "_" (tyunit_) (print_ (str_ "    ")),
+                    let_ "_" (tyunit_) (print_ (app1f_ (var_ "int2string") (var_ "i"))),
+                    let_ "_" (tyunit_) (print_ (str_ ": ")),
+                    let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string") (nth_ (var_ "arr") (var_ "i")))),
+                    let_ "_" (tyunit_) (print_ (str_ "\n"))
+                  ]) (app1f_ (var_ "printloop") (addi_ (var_ "i") (int_ 1))))
+            )
+          ) (reclets_empty)
+        in
+        bind_ (bindall_ [
+          printloop,
+          let_ "_" (tyunit_) (print_ (str_ "Contents of ")),
+          let_ "_" (tyunit_) (print_ (var_ "name")),
+          let_ "_" (tyunit_) (print_ (str_ ":\n"))
+        ]) (app1f_ (var_ "printloop") (int_ 0))
+      )
+    )
+  )
+
 let testlib_all = [
   func_id,
   func_factorial,
+  func_fibhelper, -- <= Remove this once lambda lifting is in place...
+  func_fib,
   func_saxpy_int_single,
   func_saxpy_float_single,
   func_saxpy_int_mapfull,
   func_id_ignore2nd,
   func_printintln,
-  func_printintarr
+  func_printintarr,
+  func_printfloatarr
 ]
 
 let testlibcuda_all = concat testlib_all [
   func_mapcuda_saxpy_int,
+  func_mapcuda_saxpy_float,
   func_mapcuda_id_ignore2nd
 ]
 

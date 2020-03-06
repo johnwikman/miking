@@ -169,6 +169,14 @@ lang ArithIntCGCUDA = MExprCGExt
     | CMuli _ -> genconstfun "__device__ int" "gpu_muli" "(int x, int y)" "{return x * y;}"
 end
 
+lang ArithFloatCGCUDA = MExprCGExt
+    sem codegenConstCUDA (state : CodegenState) =
+    | CAddf _ -> genconstfun "__device__ double" "gpu_addf" "(double x, double y)" "{return x + y;}"
+    | CSubf _ -> genconstfun "__device__ double" "gpu_subf" "(double x, double y)" "{return x - y;}"
+    | CMulf _ -> genconstfun "__device__ double" "gpu_mulf" "(double x, double y)" "{return x * y;}"
+    | CDivf _ -> genconstfun "__device__ double" "gpu_divf" "(double x, double y)" "{return x / y;}"
+end
+
 lang BoolCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
     | CBool b -> {cgr_new with code = if b.val then "true" else "false"}
@@ -217,6 +225,8 @@ let typeOCaml2CUDA = use MExprCGExt in
   in
   match tpe with TyInt () then
     strJoin "" ["Int_val(", name, ")"]
+  else match tpe with TyFloat () then
+    strJoin "" ["*((double *) ", name, ")"]
   else match tpe with TySeq t1 then
     name
   else perror ()
@@ -245,6 +255,19 @@ let assignIdxCUDA2OCaml = use MExprCGExt in
     strJoin "" [lhsname, "[", lhsidx, "] = Val_int(", rhs, ")"]
   else match tpe with TyFloat () then
     strJoin "" ["((double *) ", lhsname, ")[", lhsidx, "] = ", rhs]
+  else perror ()
+
+let extractIdxCUDA2OCaml = use MExprCGExt in
+  lam lhs. lam rhsname. lam rhsidx. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "extractIdxCUDA2OCaml: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" [lhs, " = Int_val(", rhsname, "[", rhsidx, "])"]
+  else match tpe with TyFloat () then
+    strJoin "" [lhs, " = ((double *) ", rhsname, ")[", rhsidx, "]"]
   else perror ()
 
 lang CUDACGCUDA = MExprCGExt
@@ -299,7 +322,12 @@ lang CUDACGCUDA = MExprCGExt
         "\tif (end > n)\n",
         "\t\tend = n;\n\n",
         "\tfor (i = start; i < end; ++i) {\n",
-        "\t\t", type2cudastr mappedrettype, "v = ", typeOCaml2CUDA (strJoin "" [inarr, "[i]"]) (getSeqType arrtype), ";\n",
+        "\t\t", type2cudastr (getSeqType arrtype), "v;\n",
+        "\t\t", extractIdxCUDA2OCaml "v"
+                                     inarr
+                                     "i"
+                                     (getSeqType arrtype),
+                ";\n",
         "\t\t", assignIdxCUDA2OCaml outarr
                                     "i"
                                     (strJoin "" [devicefuncname, "(", strJoin ", " (concat argnames genargs), ")"])
@@ -347,5 +375,5 @@ end
 
 lang MExprCGCUDA = VarCGCUDA + AppCGCUDA + FunCGCUDA + LetCGCUDA +
                    RecLetsCGCUDA + ConstCGCUDA + IntCGCUDA +
-                   ArithIntCGCUDA + BoolCGCUDA + CmpCGCUDA +
-                   CUDACGCUDA
+                   ArithIntCGCUDA + ArithFloatCGCUDA + BoolCGCUDA +
+                   CmpCGCUDA + CUDACGCUDA

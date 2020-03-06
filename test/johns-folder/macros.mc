@@ -114,6 +114,10 @@ let app3f_ = use MExprCGOCaml in
   lam f. lam a. lam b. lam c.
   app_ (app2f_ f a b) c
 
+let app4f_ = use MExprCGOCaml in
+  lam f. lam a. lam b. lam c. lam d.
+  app_ (app3f_ f a b c) d
+
 -- function/control-flow macros --
 let let_ = use MExprCGOCaml in
   lam ident. lam tpe. lam body.

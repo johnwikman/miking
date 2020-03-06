@@ -302,12 +302,21 @@ let codegen =
     -- CUDA Code
     let includeheaders = ["caml/alloc.h", "caml/memory.h",
                           "caml/mlvalues.h", "stdio.h", "stdlib.h"] in
+    let preprocessorchecks = [
+      "#ifndef FLAT_FLOAT_ARRAY",
+      "#error OCaml floats are not stored in flat array, cannot GPU optimize them.",
+      "#endif",
+      "#ifdef ARCH_ALIGN_DOUBLE",
+      "#error Doubles are not same size as OCaml values, cannot GPU optimize them.",
+      "#endif"
+    ] in
     let includes = strJoin "\n" (map (lam s. strJoin "" ["#include <", s, ">"]) includeheaders) in
+    let preprocessor = strJoin "\n" preprocessorchecks in
     let hostprototypes = strJoin "\n" ["extern \"C\" {", strJoin "\n" (map (lam s. strJoin "" ["\t", s, ";"]) res.hostprototypes), "}"] in
     let deviceprototypes = strJoin "\n" (map (lam s. concat s ";") res.deviceprototypes) in
     let devicecode = strJoin "\n\n" res.devicefuncs in
     let globalcode = strJoin "\n\n" res.globalfuncs in
     let hostcode = strJoin "\n\n" res.hostfuncs in
-    let cuda = strJoin "\n\n" [includes, hostprototypes, deviceprototypes, devicecode, globalcode, hostcode] in
+    let cuda = strJoin "\n\n" [includes, preprocessor, hostprototypes, deviceprototypes, devicecode, globalcode, hostcode] in
     -- Return code
     (ocaml, cuda)
