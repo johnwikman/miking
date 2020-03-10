@@ -1,8 +1,8 @@
 -- main.mc
 
 include "codegen/ocaml.mc"
-include "stdlib.mc"
-include "testlib.mc"
+include "lib/stdlib.mc"
+include "lib/testlib.mc"
 
 mexpr
 use MExprCGOCaml in
