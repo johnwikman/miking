@@ -108,7 +108,7 @@ __global__ void gpuglobal_saxpy_int_single(int arg0, int arg1, value *arg2, valu
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(arg2[i]);
-		outarr[i] = Val_int(gpudevice_saxpy_int_single(arg0, arg1, arg2, v));
+		outarr[i] = Val_int(gpudevice_saxpy_int_single(arg0, arg1, v));
 	}
 }
 
@@ -123,7 +123,7 @@ __global__ void gpuglobal_saxpy_float_single(double arg0, double arg1, value *ar
 	for (i = start; i < end; ++i) {
 		double v;
 		v = ((double *) arg2)[i];
-		((double *) outarr)[i] = gpudevice_saxpy_float_single(arg0, arg1, arg2, v);
+		((double *) outarr)[i] = gpudevice_saxpy_float_single(arg0, arg1, v);
 	}
 }
 
@@ -138,7 +138,7 @@ __global__ void gpuglobal_saxpy_int_mapfull(int arg0, value *arg1, value *arg2, 
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(arg2[i]);
-		outarr[i] = Val_int(gpudevice_saxpy_int_mapfull(arg0, arg1, arg2, i, v));
+		outarr[i] = Val_int(gpudevice_saxpy_int_mapfull(arg0, arg1, i, v));
 	}
 }
 
@@ -153,7 +153,7 @@ __global__ void gpuglobal_id_ignore2nd(value *arg0, value *outarr, int n)
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(arg0[i]);
-		outarr[i] = Val_int(gpudevice_id_ignore2nd(arg0, i, v));
+		outarr[i] = Val_int(gpudevice_id_ignore2nd(i, v));
 	}
 }
 
@@ -168,7 +168,7 @@ __global__ void gpuglobal_id2f_ignore2nd(value *arg0, value *outarr, int n)
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(arg0[i]);
-		((double *) outarr)[i] = gpudevice_id2f_ignore2nd(arg0, i, v);
+		((double *) outarr)[i] = gpudevice_id2f_ignore2nd(i, v);
 	}
 }
 
@@ -183,7 +183,7 @@ __global__ void gpuglobal_factidx(value *arg0, value *outarr, int n)
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(arg0[i]);
-		outarr[i] = Val_int(gpudevice_factidx(arg0, i, v));
+		outarr[i] = Val_int(gpudevice_factidx(i, v));
 	}
 }
 

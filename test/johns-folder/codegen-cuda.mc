@@ -378,7 +378,10 @@ lang CUDACGCUDA = MExprCGExt
                   ";\n",
           "\t\t", assignIdxCUDA2OCaml outarr
                                       "i"
-                                      (strJoin "" [devicefuncname, "(", strJoin ", " (concat argnames genargs), ")"])
+                                      (strJoin "" [devicefuncname,
+                                                   "(",
+                                                   strJoin ", " (concat (init argnames) genargs),
+                                                   ")"])
                                       mappedrettype,
                   ";\n"
         ],

@@ -208,13 +208,10 @@ let main =
     let _  =
         printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'a'; 'c'; 't'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
-    let fibidx i ignored_arg =
-        fib (i)
-    in
     let res  =
         gpuhost_fib (48)
     in
     let _  =
-        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'i'; 'b'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
+        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     ()

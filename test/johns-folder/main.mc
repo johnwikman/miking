@@ -96,16 +96,12 @@ let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
                                                   (var_ "res"))) in
 
 -- Fibonacci (cudaMapi)
-let prog = bind_ prog (let_ "fibidx" (tyarrows_ [tyint_, tyint_, tyint_]) (
-                            lam_ "i" tyint_ (lam_ "ignored_arg" tyint_ (
-                                 app1f_ (var_ "fib") (var_ "i"))))) in
-
 let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudamapidx_ 16
                                                                (var_ "fib")
                                                                (int_ 48))) in
 
 let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
-                                                  (str_ "cudaMapi fibidx result")
+                                                  (str_ "cudaMapidx fib result")
                                                   (var_ "res"))) in
 
 let res = codegen prog in
