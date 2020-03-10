@@ -86,11 +86,39 @@ let func_float2string =
     )
   )
 
-let stdlib_ = bindall_ [
+--recursive
+--  let strJoin = lam delim. lam strs.
+--    if eqi (length strs) 0
+--    then ""
+--    else if eqi (length strs) 1
+--         then head strs
+--         else concat (concat (head strs) delim) (strJoin delim (tail strs))
+--end
+let func_strJoin =
+  reclets_add "strJoin" (tyarrows_ [tystr_, tyseq_ tystr_, tystr_]) (
+    lam_ "delim" (tystr_) (
+      lam_ "strs" (tyseq_ tystr_) (
+        if_ (eqi_ (length_ (var_ "strs")) (int_ 0))
+            (str_ "")
+            (if_ (eqi_ (length_ (var_ "strs")) (int_ 1))
+                 (app1f_ (var_ "head") (var_ "strs"))
+                 (concat_ (concat_ (app1f_ (var_ "head")
+                                           (var_ "strs"))
+                                   (var_ "delim"))
+                          (app2f_ (var_ "strJoin")
+                                  (var_ "delim")
+                                  (app1f_ (var_ "tail")
+                                          (var_ "strs")))))
+      )
+    )
+  ) (reclets_empty)
+
+let libstd_ = bindall_ [
 	func_head,
 	func_tail,
 	func_null,
 	func_map,
 	func_int2string,
-  func_float2string
+  func_float2string,
+  func_strJoin
 ]

@@ -1,9 +1,9 @@
--- fibonacci.mc
+-- matmul.mc
 
 include "codegen/ocaml.mc"
 include "lib/std.mc"
 include "lib/io.mc"
-include "lib/arith.mc"
+include "lib/matrix.mc"
 
 mexpr
 use MExprCGOCaml in
@@ -17,16 +17,9 @@ let targetdir = nth argv 3 in
 
 let prog = libstd_ in
 let prog = bind_ prog libio_ in
-let prog = bind_ prog libarith_ in
+let prog = bind_ prog libmatrix_ in
 
--- Fibonacci (cudaMapidx)
-let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudamapidx_ 16
-                                                               (var_ "fib")
-                                                               (int_ 48))) in
-
-let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
-                                                  (str_ "cudaMapidx fib result")
-                                                  (var_ "res"))) in
+-- TEST TO BE WRITTEN
 
 let res = codegen prog in
 

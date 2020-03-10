@@ -1,11 +1,10 @@
 open Printf
 open Array
 
-external gpuhost_saxpy_int_single: int -> int -> int array -> int array = "gpuhost_saxpy_int_single"
-external gpuhost_saxpy_float_single: float -> float -> float array -> float array = "gpuhost_saxpy_float_single"
-external gpuhost_saxpy_int_mapfull: int -> int array -> int array -> int array = "gpuhost_saxpy_int_mapfull"
-external gpuhost_id_ignore2nd: int array -> int array = "gpuhost_id_ignore2nd"
+external gpuhost_saxpy_int: int -> int -> int array -> int array = "gpuhost_saxpy_int"
 external gpuhost_id2f_ignore2nd: int array -> float array = "gpuhost_id2f_ignore2nd"
+external gpuhost_saxpy_float: float -> float -> float array -> float array = "gpuhost_saxpy_float"
+external gpuhost_saxpy_intseq: int -> int array -> int array -> int array = "gpuhost_saxpy_intseq"
 
 let main =
     let head s =
@@ -41,41 +40,17 @@ let main =
     let float2string f =
         Array.of_seq (String.to_seq (string_of_float (f)))
     in
-    let id x =
-        x
-    in
-    let rec factorial n =
-            if ( = ) (n) (0) then
-                1
+    let rec strJoin delim strs =
+            if ( = ) (Array.length (strs)) (0) then
+                [||]
             else
-                ( * ) (n) (factorial (( - ) (n) (1)))
+                if ( = ) (Array.length (strs)) (1) then
+                    head (strs)
+                else
+                    Array.append (Array.append (head (strs)) (delim)) (strJoin (delim) (tail (strs)))
     in
-    let rec fib_helper i n prev current =
-            if ( = ) (i) (n) then
-                current
-            else
-                fib_helper (( + ) (i) (1)) (n) (current) (( + ) (prev) (current))
-    in
-    let fib n =
-        fib_helper (0) (n) (1) (0)
-    in
-    let saxpy_int_single x y a =
-        ( + ) (( * ) (a) (x)) (y)
-    in
-    let saxpy_float_single x y a =
-        ( +. ) (( *. ) (a) (x)) (y)
-    in
-    let saxpy_int_mapfull a y i x =
-        ( + ) (( * ) (a) (x)) (Array.get (y) (i))
-    in
-    let id_ignore2nd x y =
-        x
-    in
-    let id2f_ignore2nd x y =
-        float_of_int (x)
-    in
-    let mapi_id2f_ignore2nd arr =
-        Array.mapi (id2f_ignore2nd) (arr)
+    let printint i =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (int2string (i))
     in
     let printintln i =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (int2string (i)) ([|'\n'|]))
@@ -146,37 +121,37 @@ let main =
         in
         printloop (0)
     in
-    let mapcuda_saxpy_int x y arr =
-        gpuhost_saxpy_int_single (x) (y) (arr)
+    let saxpy_int x y a =
+        ( + ) (( * ) (a) (x)) (y)
     in
-    let mapcuda_saxpy_float x y arr =
-        gpuhost_saxpy_float_single (x) (y) (arr)
+    let saxpy_float x y a =
+        ( +. ) (( *. ) (a) (x)) (y)
     in
-    let mapcuda_saxpy_intfull a x y =
-        gpuhost_saxpy_int_mapfull (a) (y) (x)
+    let saxpy_intseq a y i x =
+        ( + ) (( * ) (a) (x)) (Array.get (y) (i))
     in
-    let mapcuda_id_ignore2nd arr =
-        gpuhost_id_ignore2nd (arr)
+    let id_ignore2nd x y =
+        x
     in
-    let mapcuda_id2f_ignore2nd arr =
-        gpuhost_id2f_ignore2nd (arr)
+    let id2f_ignore2nd x y =
+        float_of_int (x)
     in
     let res  =
-        mapcuda_saxpy_int (17) (11) ([|15; 1|])
+        gpuhost_saxpy_int (17) (11) ([|15; 1|])
     in
     let _  =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     let res  =
-        mapcuda_id2f_ignore2nd (Array.make (5000) (0))
+        gpuhost_id2f_ignore2nd (Array.make (5000) (0))
     in
     let res  =
-        mapcuda_saxpy_float (1.70e+1) (1.100000e+1) (res)
+        gpuhost_saxpy_float (1.70e+1) (1.100000e+1) (res)
     in
     let res  =
-        mapcuda_saxpy_intfull (17) ([|15; 1|]) ([|9; 8|])
+        gpuhost_saxpy_intseq (17) ([|9; 8|]) ([|15; 1|])
     in
     let _  =
-        printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; '_'; 'm'; 'a'; 'p'; 'f'; 'u'; 'l'; 'l'; ' '; '1'; '7'; ' '; '('; 'a'; ')'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; '('; 'x'; ')'; ' '; '['; '9'; ','; ' '; '8'; ']'; ' '; '('; 'y'; ')'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
+        printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; '_'; 'i'; 'n'; 't'; 's'; 'e'; 'q'; ' '; '('; 'a'; ':'; ' '; '1'; '7'; ')'; ' '; '('; 'x'; ':'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ')'; ' '; '('; 'y'; ':'; ' '; '['; '9'; ','; ' '; '8'; ']'; ')'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     ()

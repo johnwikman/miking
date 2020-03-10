@@ -1,8 +1,9 @@
 -- factorial.mc
 
 include "codegen/ocaml.mc"
-include "lib/stdlib.mc"
-include "lib/testlib.mc"
+include "lib/std.mc"
+include "lib/io.mc"
+include "lib/arith.mc"
 
 mexpr
 use MExprCGOCaml in
@@ -14,30 +15,30 @@ else
 	-- carry on
 let targetdir = nth argv 3 in
 
-let prog = stdlib_ in
-let prog = bind_ prog testlibcuda_ in
+let prog = libstd_ in
+let prog = bind_ prog libio_ in
+let prog = bind_ prog libarith_ in
 
--- factorial 10
-let prog = bind_ prog func_printintln in
+-- let v = 10 in
+-- let res = factorial v in
+-- let printstr = strJoin "" ["factorial ", int2string v, " = ", int2string res, "\n"] in
+-- let _ = print printstr in
 let prog = bind_ prog (let_ "v" (tyint_) (int_ 10)) in
 let prog = bind_ prog (let_ "res" (tyint_) (app_ (var_ "factorial")
                                                  (var_ "v"))) in
-let prog = bind_ prog (let_ "printstr" (tystr_) (concat_ (str_ "factorial ")
-                                                         (concat_ (app_ (var_ "int2string")
-                                                                        (var_ "v"))
-                                                                  (concat_ (str_ " = ")
-                                                                           (concat_ (app_ (var_ "int2string")
-                                                                                          (var_ "res"))
-                                                                                    (str_ "\n")))))) in
+let prog = bind_ prog (let_ "printstr" (tystr_) (
+    app2f_ (var_ "strJoin")
+           (str_ "")
+           (seq_ [str_ "factorial ",
+                  app_ (var_ "int2string")
+                       (var_ "v"),
+                  str_ " = ",
+                  app_ (var_ "int2string")
+                       (var_ "res"),
+                  str_ "\n"])
+  )) in
+
 let prog = bind_ prog (let_ "_" (tyunit_) (print_ (var_ "printstr"))) in
-
--- ID (cudaMapi)
-let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (app1f_ (var_ "mapcuda_id_ignore2nd")
-                                                          (makeseq_ (int_ 70) (int_ 0)))) in
-
-let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
-                                                  (str_ "mapcuda_id_ignore2nd result")
-                                                  (var_ "res"))) in
 
 -- Factorial (cudaMapi)
 let prog = bind_ prog (let_ "factidx" (tyarrows_ [tyint_, tyint_, tyint_]) (

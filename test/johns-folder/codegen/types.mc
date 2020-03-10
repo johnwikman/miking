@@ -73,7 +73,10 @@ end
 
 lang SeqCGType = MExprCGExt
     sem codegenGetExprType (state : CodegenState) =
-    -- intentionally left blank
+    | TmSeq t -> if gti (length t.tms) 0 then
+                   TySeq {tpe = codegenGetExprType state (head t.tms)}
+                 else
+                   TySeq {tpe = TyDyn ()}
 
     sem codegenGetConstType (state : CodegenState) =
     | CSeq t -> if gti (length t.tms) 0 then
