@@ -1,6 +1,6 @@
 -- main.mc
 
-include "codegen-ocaml.mc"
+include "codegen/ocaml.mc"
 include "stdlib.mc"
 include "testlib.mc"
 

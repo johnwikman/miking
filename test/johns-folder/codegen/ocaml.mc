@@ -6,9 +6,10 @@
 --  The lambdas need to appear on the left side of the equals sign
 
 include "mexpr/pprint.mc"
-include "codegen-common.mc"
-include "codegen-cuda.mc"
-include "codegen-types.mc"
+
+include "common.mc"
+include "cuda.mc"
+include "types.mc"
 
 lang VarCGOCaml = MExprCGExt
     sem codegenOCaml (state : CodegenState) =

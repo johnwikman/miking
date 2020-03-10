@@ -1,6 +1,6 @@
 -- macros
 
-include "codegen-ocaml.mc"
+include "codegen/ocaml.mc"
 
 recursive let bind_ = use MExprCGOCaml in
   lam letexpr. lam inexpr.

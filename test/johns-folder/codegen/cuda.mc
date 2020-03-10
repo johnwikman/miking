@@ -1,7 +1,7 @@
 -- CUDA Code generation
 
-include "codegen-common.mc"
-include "codegen-types.mc"
+include "common.mc"
+include "types.mc"
 
 let mapi = lam f. lam seq.
   recursive let work = lam i. lam f. lam seq.

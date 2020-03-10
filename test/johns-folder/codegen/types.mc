@@ -1,6 +1,6 @@
 -- Type finder, get the type of any particular expression
 
-include "codegen-common.mc"
+include "common.mc"
 
 lang VarCGType = MExprCGExt
     sem codegenGetExprType (state : CodegenState) =
