@@ -6,8 +6,6 @@ external gpuhost_saxpy_float_single: float -> float -> float array -> float arra
 external gpuhost_saxpy_int_mapfull: int -> int array -> int array -> int array = "gpuhost_saxpy_int_mapfull"
 external gpuhost_id_ignore2nd: int array -> int array = "gpuhost_id_ignore2nd"
 external gpuhost_id2f_ignore2nd: int array -> float array = "gpuhost_id2f_ignore2nd"
-external gpuhost_factidx: int array -> int array = "gpuhost_factidx"
-external gpuhost_fib: int -> int array = "gpuhost_fib"
 
 let main =
     let head s =
@@ -163,18 +161,6 @@ let main =
     let mapcuda_id2f_ignore2nd arr =
         gpuhost_id2f_ignore2nd (arr)
     in
-    let v  =
-        10
-    in
-    let res  =
-        factorial (v)
-    in
-    let printstr  =
-        Array.append ([|'f'; 'a'; 'c'; 't'; 'o'; 'r'; 'i'; 'a'; 'l'; ' '|]) (Array.append (int2string (v)) (Array.append ([|' '; '='; ' '|]) (Array.append (int2string (res)) ([|'\n'|]))))
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (printstr)
-    in
     let res  =
         mapcuda_saxpy_int (17) (11) ([|15; 1|])
     in
@@ -182,7 +168,7 @@ let main =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     let res  =
-        mapcuda_id2f_ignore2nd (Array.make (50000000) (0))
+        mapcuda_id2f_ignore2nd (Array.make (5000) (0))
     in
     let res  =
         mapcuda_saxpy_float (1.70e+1) (1.100000e+1) (res)
@@ -192,26 +178,5 @@ let main =
     in
     let _  =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; '_'; 'm'; 'a'; 'p'; 'f'; 'u'; 'l'; 'l'; ' '; '1'; '7'; ' '; '('; 'a'; ')'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; '('; 'x'; ')'; ' '; '['; '9'; ','; ' '; '8'; ']'; ' '; '('; 'y'; ')'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
-    in
-    let res  =
-        mapcuda_id_ignore2nd (Array.make (70) (0))
-    in
-    let _  =
-        printintarr ([|'m'; 'a'; 'p'; 'c'; 'u'; 'd'; 'a'; '_'; 'i'; 'd'; '_'; 'i'; 'g'; 'n'; 'o'; 'r'; 'e'; '2'; 'n'; 'd'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
-    in
-    let factidx i ignored_arg =
-        factorial (i)
-    in
-    let res  =
-        gpuhost_factidx (Array.make (16) (0))
-    in
-    let _  =
-        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'a'; 'c'; 't'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
-    in
-    let res  =
-        gpuhost_fib (48)
-    in
-    let _  =
-        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     ()

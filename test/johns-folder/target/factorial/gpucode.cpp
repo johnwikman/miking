@@ -18,7 +18,6 @@ extern "C" {
 	value gpuhost_id_ignore2nd(value arg0);
 	value gpuhost_id2f_ignore2nd(value arg0);
 	value gpuhost_factidx(value arg0);
-	value gpuhost_fib(value arg0);
 }
 
 __device__ int gpudevice_saxpy_int_single(int x, int y, int a);
@@ -26,17 +25,15 @@ __device__ double gpudevice_saxpy_float_single(double x, double y, double a);
 __device__ inline double gpu_mulf(double x, double y);
 __device__ inline double gpu_addf(double x, double y);
 __device__ int gpudevice_saxpy_int_mapfull(int a, value *y, int i, int x);
+__device__ inline int gpu_addi(int x, int y);
 __device__ int gpudevice_id_ignore2nd(int x, int y);
 __device__ double gpudevice_id2f_ignore2nd(int x, int y);
 __device__ inline double gpu_int2float(int x);
 __device__ int gpudevice_factidx(int i, int ignored_arg);
 __device__ int gpudevice_factorial(int n);
+__device__ inline bool gpu_eqi(int x, int y);
 __device__ inline int gpu_subi(int x, int y);
 __device__ inline int gpu_muli(int x, int y);
-__device__ int gpudevice_fib(int n);
-__device__ int gpudevice_fib_helper(int i, int n, int prev, int current);
-__device__ inline bool gpu_eqi(int x, int y);
-__device__ inline int gpu_addi(int x, int y);
 
 __device__ int gpudevice_saxpy_int_single(int x, int y, int a)
 {
@@ -56,6 +53,8 @@ __device__ int gpudevice_saxpy_int_mapfull(int a, value *y, int i, int x)
 {
 	return gpu_addi(gpu_muli(a, x), Int_val((y[i])));
 }
+
+__device__ inline int gpu_addi(int x, int y) {return x + y;}
 
 __device__ int gpudevice_id_ignore2nd(int x, int y)
 {
@@ -79,23 +78,11 @@ __device__ int gpudevice_factorial(int n)
 	return (gpu_eqi(n, 0)) ? (1) : (gpu_muli(n, gpudevice_factorial(gpu_subi(n, 1))));
 }
 
+__device__ inline bool gpu_eqi(int x, int y) {return x == y;}
+
 __device__ inline int gpu_subi(int x, int y) {return x - y;}
 
 __device__ inline int gpu_muli(int x, int y) {return x * y;}
-
-__device__ int gpudevice_fib(int n)
-{
-	return gpudevice_fib_helper(0, n, 1, 0);
-}
-
-__device__ int gpudevice_fib_helper(int i, int n, int prev, int current)
-{
-	return (gpu_eqi(i, n)) ? (current) : (gpudevice_fib_helper(gpu_addi(i, 1), n, current, gpu_addi(prev, current)));
-}
-
-__device__ inline bool gpu_eqi(int x, int y) {return x == y;}
-
-__device__ inline int gpu_addi(int x, int y) {return x + y;}
 
 __global__ void gpuglobal_saxpy_int_single(int arg0, int arg1, value *arg2, value *outarr, int n)
 {
@@ -184,19 +171,6 @@ __global__ void gpuglobal_factidx(value *arg0, value *outarr, int n)
 		int v;
 		v = Int_val(arg0[i]);
 		outarr[i] = Val_int(gpudevice_factidx(i, v));
-	}
-}
-
-__global__ void gpuglobal_fib(value *outarr, int n)
-{
-	int i;
-	int start = threadIdx.x * 16;
-	int end = start + 16;
-	if (end > n)
-		end = n;
-
-	for (i = start; i < end; ++i) {
-		outarr[i] = Val_int(gpudevice_fib(i));
 	}
 }
 
@@ -344,26 +318,6 @@ value gpuhost_factidx(value arg0)
 
 	cudaFree(cuda_outarr);
 	cudaFree(cuda_arg0);
-
-	CAMLreturn(outarr);
-}
-
-value gpuhost_fib(value arg0)
-{
-	CAMLparam1(arg0);
-	CAMLlocal1(outarr);
-	int n = Int_val(arg0);
-
-	value *cuda_outarr;
-	cudaMalloc(&cuda_outarr, n * sizeof(value));
-
-	gpuglobal_fib<<<1,(n + 15) / 16>>>(cuda_outarr, n);
-	outarr = caml_alloc(n, 0);
-	cudaDeviceSynchronize();
-
-	cudaMemcpy(Op_val(outarr), cuda_outarr, n * sizeof(value), cudaMemcpyDeviceToHost);
-
-	cudaFree(cuda_outarr);
 
 	CAMLreturn(outarr);
 }
