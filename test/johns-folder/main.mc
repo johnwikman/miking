@@ -43,13 +43,35 @@ let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
                                                   (var_ "res"))) in
 
 -- SAXPY (float)
+let prog = bind_ prog (let_ "res" (tyseq_ tyfloat_) (app1f_ (var_ "mapcuda_id2f_ignore2nd")
+                                                            (makeseq_ (int_ 50000000) (int_ 0)))) in
+
 let prog = bind_ prog (let_ "res" (tyseq_ tyfloat_) (app3f_ (var_ "mapcuda_saxpy_float")
                                                             (float_ 17.0)
                                                             (float_ 11.0)
-                                                            (seq_ [float_ 15.0, float_ 1.0]))) in
+                                                            (var_ "res"))) in
 
-let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printfloatarr")
-                                                  (str_ "saxpy 17.0 11.0 [15.0, 1.0] result")
+--let prog = bind_ prog (let_ "res" (tyseq_ tyfloat_) (app1f_ (var_ "mapi_id2f_ignore2nd")
+--                                                            (makeseq_ (int_ 50000000) (int_ 0)))) in
+--
+--let prog = bind_ prog (let_ "res" (tyseq_ tyfloat_) (app2f_ (var_ "Array.map")
+--                                                            (app2f_ (var_ "saxpy_float_single")
+--                                                                    (float_ 17.0)
+--                                                                    (float_ 11.0))
+--                                                            (var_ "res"))) in
+
+--let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printfloatarr")
+--                                                  (str_ "saxpy 17.0 11.0 \"res\" result")
+--                                                  (var_ "res"))) in
+
+-- SAXPY (Int - full)
+let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (app3f_ (var_ "mapcuda_saxpy_intfull")
+                                                          (int_ 17)
+                                                          (seq_ [int_ 15, int_ 1])
+                                                          (seq_ [int_ 9, int_ 8]))) in
+
+let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
+                                                  (str_ "saxpy_mapfull 17 (a) [15, 1] (x) [9, 8] (y) result")
                                                   (var_ "res"))) in
 
 -- ID (cudaMapi)
@@ -78,9 +100,9 @@ let prog = bind_ prog (let_ "fibidx" (tyarrows_ [tyint_, tyint_, tyint_]) (
                             lam_ "i" tyint_ (lam_ "ignored_arg" tyint_ (
                                  app1f_ (var_ "fib") (var_ "i"))))) in
 
-let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudamapi_ 16
-                                                             (var_ "fibidx")
-                                                             (makeseq_ (int_ 48) (int_ 0)))) in
+let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudamapidx_ 16
+                                                               (var_ "fib")
+                                                               (int_ 48))) in
 
 let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
                                                   (str_ "cudaMapi fibidx result")

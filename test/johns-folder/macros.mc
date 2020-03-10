@@ -190,6 +190,21 @@ let mulf_ = use MExprCGOCaml in
 let divf_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CDivf ()})
 
+let floorfi_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CFloorfi ()})
+
+let ceilfi_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CCeilfi ()})
+
+let roundfi_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CRoundfi ()})
+
+let int2float_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CInt2float ()})
+
+let string2float_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CString2float ()})
+
 let cons_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CCons ()})
 
@@ -208,8 +223,27 @@ let makeseq_ = use MExprCGOCaml in
 -- cuda macros --
 let cudamap_ = use MExprCGOCaml in
   lam ept. lam f. lam arr.
-  TmCUDAMap {elemPerThread = ept, includeIndexArg = false, func = f, array = arr}
+  TmCUDAMap {elemPerThread = ept,
+             includeIndexArg = false,
+             onlyIndexArg = false,
+             onlyIndexArgSize = int_ 0,
+             func = f,
+             array = arr}
 
 let cudamapi_ = use MExprCGOCaml in
   lam ept. lam f. lam arr.
-  TmCUDAMap {elemPerThread = ept, includeIndexArg = true, func = f, array = arr}
+  TmCUDAMap {elemPerThread = ept,
+             includeIndexArg = true,
+             onlyIndexArg = false,
+             onlyIndexArgSize = int_ 0,
+             func = f,
+             array = arr}
+
+let cudamapidx_ = use MExprCGOCaml in
+  lam ept. lam f. lam size.
+  TmCUDAMap {elemPerThread = ept,
+             includeIndexArg = false,
+             onlyIndexArg = true,
+             onlyIndexArgSize = size,
+             func = f,
+             array = seq_ []}

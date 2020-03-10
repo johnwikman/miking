@@ -139,6 +139,15 @@ lang ArithFloatCGOCaml = MExprCGExt
     | CSubf _ -> {cgr_new with code = "( -. )"}
     | CMulf _ -> {cgr_new with code = "( *. )"}
     | CDivf _ -> {cgr_new with code = "( /. )"}
+    | CFloorfi _ -> {{cgr_new with code = "(fun x -> int_of_float (Float.floor x))"}
+                              with opens = strset_add "Float" strset_new}
+    | CCeilfi _ -> {{cgr_new with code = "(fun x -> int_of_float (Float.ceil x))"}
+                             with opens = strset_add "Float" strset_new}
+    | CRoundfi _ -> {{cgr_new with code = "(fun x -> int_of_float (Float.round x))"}
+                              with opens = strset_add "Float" strset_new}
+    | CInt2float _ -> {cgr_new with code = "float_of_int"}
+    | CString2float _ -> {{cgr_new with code = "(fun s -> float_of_string (String.of_seq (Array.to_seq s)))"}
+                                   with opens = strset_add "String" (strset_add "Array" strset_new)}
 end
 
 lang BoolCGOCaml = MExprCGExt
@@ -246,26 +255,21 @@ lang CUDACGOCaml = MExprCGExt
           tpe
       in
       let res = extract_args [] t.func in
-      let args = res.0 in
+      let args = concat res.0 (if t.onlyIndexArg then [t.onlyIndexArgSize] else [t.array]) in
       let hostfuncname = concat "gpuhost_" res.1 in
       let argtypes = map (codegenGetExprType state) args in
-      let arrtype = codegenGetExprType state t.array in
       let funrettype = findarrow_endtpe (codegenGetExprType state (TmVar {ident = res.1})) in
-
-      let argcgr = map (codegenOCaml state) args in
-      let argcgr = concat argcgr [codegenOCaml state t.array] in
-      let argcode = strJoin " " (map (lam r. strJoin "" ["(", r.code, ")"]) argcgr) in
-
-      -- Must map an a sequence of something
-      let arrtype = match arrtype with TySeq t1 then arrtype else error "TmCUDAMap: must map a sequence" in
-
       let rettype = TySeq {tpe = funrettype} in
 
       let externdef =
         strJoin "" ["external ", hostfuncname, ": ",
-                    strJoin " -> " (map type2ocamlstring (concat argtypes [arrtype, rettype])),
+                    strJoin " -> " (map type2ocamlstring (concat argtypes [rettype])),
                     " = \"", hostfuncname, "\""]
       in
+
+      let argcgr = map (codegenOCaml state) args in
+      let argcode = strJoin " " (map (lam r. strJoin "" ["(", r.code, ")"]) argcgr) in
+
       let cudacgr = codegenCUDA state (TmCUDAMap t) in
       let retcgr = cgr_merge "" (cons cudacgr argcgr) in
       {{retcgr with code = strJoin " " [hostfuncname, argcode]}

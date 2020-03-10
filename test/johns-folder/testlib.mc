@@ -112,11 +112,26 @@ let func_mapcuda_saxpy_float =
     lam_ "x" (tyfloat_) (
       lam_ "y" (tyfloat_) (
         lam_ "arr" (tyseq_ tyfloat_) (
-          cudamap_ 32
+          cudamap_ 512
                    (app2f_ (var_ "saxpy_float_single")
                            (var_ "x")
                            (var_ "y"))
                    (var_ "arr")
+        )
+      )
+    )
+  )
+
+let func_mapcuda_saxpy_intfull =
+  let_ "mapcuda_saxpy_intfull" (tyarrows_ [tyint_, tyseq_ tyint_, tyseq_ tyint_, tyseq_ tyint_]) (
+    lam_ "a" (tyint_) (
+      lam_ "x" (tyseq_ tyint_) (
+        lam_ "y" (tyseq_ tyint_) (
+          cudamapi_ 512
+                    (app2f_ (var_ "saxpy_int_mapfull")
+                            (var_ "a")
+                            (var_ "y"))
+                    (var_ "x")
         )
       )
     )
@@ -137,6 +152,33 @@ let func_mapcuda_id_ignore2nd =
       cudamapi_ 16
                 (var_ "id_ignore2nd")
                 (var_ "arr")
+    )
+  )
+
+let func_id2f_ignore2nd =
+  let_ "id2f_ignore2nd" (tyarrows_ [tyint_, tyint_, tyfloat_]) (
+    lam_ "x" (tyint_) (
+      lam_ "y" (tyint_) (
+        int2float_ (var_ "x")
+      )
+    )
+  )
+
+let func_mapcuda_id2f_ignore2nd =
+  let_ "mapcuda_id2f_ignore2nd" (tyarrows_ [tyseq_ tyint_, tyseq_ tyfloat_]) (
+    lam_ "arr" (tyseq_ tyint_) (
+      cudamapi_ 512
+                (var_ "id2f_ignore2nd")
+                (var_ "arr")
+    )
+  )
+
+let func_mapi_id2f_ignore2nd =
+  let_ "mapi_id2f_ignore2nd" (tyarrows_ [tyseq_ tyint_, tyseq_ tyfloat_]) (
+    lam_ "arr" (tyseq_ tyint_) (
+      app2f_ (var_ "Array.mapi")
+             (var_ "id2f_ignore2nd")
+             (var_ "arr")
     )
   )
 
@@ -233,6 +275,8 @@ let testlib_all = [
   func_saxpy_float_single,
   func_saxpy_int_mapfull,
   func_id_ignore2nd,
+  func_id2f_ignore2nd,
+  func_mapi_id2f_ignore2nd,
   func_printintln,
   func_printintarr,
   func_printfloatarr
@@ -241,7 +285,9 @@ let testlib_all = [
 let testlibcuda_all = concat testlib_all [
   func_mapcuda_saxpy_int,
   func_mapcuda_saxpy_float,
-  func_mapcuda_id_ignore2nd
+  func_mapcuda_saxpy_intfull,
+  func_mapcuda_id_ignore2nd,
+  func_mapcuda_id2f_ignore2nd
 ]
 
 let testlib_ = bindall_ testlib_all

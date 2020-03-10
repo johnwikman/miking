@@ -107,12 +107,22 @@ lang ArithFloatCGExt
     | CSubf {}
     | CMulf {}
     | CDivf {}
+    | CFloorfi {}
+    | CCeilfi {}
+    | CRoundfi {}
+    | CInt2float {}
+    | CString2float {}
 
     sem getConstStringCode (indent : Int) =
     | CAddf _ -> "addf"
     | CSubf _ -> "subf"
     | CMulf _ -> "mulf"
     | CDivf _ -> "divf"
+    | CFloorfi -> "floorfi"
+    | CCeilfi -> "ceilfi"
+    | CRoundfi -> "roundfi"
+    | CInt2float -> "int2float"
+    | CString2float -> "string2float"
 end
 
 lang CharCGExt = CharAst
@@ -155,12 +165,18 @@ lang CUDACGExt
     syn Expr =
     | TmCUDAMap {elemPerThread : Int,
                  includeIndexArg : Bool,
+                 onlyIndexArg : Bool,
+                 onlyIndexArgSize : Expr,
                  func : Expr,
                  array : Expr}
 
     sem pprintCode (indent : Int) =
     | TmCUDAMap t ->
-      let suffix = if t.includeIndexArg then "i" else "" in
+      let suffix =
+        if t.includeIndexArg then "i"
+        else if t.onlyIndexArg then "idx"
+        else ""
+      in
       strJoin "" [
         "cudaMap", suffix, " ", int2string t.elemPerThread,
         " (", pprintCode indent t.func, ")",

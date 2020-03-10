@@ -10,9 +10,96 @@ let mapi = lam f. lam seq.
   in
   work 0 f seq
 
+let last = lam seq. nth seq (subi (length seq) 1)
+let init = lam seq. slice seq 0 (subi (length seq) 1)
+
 let hostname = lam s. concat "gpuhost_" s
 let gblname = lam s. concat "gpuglobal_" s
 let devname = lam s. concat "gpudevice_" s
+
+-- acc: List of applied arguments
+-- e: Expression to extract
+recursive let extract_args: [Expr] -> Expr -> ([Expr], String) = use MExprCGExt in
+  lam acc. lam e.
+  let perror = lam _.
+    let _ = dprint e in
+    let _ = print "\n" in
+    error "extract_args: Mapped function is not lifted! (Expected TmVar)"
+  in
+    match e with TmApp t1 then
+      extract_args (cons t1.rhs acc) t1.lhs
+    else match e with TmVar t1 then
+      (acc, t1.ident)
+    else
+      perror ()
+end
+
+let typeOCaml2CUDA = use MExprCGExt in
+  lam name. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "typeOCaml2CUDA: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" ["Int_val(", name, ")"]
+  else match tpe with TyFloat () then
+    strJoin "" ["*((double *) ", name, ")"]
+  else match tpe with TySeq t1 then
+    name
+  else perror ()
+
+let typeCUDA2OCaml = use MExprCGExt in
+  lam name. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "typeCUDA2OCaml: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" ["Val_int(", name, ")"]
+  else match tpe with TySeq t1 then
+    name
+  else perror ()
+
+let typeOCamlTag = use MExprCGExt in
+  lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "typeOCamlTag: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    "0" -- verified on sleipner that Tag_val(int array) = 0
+  else match tpe with TyFloat () then
+    "Double_array_tag"
+  else perror ()
+
+let assignIdxCUDA2OCaml = use MExprCGExt in
+  lam lhsname. lam lhsidx. lam rhs. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "assignIdxCUDA2OCaml: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" [lhsname, "[", lhsidx, "] = Val_int(", rhs, ")"]
+  else match tpe with TyFloat () then
+    strJoin "" ["((double *) ", lhsname, ")[", lhsidx, "] = ", rhs]
+  else perror ()
+
+let extractIdxCUDA2OCaml = use MExprCGExt in
+  lam lhs. lam rhsname. lam rhsidx. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "extractIdxCUDA2OCaml: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" [lhs, " = Int_val(", rhsname, "[", rhsidx, "])"]
+  else match tpe with TyFloat () then
+    strJoin "" [lhs, " = ((double *) ", rhsname, ")[", rhsidx, "]"]
+  else perror ()
 
 lang VarCGCUDA = MExprCGExt
     sem codegenCUDA (state : CodegenState) =
@@ -32,6 +119,9 @@ lang VarCGCUDA = MExprCGExt
 end
 
 lang AppCGCUDA = MExprCGExt
+    sem codegenGetExprType (state : CodegenState) =
+    -- Intentionally left blank
+
     sem codegenCUDA (state : CodegenState) =
     | TmApp t ->
       let nthCheck =
@@ -46,7 +136,10 @@ lang AppCGCUDA = MExprCGExt
               -- We are performing an array access!
               match t1.rhs with TmVar t2 then
                 let idxcgr = codegenCUDA state t.rhs in
-                Some ({idxcgr with code = strJoin "" [t2.ident, "[", idxcgr.code, "]"]})
+                let arrtype = codegenGetExprType state (TmVar t2) in
+                let elemtype = match arrtype with TySeq t3 then t3.tpe else perror () in
+                let code = typeOCaml2CUDA (strJoin "" ["(", t2.ident, "[", idxcgr.code, "])"]) elemtype in
+                Some ({idxcgr with code = code})
               else perror ()
             else None ()
           else None ()
@@ -175,6 +268,7 @@ lang ArithFloatCGCUDA = MExprCGExt
     | CSubf _ -> genconstfun "double" "gpu_subf" "(double x, double y)" "{return x - y;}"
     | CMulf _ -> genconstfun "double" "gpu_mulf" "(double x, double y)" "{return x * y;}"
     | CDivf _ -> genconstfun "double" "gpu_divf" "(double x, double y)" "{return x / y;}"
+    | CInt2float _ -> genconstfun "double" "gpu_int2float" "(int x)" "{return (double) x;}"
 end
 
 lang BoolCGCUDA = MExprCGExt
@@ -199,77 +293,6 @@ lang CmpCGCUDA = MExprCGExt
     | CLti _ -> genconstfun "bool" "gpu_lti" "(int x, int y)" "{return x < y;}"
 end
 
--- acc: List of applied arguments
--- e: Expression to extract
-recursive let extract_args: [Expr] -> Expr -> ([Expr], String) = use MExprCGExt in
-  lam acc. lam e.
-  let perror = lam _.
-    let _ = dprint e in
-    let _ = print "\n" in
-    error "extract_args: Mapped function is not lifted! (Expected TmVar)"
-  in
-    match e with TmApp t1 then
-      extract_args (cons t1.rhs acc) t1.lhs
-    else match e with TmVar t1 then
-      (acc, t1.ident)
-    else
-      perror ()
-end
-
-let typeOCaml2CUDA = use MExprCGExt in
-  lam name. lam tpe.
-  let perror = lam _.
-    let _ = dprint tpe in
-    let _ = print "\n" in
-    error "typeOCaml2CUDA: Above type is invalid."
-  in
-  match tpe with TyInt () then
-    strJoin "" ["Int_val(", name, ")"]
-  else match tpe with TyFloat () then
-    strJoin "" ["*((double *) ", name, ")"]
-  else match tpe with TySeq t1 then
-    name
-  else perror ()
-
-let typeCUDA2OCaml = use MExprCGExt in
-  lam name. lam tpe.
-  let perror = lam _.
-    let _ = dprint tpe in
-    let _ = print "\n" in
-    error "typeCUDA2OCaml: Above type is invalid."
-  in
-  match tpe with TyInt () then
-    strJoin "" ["Val_int(", name, ")"]
-  else match tpe with TySeq t1 then
-    name
-  else perror ()
-
-let assignIdxCUDA2OCaml = use MExprCGExt in
-  lam lhsname. lam lhsidx. lam rhs. lam tpe.
-  let perror = lam _.
-    let _ = dprint tpe in
-    let _ = print "\n" in
-    error "assignIdxCUDA2OCaml: Above type is invalid."
-  in
-  match tpe with TyInt () then
-    strJoin "" [lhsname, "[", lhsidx, "] = Val_int(", rhs, ")"]
-  else match tpe with TyFloat () then
-    strJoin "" ["((double *) ", lhsname, ")[", lhsidx, "] = ", rhs]
-  else perror ()
-
-let extractIdxCUDA2OCaml = use MExprCGExt in
-  lam lhs. lam rhsname. lam rhsidx. lam tpe.
-  let perror = lam _.
-    let _ = dprint tpe in
-    let _ = print "\n" in
-    error "extractIdxCUDA2OCaml: Above type is invalid."
-  in
-  match tpe with TyInt () then
-    strJoin "" [lhs, " = Int_val(", rhsname, "[", rhsidx, "])"]
-  else match tpe with TyFloat () then
-    strJoin "" [lhs, " = ((double *) ", rhsname, ")[", rhsidx, "]"]
-  else perror ()
-
 lang CUDACGCUDA = MExprCGExt
     sem codegenGetExprType (state : CodegenState) =
     -- Intentionally left blank
@@ -277,14 +300,29 @@ lang CUDACGCUDA = MExprCGExt
     -- Generate C++ host functions that interfaces with the OCaml types
     sem codegenCUDA (state : CodegenState) =
     | TmCUDAMap t ->
+      let outarr = "outarr" in
       let res = extract_args [] t.func in
-      let args = res.0 in
+      let extra_args = if t.onlyIndexArg then [t.onlyIndexArgSize] else [t.array] in
+      let args = concat res.0 extra_args in
       let argtypes = map (codegenGetExprType state) args in
       let argnames = mapi (lam i. lam _. concat "arg" (int2string i)) args in
       let argsconved = zipWith typeOCaml2CUDA argnames argtypes in
+      let argsconved = zipWith (lam n. lam t. match t with TySeq _ then concat "cuda_" n else n) argsconved argtypes in
       let argstyped = zipWith concat (map type2cudastr argtypes) argnames in
+      let argarrs = map (lam e. (e.1, concat "cuda_" e.1))
+                        (filter (lam e. match e.0 with TySeq _ then true else false)
+                                (zipWith (lam a. lam b. (a, b)) argtypes argnames))
+      in
+      -- Remove size argument if only mapping with index argument
+      let argsconved = if t.onlyIndexArg then init argsconved else argsconved in
+      let argstyped = if t.onlyIndexArg then init argstyped else argstyped in
 
-      let arrtype = codegenGetExprType state t.array in
+      let nstr =
+        if t.onlyIndexArg
+        then strJoin "" ["Int_val(", last argnames, ")"]
+        else strJoin "" ["Wosize_val(", last argnames, ")"]
+      in
+
       let mappedfuncname = res.1 in
       let mappedfunctype = codegenGetExprType state (cgs_envLookup mappedfuncname state) in
       let mappedrettype = getRetType mappedfunctype in
@@ -295,11 +333,9 @@ lang CUDACGCUDA = MExprCGExt
       let hostfuncname = hostname mappedfuncname in
       let globalfuncname = gblname mappedfuncname in
       let devicefuncname = cudaret.code in
-      let inarr = "inarr" in
       let outarr = "outarr" in
-      let cuda_inarr = concat "cuda_" inarr in
       let cuda_outarr = concat "cuda_" outarr in
-      let numargs = addi (length argnames) 1 in
+      let numargs = length argnames in
       if gti numargs 5 then
         let _ = print (strJoin "" ["Number of arguments to ", hostfuncname, ": ", int2string numargs]) in
         error "Number of arguments cannot exceed 5."
@@ -307,13 +343,14 @@ lang CUDACGCUDA = MExprCGExt
 
 
       -- Arguments to be applied that were generated in the global CUDA function
-      let genargs = ["v"] in
+      let genargs = [] in
+      let genargs = if t.onlyIndexArg then cons "i" genargs else cons "v" genargs in
       let genargs = if t.includeIndexArg then cons "i" genargs else genargs in
 
       -- Generate the global device body
       let globalbody = strJoin "" [
         "__global__ void ", globalfuncname, "(", strJoin ", " (concat argstyped
-                                                                      (map (concat "value *") [inarr, outarr])),
+                                                                      [concat "value *" outarr]),
                                                  ", int n)\n",
         "{\n",
         "\tint i;\n",
@@ -322,17 +359,29 @@ lang CUDACGCUDA = MExprCGExt
         "\tif (end > n)\n",
         "\t\tend = n;\n\n",
         "\tfor (i = start; i < end; ++i) {\n",
-        "\t\t", type2cudastr (getSeqType arrtype), "v;\n",
-        "\t\t", extractIdxCUDA2OCaml "v"
-                                     inarr
-                                     "i"
-                                     (getSeqType arrtype),
-                ";\n",
-        "\t\t", assignIdxCUDA2OCaml outarr
-                                    "i"
-                                    (strJoin "" [devicefuncname, "(", strJoin ", " (concat argnames genargs), ")"])
-                                    mappedrettype,
-                ";\n",
+        if t.onlyIndexArg then strJoin "" [
+          "\t\t", assignIdxCUDA2OCaml outarr
+                                      "i"
+                                      (strJoin "" [devicefuncname,
+                                                   "(",
+                                                   strJoin ", " (concat (init argnames) genargs),
+                                                   ")"])
+                                      mappedrettype,
+                  ";\n"
+        ]
+        else strJoin "" [
+          "\t\t", type2cudastr (getSeqType (last argtypes)), "v;\n",
+          "\t\t", extractIdxCUDA2OCaml "v"
+                                       (last argnames)
+                                       "i"
+                                       (getSeqType (last argtypes)),
+                  ";\n",
+          "\t\t", assignIdxCUDA2OCaml outarr
+                                      "i"
+                                      (strJoin "" [devicefuncname, "(", strJoin ", " (concat argnames genargs), ")"])
+                                      mappedrettype,
+                  ";\n"
+        ],
         "\t}\n",
         "}"
       ] in
@@ -340,7 +389,7 @@ lang CUDACGCUDA = MExprCGExt
       -- Generate the prototype
       let prototype = strJoin "" [
         "value ", hostfuncname, "(",
-        strJoin ", " (map (concat "value ") (concat argnames [inarr])),
+        strJoin ", " (map (concat "value ") argnames),
         ")"
       ] in
       -- Generate the host body
@@ -349,22 +398,36 @@ lang CUDACGCUDA = MExprCGExt
         "\n{\n",
         -- The CAML interface for the parameters
         "\tCAMLparam", int2string numargs, "(",
-           strJoin ", " (concat argnames [inarr]), ");\n",
+           strJoin ", " argnames, ");\n",
         "\tCAMLlocal1(", outarr, ");\n",
-        "\tint n = Wosize_val(", inarr, ");\n\n",
-        "\tvalue *", cuda_inarr, ";\n",
+        "\tint n = ", nstr, ";\n\n",
         "\tvalue *", cuda_outarr, ";\n",
-        "\tcudaMalloc(&", cuda_inarr, ", n * sizeof(value));\n",
+        strJoin "" (
+          map (lam e. strJoin "" ["\tvalue *", e.1, ";\n"])
+              argarrs
+        ),
         "\tcudaMalloc(&", cuda_outarr, ", n * sizeof(value));\n",
-        "\tcudaMemcpy(", cuda_inarr, ", Op_val(", inarr, "), n * sizeof(value), cudaMemcpyHostToDevice);\n\n",
+        strJoin "" (
+          map (lam e. strJoin "" ["\tcudaMalloc(&", e.1, ", Wosize_val(", e.0, ") * sizeof(value));\n"])
+              argarrs
+        ),
+        strJoin "" (
+          map (lam e. strJoin "" ["\tcudaMemcpy(", e.1, ", Op_val(", e.0, "), Wosize_val(", e.0, ") * sizeof(value), cudaMemcpyHostToDevice);\n"])
+              argarrs
+        ),
+        "\n",
         "\t", globalfuncname, "<<<1,(n + ", int2string (subi t.elemPerThread 1),
                               ") / ", int2string t.elemPerThread, ">>>(",
-                              strJoin ", " (concat argsconved [cuda_inarr, cuda_outarr, "n"]), ");\n",
-        "\t", outarr, " = caml_alloc(n, Tag_val(", inarr, "));\n",
+                              strJoin ", " (concat argsconved [cuda_outarr, "n"]), ");\n",
+        "\t", outarr, " = caml_alloc(n, ", typeOCamlTag mappedrettype, ");\n",
         "\tcudaDeviceSynchronize();\n\n",
         "\tcudaMemcpy(Op_val(", outarr, "), ", cuda_outarr, ", n * sizeof(value), cudaMemcpyDeviceToHost);\n\n",
-        "\tcudaFree(", cuda_inarr, ");\n",
-        "\tcudaFree(", cuda_outarr, ");\n\n",
+        "\tcudaFree(", cuda_outarr, ");\n",
+        strJoin "" (
+          map (lam e. strJoin "" ["\tcudaFree(", e.1, ");\n"])
+              argarrs
+        ),
+        "\n",
         "\tCAMLreturn(", outarr, ");\n",
         "}"
       ] in

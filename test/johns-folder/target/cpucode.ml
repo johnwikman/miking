@@ -3,9 +3,11 @@ open Array
 
 external gpuhost_saxpy_int_single: int -> int -> int array -> int array = "gpuhost_saxpy_int_single"
 external gpuhost_saxpy_float_single: float -> float -> float array -> float array = "gpuhost_saxpy_float_single"
+external gpuhost_saxpy_int_mapfull: int -> int array -> int array -> int array = "gpuhost_saxpy_int_mapfull"
 external gpuhost_id_ignore2nd: int array -> int array = "gpuhost_id_ignore2nd"
+external gpuhost_id2f_ignore2nd: int array -> float array = "gpuhost_id2f_ignore2nd"
 external gpuhost_factidx: int array -> int array = "gpuhost_factidx"
-external gpuhost_fibidx: int array -> int array = "gpuhost_fibidx"
+external gpuhost_fib: int -> int array = "gpuhost_fib"
 
 let main =
     let head s =
@@ -70,6 +72,12 @@ let main =
     in
     let id_ignore2nd x y =
         x
+    in
+    let id2f_ignore2nd x y =
+        float_of_int (x)
+    in
+    let mapi_id2f_ignore2nd arr =
+        Array.mapi (id2f_ignore2nd) (arr)
     in
     let printintln i =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (int2string (i)) ([|'\n'|]))
@@ -146,8 +154,14 @@ let main =
     let mapcuda_saxpy_float x y arr =
         gpuhost_saxpy_float_single (x) (y) (arr)
     in
+    let mapcuda_saxpy_intfull a x y =
+        gpuhost_saxpy_int_mapfull (a) (y) (x)
+    in
     let mapcuda_id_ignore2nd arr =
         gpuhost_id_ignore2nd (arr)
+    in
+    let mapcuda_id2f_ignore2nd arr =
+        gpuhost_id2f_ignore2nd (arr)
     in
     let v  =
         10
@@ -168,10 +182,16 @@ let main =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     let res  =
-        mapcuda_saxpy_float (1.70e+1) (1.100000e+1) ([|1.50e+1; 1.0e-0|])
+        mapcuda_id2f_ignore2nd (Array.make (50000000) (0))
+    in
+    let res  =
+        mapcuda_saxpy_float (1.70e+1) (1.100000e+1) (res)
+    in
+    let res  =
+        mapcuda_saxpy_intfull (17) ([|15; 1|]) ([|9; 8|])
     in
     let _  =
-        printfloatarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; '.'; '0'; ' '; '1'; '1'; '.'; '0'; ' '; '['; '1'; '5'; '.'; '0'; ','; ' '; '1'; '.'; '0'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
+        printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; '_'; 'm'; 'a'; 'p'; 'f'; 'u'; 'l'; 'l'; ' '; '1'; '7'; ' '; '('; 'a'; ')'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; '('; 'x'; ')'; ' '; '['; '9'; ','; ' '; '8'; ']'; ' '; '('; 'y'; ')'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     let res  =
         mapcuda_id_ignore2nd (Array.make (70) (0))
@@ -192,7 +212,7 @@ let main =
         fib (i)
     in
     let res  =
-        gpuhost_fibidx (Array.make (48) (0))
+        gpuhost_fib (48)
     in
     let _  =
         printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'i'; 'b'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
