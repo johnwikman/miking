@@ -391,15 +391,6 @@ lang CUDACGCUDA = MExprCGExt
         "}"
       ] in
 
-      recursive let generate_camlparam = lam i.
-        if (geqi i numargs) then
-          ""
-        else
-          let n = 
-          concat (strJoin "" ["\tCAMLparam"])
-          ---------- TODO!
-      in
-
       -- Generate the prototype
       let prototype = strJoin "" [
         "value ", hostfuncname, "(",

@@ -1,7 +1,7 @@
 open Array
 open Printf
 
-
+external gpuhost_matrixMuliWorker: int array -> int array -> int array -> int -> int array = "gpuhost_matrixMuliWorker"
 
 let main =
     let head s =
@@ -166,15 +166,25 @@ let main =
             else
                 matrixMuliWorkerReduce (innerDim) (b_cols) (a) (b) (( + ) (acc) (( * ) (Array.get (a) (a_offset)) (Array.get (b) (b_offset)))) (( + ) (p) (1)) (( + ) (a_offset) (1)) (( + ) (b_offset) (b_cols))
     in
-    let matrixMuliWorker innerDim a_rows b_cols a b idx =
-        matrixMuliWorkerReduce (innerDim) (b_cols) (a) (b) (0) (0) (( * ) (innerDim) (( / ) (idx) (b_cols))) (( mod ) (idx) (b_cols))
+    let matrixMuliWorker innerDim__a_rows__b_cols a b idx =
+        matrixMuliWorkerReduce (Array.get (innerDim__a_rows__b_cols) (0)) (Array.get (innerDim__a_rows__b_cols) (2)) (a) (b) (0) (0) (( * ) (Array.get (innerDim__a_rows__b_cols) (0)) (( / ) (idx) (Array.get (innerDim__a_rows__b_cols) (2)))) (( mod ) (idx) (Array.get (innerDim__a_rows__b_cols) (2)))
     in
     let matrixMuli a_rows a_cols a b_rows b_cols b =
         if ( <> ) (a_cols) (b_rows) then
             (fun s -> printf "ERROR: %s
 " (String.of_seq (Array.to_seq s)); exit 1) ([|'m'; 'a'; 't'; 'r'; 'i'; 'x'; 'M'; 'u'; 'l'; 'i'; ':'; ' '; 'I'; 'n'; 'n'; 'e'; 'r'; ' '; 'd'; 'i'; 'm'; 'e'; 'n'; 's'; 'i'; 'o'; 'n'; 's'; ' '; 'd'; 'i'; 'f'; 'f'; 'e'; 'r'; '.'|])
         else
-            seqInit (( * ) (a_rows) (b_cols)) (matrixMuliWorker (a_cols) (a_rows) (b_cols) (a) (b))
+            seqInit (( * ) (a_rows) (b_cols)) (matrixMuliWorker ([|a_cols; a_rows; b_cols|]) (a) (b))
+    in
+    let matrixMuliCUDA a_rows a_cols a b_rows b_cols b =
+        let size  =
+            ( * ) (a_rows) (b_cols)
+        in
+        if ( <> ) (a_cols) (b_rows) then
+            (fun s -> printf "ERROR: %s
+" (String.of_seq (Array.to_seq s)); exit 1) ([|'m'; 'a'; 't'; 'r'; 'i'; 'x'; 'M'; 'u'; 'l'; 'i'; 'C'; 'U'; 'D'; 'A'; ':'; ' '; 'I'; 'n'; 'n'; 'e'; 'r'; ' '; 'd'; 'i'; 'm'; 'e'; 'n'; 's'; 'i'; 'o'; 'n'; 's'; ' '; 'd'; 'i'; 'f'; 'f'; 'e'; 'r'; '.'|])
+        else
+            gpuhost_matrixMuliWorker ([|a_cols; a_rows; b_cols|]) (a) (b) (size)
     in
     let matAinitfun row col =
         ( + ) (( * ) (row) (row)) (col)
@@ -213,7 +223,7 @@ let main =
         matrix2stri (matB_rows) (matB_cols) (matB)
     in
     let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'m'; 'a'; 't'; 'B'; ':'; '\n'|])
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'B'; ':'; '\n'|])
     in
     let _  =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matBstr)
@@ -231,7 +241,25 @@ let main =
         matrix2stri (matAxB_rows) (matAxB_cols) (matAxB)
     in
     let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'m'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
+    in
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matAxBstr)
+    in
+    let matAxB  =
+        matrixMuliCUDA (matA_rows) (matA_cols) (matA) (matB_rows) (matB_cols) (matB)
+    in
+    let matAxB_rows  =
+        matA_rows
+    in
+    let matAxB_cols  =
+        matB_cols
+    in
+    let matAxBstr  =
+        matrix2stri (matAxB_rows) (matAxB_cols) (matAxB)
+    in
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ' '; '('; 'C'; 'U'; 'D'; 'A'; ')'; ':'; '\n'|])
     in
     let _  =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matAxBstr)
