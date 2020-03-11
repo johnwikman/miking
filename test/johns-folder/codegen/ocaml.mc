@@ -173,6 +173,10 @@ lang CmpCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CEqi _ -> {cgr_new with code = "( = )"}
     | CLti _ -> {cgr_new with code = "( < )"}
+    | CNeqi _ -> {cgr_new with code = "( <> )"}
+    | CGti _ -> {cgr_new with code = "( > )"}
+    | CGeqi _ -> {cgr_new with code = "( >= )"}
+    | CLeqi _ -> {cgr_new with code = "( <= )"}
 end
 
 lang CharCGOCaml = MExprCGExt
@@ -287,6 +291,7 @@ lang MainGCOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
     | CPrint _ -> {{cgr_new with code = "(fun s -> printf \"%s\" (String.of_seq (Array.to_seq s)))"}
                             with opens = strset_add "Printf" strset_new}
+    | CError _ -> {cgr_new with code = "(fun s -> printf \"ERROR: %s\n\" (String.of_seq (Array.to_seq s)); exit 1)"}
 end
 
 lang MExprCGOCaml = VarCGOCaml + AppCGOCaml + FunCGOCaml + LetCGOCaml +

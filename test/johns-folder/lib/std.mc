@@ -27,18 +27,93 @@ let func_null =
        	     (eqi_ (length_ (var_ "l")) (int_ 0)))
 
 let func_map =
-  reclets_add "map" (tyarrows_ [tyarrow_ tydyn_ tydyn_, tyseq_ tydyn_, tyseq_ tydyn_]) (
-    lam_ "f" (tyarrow_ tydyn_ tydyn_) (
+  let_ "map" (tyarrows_ [tyarrows_ [tydyn_, tydyn_], tyseq_ tydyn_, tyseq_ tydyn_]) (
+    lam_ "f" (tyarrows_ [tydyn_, tydyn_]) (
       lam_ "seq" (tyseq_ tydyn_) (
-        if_ (app1f_ (var_ "null") (var_ "seq"))
-            (seq_ [])
-            (cons_ (app1f_ (var_ "f")
-                           (app1f_ (var_ "head") (var_ "seq")))
-                   (app2f_ (var_ "map")
-                           (var_ "f")
-                           (app1f_ (var_ "tail") (var_ "seq"))))
-    ))
-  ) (reclets_empty)
+        app2f_ (var_ "Array.map")
+               (var_ "f")
+               (var_ "seq")
+      )
+    )
+  )
+--  reclets_add "map" (tyarrows_ [tyarrow_ tydyn_ tydyn_, tyseq_ tydyn_, tyseq_ tydyn_]) (
+--    lam_ "f" (tyarrow_ tydyn_ tydyn_) (
+--      lam_ "seq" (tyseq_ tydyn_) (
+--        if_ (app1f_ (var_ "null") (var_ "seq"))
+--            (seq_ [])
+--            (cons_ (app1f_ (var_ "f")
+--                           (app1f_ (var_ "head") (var_ "seq")))
+--                   (app2f_ (var_ "map")
+--                           (var_ "f")
+--                           (app1f_ (var_ "tail") (var_ "seq"))))
+--    ))
+--  ) (reclets_empty)
+
+let func_mapi =
+  let_ "mapi" (tyarrows_ [tyarrows_ [tyint_, tydyn_, tydyn_], tyseq_ tydyn_, tyseq_ tydyn_]) (
+    lam_ "f" (tyarrows_ [tyint_, tydyn_, tydyn_]) (
+      lam_ "seq" (tyseq_ tydyn_) (
+        app2f_ (var_ "Array.mapi")
+               (var_ "f")
+               (var_ "seq")
+      )
+    )
+  )
+--  let_ "mapi"  (tyarrows_ [tyarrows_ [tyint_, tydyn_, tydyn_], tyseq_ tydyn_, tyseq_ tydyn_]) (
+--    lam_ "f" (tyarrows_ [tyint_, tydyn_, tydyn_]) (
+--      lam_ "seq" (tyseq_ tydyn_) (
+--        let mapi_helper =
+--          reclets_add "mapi_helper" (tyarrows_ [tyint_, tyseq_ tydyn_, tyseq_ tydyn_]) (
+--            lam_ "i" (tyint_) (
+--              lam_ "partseq" (tyseq_ tydyn_) (
+--                if_ (app1f_ (var_ "null") (var_ "partseq"))
+--                    (seq_ [])
+--                    (cons_ (app2f_ (var_ "f")
+--                                   (var_ "i")
+--                                   (app1f_ (var_ "head") (var_ "partseq")))
+--                           (app2f_ (var_ "mapi_helper")
+--                                   (addi_ (var_ "i") (int_ 1))
+--                                   (app1f_ (var_ "tail") (var_ "partseq"))))
+--            ))
+--          ) (reclets_empty)
+--        in
+--        bind_ mapi_helper (app2f_ (var_ "mapi_helper")
+--                                  (int_ 0)
+--                                  (var_ "seq"))
+--      )
+--    )
+--  )
+
+let func_seqInit =
+  let_ "seqInit" (tyarrows_ [tyint_, tyarrows_ [tyint_, tydyn_], tyseq_ tydyn_]) (
+    lam_ "size" (tyint_) (
+      lam_ "f" (tyarrows_ [tyint_, tydyn_]) (
+        app2f_ (var_ "Array.init")
+               (var_ "size")
+               (var_ "f")
+      )
+    )
+  )
+--  let_ "seqInit" (tyarrows_ [tyint_, tyarrows_ [tyint_, tydyn_], tyseq_ tydyn_]) (
+--    lam_ "size" (tyint_) (
+--      lam_ "f" (tyarrows_ [tyint_, tydyn_]) (
+--        let seqInit_helper =
+--          reclets_add "seqInit_helper" (tyarrows_ [tyint_, tyseq_ tydyn_, tyseq_ tydyn_]) (
+--            lam_ "i" (tyint_) (
+--              if_ (eqi_ (var_ "i") (var_ "size"))
+--                  (seq_ [])
+--                  (cons_ (app1f_ (var_ "f")
+--                                 (var_ "i"))
+--                         (app1f_ (var_ "seqInit_helper")
+--                                 (addi_ (var_ "i") (int_ 1))))
+--            )
+--          ) (reclets_empty)
+--        in
+--        bind_ seqInit_helper (app1f_ (var_ "seqInit_helper")
+--                                     (int_ 0))
+--      )
+--    )
+--  )
 
 let func_int2string =
   let_ "int2string" (tyarrow_ tyint_ tystr_) (
@@ -118,6 +193,8 @@ let libstd_ = bindall_ [
 	func_tail,
 	func_null,
 	func_map,
+  func_mapi,
+  func_seqInit,
 	func_int2string,
   func_float2string,
   func_strJoin

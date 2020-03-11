@@ -125,6 +125,20 @@ lang ArithFloatCGExt
     | CString2float -> "string2float"
 end
 
+lang CmpCGExt = CmpAst
+    syn Const =
+    | CNeqi {}
+    | CGti {}
+    | CGeqi {}
+    | CLeqi {}
+
+    sem getConstStringCode (indent : Int) =
+    | CNeqi -> "neqi"
+    | CGti -> "gti"
+    | CGeqi -> "geqi"
+    | CLeqi -> "leqi"
+end
+
 lang CharCGExt = CharAst
     syn Const =
     | CChar2int {}
@@ -190,14 +204,16 @@ lang MainCGExt
 
     syn Const =
     | CPrint {}
+    | CError {}
 
     sem getConstStringCode (indent : Int) =
     | CPrint _ -> "print"
+    | CError _ -> "error"
 end
 
 lang MExprCGExt = MExprAst + RecLetsCGExt+ FloatCGExt + ArithIntCGExt +
-                  ArithFloatCGExt + CharCGExt + SeqCGExt + ArithTypeCGExt +
-                  CUDACGExt + MainCGExt +
+                  ArithFloatCGExt + CmpCGExt + CharCGExt + SeqCGExt +
+                  ArithTypeCGExt + CUDACGExt + MainCGExt +
                   DynTypeAst + UnitTypeAst + CharTypeAst + SeqTypeAst +
                   TupleTypeAst + RecordTypeAst + DataTypeAst + ArithTypeAst +
                   BoolTypeAst + AppTypeAst

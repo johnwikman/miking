@@ -260,6 +260,8 @@ lang ArithIntCGCUDA = MExprCGExt
     | CAddi _ -> genconstfun "int" "gpu_addi" "(int x, int y)" "{return x + y;}"
     | CSubi _ -> genconstfun "int" "gpu_subi" "(int x, int y)" "{return x - y;}"
     | CMuli _ -> genconstfun "int" "gpu_muli" "(int x, int y)" "{return x * y;}"
+    | CDivi _ -> genconstfun "int" "gpu_divi" "(int x, int y)" "{return x / y;}"
+    | CModi _ -> genconstfun "int" "gpu_modi" "(int x, int y)" "{return x % y;}"
 end
 
 lang ArithFloatCGCUDA = MExprCGExt
@@ -337,7 +339,7 @@ lang CUDACGCUDA = MExprCGExt
       let cuda_outarr = concat "cuda_" outarr in
       let numargs = length argnames in
       if gti numargs 5 then
-        let _ = print (strJoin "" ["Number of arguments to ", hostfuncname, ": ", int2string numargs]) in
+        let _ = print (strJoin "" ["Number of arguments to ", hostfuncname, ": ", int2string numargs, "\n"]) in
         error "Number of arguments cannot exceed 5."
       else -- carry on
 
@@ -388,6 +390,15 @@ lang CUDACGCUDA = MExprCGExt
         "\t}\n",
         "}"
       ] in
+
+      recursive let generate_camlparam = lam i.
+        if (geqi i numargs) then
+          ""
+        else
+          let n = 
+          concat (strJoin "" ["\tCAMLparam"])
+          ---------- TODO!
+      in
 
       -- Generate the prototype
       let prototype = strJoin "" [

@@ -21,11 +21,11 @@ let prog = bind_ prog libarith_ in
 
 -- Fibonacci (cudaMapidx)
 let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudamapidx_ 16
-                                                               (var_ "fib")
-                                                               (int_ 48))) in
+                                                               (int_ 48)
+                                                               (var_ "fib"))) in
 
 let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
-                                                  (str_ "cudaMapidx fib result")
+                                                  (str_ "cudaMapidx 48 fib result")
                                                   (var_ "res"))) in
 
 let res = codegen prog in

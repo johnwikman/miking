@@ -13,11 +13,14 @@ let main =
     let null l =
         ( = ) (Array.length (l)) (0)
     in
-    let rec map f seq =
-            if null (seq) then
-                [||]
-            else
-                (fun x xs -> Array.append [|x|] xs) (f (head (seq))) (map (f) (tail (seq)))
+    let map f seq =
+        Array.map (f) (seq)
+    in
+    let mapi f seq =
+        Array.mapi (f) (seq)
+    in
+    let seqInit size f =
+        Array.init (size) (f)
     in
     let int2string n =
         let rec int2string_rechelper n =

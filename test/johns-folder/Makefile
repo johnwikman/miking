@@ -1,8 +1,7 @@
 .PHONY: upload clean
 
-SOURCES=fibonacci.mc factorial.mc saxpy.mc
-
-all: $(SOURCES)
+all:
+	make $(shell ls *.mc)
 
 %.mc: FORCE
 	mkdir -p target/$*

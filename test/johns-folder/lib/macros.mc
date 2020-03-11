@@ -103,20 +103,36 @@ let app_ = use MExprCGOCaml in
   TmApp {lhs = lhs, rhs = rhs}
 
 let app1f_ = use MExprCGOCaml in
-  lam f. lam a.
-  app_ f a
+  lam f. lam a1.
+  app_ f a1
 
 let app2f_ = use MExprCGOCaml in
-  lam f. lam a. lam b.
-  app_ (app1f_ f a) b
+  lam f. lam a1. lam a2.
+  app_ (app1f_ f a1) a2
 
 let app3f_ = use MExprCGOCaml in
-  lam f. lam a. lam b. lam c.
-  app_ (app2f_ f a b) c
+  lam f. lam a1. lam a2. lam a3.
+  app_ (app2f_ f a1 a2) a3
 
 let app4f_ = use MExprCGOCaml in
-  lam f. lam a. lam b. lam c. lam d.
-  app_ (app3f_ f a b c) d
+  lam f. lam a1. lam a2. lam a3. lam a4.
+  app_ (app3f_ f a1 a2 a3) a4
+
+let app5f_ = use MExprCGOCaml in
+  lam f. lam a1. lam a2. lam a3. lam a4. lam a5.
+  app_ (app4f_ f a1 a2 a3 a4) a5
+
+let app6f_ = use MExprCGOCaml in
+  lam f. lam a1. lam a2. lam a3. lam a4. lam a5. lam a6.
+  app_ (app5f_ f a1 a2 a3 a4 a5) a6
+
+let app7f_ = use MExprCGOCaml in
+  lam f. lam a1. lam a2. lam a3. lam a4. lam a5. lam a6. lam a7.
+  app_ (app6f_ f a1 a2 a3 a4 a5 a6) a7
+
+let app8f_ = use MExprCGOCaml in
+  lam f. lam a1. lam a2. lam a3. lam a4. lam a5. lam a6. lam a7. lam a8.
+  app_ (app7f_ f a1 a2 a3 a4 a5 a6 a7) a8
 
 -- function/control-flow macros --
 let let_ = use MExprCGOCaml in
@@ -145,6 +161,9 @@ let if_ = use MExprCGOCaml in
 let print_ = use MExprCGOCaml in
   app1f_ (TmConst {val = CPrint ()})
 
+let error_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CError ()})
+
 let int2char_ = use MExprCGOCaml in
   app1f_ (TmConst {val = CInt2char ()})
 
@@ -162,6 +181,18 @@ let lti_ = use MExprCGOCaml in
 
 let eqi_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CEqi ()})
+
+let neqi_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CNeqi ()})
+
+let gti_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CGti ()})
+
+let geqi_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CGeqi ()})
+
+let leqi_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CLeqi ()})
 
 let addi_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CAddi ()})
@@ -240,7 +271,7 @@ let cudamapi_ = use MExprCGOCaml in
              array = arr}
 
 let cudamapidx_ = use MExprCGOCaml in
-  lam ept. lam f. lam size.
+  lam ept. lam size. lam f.
   TmCUDAMap {elemPerThread = ept,
              includeIndexArg = false,
              onlyIndexArg = true,

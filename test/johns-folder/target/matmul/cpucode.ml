@@ -1,7 +1,7 @@
-open Printf
 open Array
+open Printf
 
-external gpuhost_fib: int -> int array = "gpuhost_fib"
+
 
 let main =
     let head s =
@@ -121,28 +121,119 @@ let main =
         in
         printloop (0)
     in
-    let id x =
-        x
+    let matrixMki rows cols v =
+        Array.make (( * ) (rows) (cols)) (v)
     in
-    let rec factorial n =
-            if ( = ) (n) (0) then
-                1
+    let matrixGeti row col m_rows m_cols m =
+        Array.get (m) (( + ) (( * ) (m_cols) (row)) (col))
+    in
+    let matrixIniti rows cols f =
+        let seqInitFun i =
+            let row  =
+                ( / ) (i) (cols)
+            in
+            let col  =
+                ( mod ) (i) (cols)
+            in
+            f (row) (col)
+        in
+        seqInit (( * ) (rows) (cols)) (seqInitFun)
+    in
+    let matrix2stri m_rows m_cols m =
+        let rec printrc row col =
+                if ( = ) (row) (m_rows) then
+                    [||]
+                else
+                    let next_col  =
+                        ( mod ) (( + ) (col) (1)) (m_cols)
+                    in
+                    let next_row  =
+                        if ( = ) (next_col) (0) then
+                            ( + ) (row) (1)
+                        else
+                            row
+                    in
+                    strJoin ([||]) ([|int2string (matrixGeti (row) (col) (m_rows) (m_cols) (m)); if ( = ) (next_col) (0) then
+                        [|'\n'|]
+                    else
+                        [|' '|]; printrc (next_row) (next_col)|])
+        in
+        printrc (0) (0)
+    in
+    let rec matrixMuliWorkerReduce innerDim b_cols a b acc p a_offset b_offset =
+            if ( = ) (p) (innerDim) then
+                acc
             else
-                ( * ) (n) (factorial (( - ) (n) (1)))
+                matrixMuliWorkerReduce (innerDim) (b_cols) (a) (b) (( + ) (acc) (( * ) (Array.get (a) (a_offset)) (Array.get (b) (b_offset)))) (( + ) (p) (1)) (( + ) (a_offset) (1)) (( + ) (b_offset) (b_cols))
     in
-    let rec fib_helper i n prev current =
-            if ( = ) (i) (n) then
-                current
-            else
-                fib_helper (( + ) (i) (1)) (n) (current) (( + ) (prev) (current))
+    let matrixMuliWorker innerDim a_rows b_cols a b idx =
+        matrixMuliWorkerReduce (innerDim) (b_cols) (a) (b) (0) (0) (( * ) (innerDim) (( / ) (idx) (b_cols))) (( mod ) (idx) (b_cols))
     in
-    let fib n =
-        fib_helper (0) (n) (1) (0)
+    let matrixMuli a_rows a_cols a b_rows b_cols b =
+        if ( <> ) (a_cols) (b_rows) then
+            (fun s -> printf "ERROR: %s
+" (String.of_seq (Array.to_seq s)); exit 1) ([|'m'; 'a'; 't'; 'r'; 'i'; 'x'; 'M'; 'u'; 'l'; 'i'; ':'; ' '; 'I'; 'n'; 'n'; 'e'; 'r'; ' '; 'd'; 'i'; 'm'; 'e'; 'n'; 's'; 'i'; 'o'; 'n'; 's'; ' '; 'd'; 'i'; 'f'; 'f'; 'e'; 'r'; '.'|])
+        else
+            seqInit (( * ) (a_rows) (b_cols)) (matrixMuliWorker (a_cols) (a_rows) (b_cols) (a) (b))
     in
-    let res  =
-        gpuhost_fib (48)
+    let matAinitfun row col =
+        ( + ) (( * ) (row) (row)) (col)
+    in
+    let matBinitfun row col =
+        ( mod ) (( / ) (( * ) (( + ) (row) (19)) (17)) (( + ) (col) (13))) (( + ) (row) (11))
+    in
+    let matA_rows  =
+        2
+    in
+    let matA_cols  =
+        5
+    in
+    let matA  =
+        matrixIniti (matA_rows) (matA_cols) (matAinitfun)
+    in
+    let matAstr  =
+        matrix2stri (matA_rows) (matA_cols) (matA)
     in
     let _  =
-        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'m'; 'a'; 't'; 'A'; ':'; '\n'|])
+    in
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matAstr)
+    in
+    let matB_rows  =
+        5
+    in
+    let matB_cols  =
+        3
+    in
+    let matB  =
+        matrixIniti (matB_rows) (matB_cols) (matBinitfun)
+    in
+    let matBstr  =
+        matrix2stri (matB_rows) (matB_cols) (matB)
+    in
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'m'; 'a'; 't'; 'B'; ':'; '\n'|])
+    in
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matBstr)
+    in
+    let matAxB  =
+        matrixMuli (matA_rows) (matA_cols) (matA) (matB_rows) (matB_cols) (matB)
+    in
+    let matAxB_rows  =
+        matA_rows
+    in
+    let matAxB_cols  =
+        matB_cols
+    in
+    let matAxBstr  =
+        matrix2stri (matAxB_rows) (matAxB_cols) (matAxB)
+    in
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'m'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
+    in
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matAxBstr)
     in
     ()
