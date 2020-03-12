@@ -356,7 +356,7 @@ lang CUDACGCUDA = MExprCGExt
                                                  ", int n)\n",
         "{\n",
         "\tint i;\n",
-        "\tint start = threadIdx.x * ", int2string t.elemPerThread, ";\n",
+        "\tint start = ((blockIdx.x * blockDim.x) + threadIdx.x) * ", int2string t.elemPerThread, ";\n",
         "\tint end = start + ", int2string t.elemPerThread, ";\n",
         "\tif (end > n)\n",
         "\t\tend = n;\n\n",
@@ -406,6 +406,14 @@ lang CUDACGCUDA = MExprCGExt
            strJoin ", " argnames, ");\n",
         "\tCAMLlocal1(", outarr, ");\n",
         "\tint n = ", nstr, ";\n\n",
+        -- Determine number of blocks and threads
+        "\tint threadsPerBlock;\n",
+        "\tint elemPerBlock;\n",
+        "\tint blockCount;\n",
+        "\tcudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);\n",
+        "\telemPerBlock = threadsPerBlock * ", int2string t.elemPerThread, ";\n",
+        "\tblockCount = (n + elemPerBlock - 1) / elemPerBlock;\n",
+        -- Allocate device memory
         "\tvalue *", cuda_outarr, ";\n",
         strJoin "" (
           map (lam e. strJoin "" ["\tvalue *", e.1, ";\n"])
@@ -421,9 +429,7 @@ lang CUDACGCUDA = MExprCGExt
               argarrs
         ),
         "\n",
-        "\t", globalfuncname, "<<<1,(n + ", int2string (subi t.elemPerThread 1),
-                              ") / ", int2string t.elemPerThread, ">>>(",
-                              strJoin ", " (concat argsconved [cuda_outarr, "n"]), ");\n",
+        "\t", globalfuncname, "<<<blockCount,threadsPerBlock>>>(", strJoin ", " (concat argsconved [cuda_outarr, "n"]), ");\n",
         "\t", outarr, " = caml_alloc(n, ", typeOCamlTag mappedrettype, ");\n",
         "\tcudaDeviceSynchronize();\n\n",
         "\tcudaMemcpy(Op_val(", outarr, "), ", cuda_outarr, ", n * sizeof(value), cudaMemcpyDeviceToHost);\n\n",

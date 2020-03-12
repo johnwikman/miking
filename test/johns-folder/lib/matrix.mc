@@ -107,6 +107,56 @@ let func_matrix2stri =
     )
   )
 
+let func_printMatrixi =
+  let_ "printMatrixi" (tyarrows_ [tyint_, tyint_, tymatrixi_, tyunit_]) (
+    lam_ "m_rows" (tyint_) (
+      lam_ "m_cols" (tyint_) (
+        lam_ "m" (tyseq_ tyint_) (
+          let printrc =
+            reclets_add "printrc" (tyarrows_ [tyint_, tyint_, tyunit_]) (
+              lam_ "row" (tyint_) (
+                lam_ "col" (tyint_) (
+                  if_ (eqi_ (var_ "row") (var_ "m_rows"))
+                      (str_ "")
+                      (bindall_ [
+                         let_ "next_col" (tyint_) (modi_ (addi_ (var_ "col") (int_ 1)) (var_ "m_cols")),
+                         let_ "next_row" (tyint_) (if_ (eqi_ (var_ "next_col") (int_ 0))
+                                                       (addi_ (var_ "row") (int_ 1))
+                                                       (var_ "row")),
+                         let_ "_" (tyunit_) (
+                           print_ (
+                             app2f_ (var_ "strJoin")
+                                    (str_ "")
+                                    (seq_ [app_ (var_ "int2string")
+                                                (app5f_ (var_ "matrixGeti")
+                                                        (var_ "row")
+                                                        (var_ "col")
+                                                        (var_ "m_rows")
+                                                        (var_ "m_cols")
+                                                        (var_ "m")),
+                                           if_ (eqi_ (var_ "next_col") (int_ 0))
+                                               (str_ "\n")
+                                               (str_ " ")])
+                           )
+                         ),
+                         app2f_ (var_ "printrc")
+                                (var_ "next_row")
+                                (var_ "next_col")
+                       ])
+                )
+              )
+            ) (reclets_empty)
+          in
+          bind_ printrc (
+            app2f_ (var_ "printrc")
+                   (int_ 0)
+                   (int_ 0)
+          )
+        )
+      )
+    )
+  )
+
 -- let matrixMuliWorker = lam innerDim. lam a_rows. lam b_cols. lam a. lam b. lam idx.
 --   let row = divi idx b_cols in
 --   let col = modi idx b_cols in
@@ -233,6 +283,7 @@ let libmatrix_ = bindall_ [
   func_matrixGeti,
   func_matrixIniti,
   func_matrix2stri,
+  func_printMatrixi,
   func_matrixMuliWorkerReduce,
   func_matrixMuliWorker,
   func_matrixMuli,

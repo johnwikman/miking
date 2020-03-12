@@ -33,7 +33,7 @@ let main =
                     Array.append (int2string_rechelper (( / ) (n) (10))) (d)
         in
         if ( < ) (n) (0) then
-            (fun x xs -> Array.append [|x|] xs) ('_') (int2string_rechelper (( ~- ) (n)))
+            (fun x xs -> Array.append [|x|] xs) ('-') (int2string_rechelper (( ~- ) (n)))
         else
             int2string_rechelper (n)
     in
@@ -160,6 +160,30 @@ let main =
         in
         printrc (0) (0)
     in
+    let printMatrixi m_rows m_cols m =
+        let rec printrc row col =
+                if ( = ) (row) (m_rows) then
+                    [||]
+                else
+                    let next_col  =
+                        ( mod ) (( + ) (col) (1)) (m_cols)
+                    in
+                    let next_row  =
+                        if ( = ) (next_col) (0) then
+                            ( + ) (row) (1)
+                        else
+                            row
+                    in
+                    let _  =
+                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (strJoin ([||]) ([|int2string (matrixGeti (row) (col) (m_rows) (m_cols) (m)); if ( = ) (next_col) (0) then
+                            [|'\n'|]
+                        else
+                            [|' '|]|]))
+                    in
+                    printrc (next_row) (next_col)
+        in
+        printrc (0) (0)
+    in
     let rec matrixMuliWorkerReduce innerDim b_cols a b acc p a_offset b_offset =
             if ( = ) (p) (innerDim) then
                 acc
@@ -192,59 +216,29 @@ let main =
     let matBinitfun row col =
         ( mod ) (( / ) (( * ) (( + ) (row) (19)) (17)) (( + ) (col) (13))) (( + ) (row) (11))
     in
+    let matAinitfun_v2 row col =
+        ( - ) (( mod ) (( + ) (( * ) (row) (row)) (col)) (3)) (1)
+    in
+    let matBinitfun_v2 row col =
+        ( mod ) (( / ) (( * ) (( + ) (row) (19)) (17)) (( + ) (col) (13))) (2)
+    in
     let matA_rows  =
-        2
+        1024
     in
     let matA_cols  =
-        5
+        1024
     in
     let matA  =
-        matrixIniti (matA_rows) (matA_cols) (matAinitfun)
-    in
-    let matAstr  =
-        matrix2stri (matA_rows) (matA_cols) (matA)
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'m'; 'a'; 't'; 'A'; ':'; '\n'|])
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matAstr)
+        matrixIniti (matA_rows) (matA_cols) (matAinitfun_v2)
     in
     let matB_rows  =
-        5
+        1024
     in
     let matB_cols  =
-        3
+        1024
     in
     let matB  =
-        matrixIniti (matB_rows) (matB_cols) (matBinitfun)
-    in
-    let matBstr  =
-        matrix2stri (matB_rows) (matB_cols) (matB)
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'B'; ':'; '\n'|])
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matBstr)
-    in
-    let matAxB  =
-        matrixMuli (matA_rows) (matA_cols) (matA) (matB_rows) (matB_cols) (matB)
-    in
-    let matAxB_rows  =
-        matA_rows
-    in
-    let matAxB_cols  =
-        matB_cols
-    in
-    let matAxBstr  =
-        matrix2stri (matAxB_rows) (matAxB_cols) (matAxB)
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matAxBstr)
+        matrixIniti (matB_rows) (matB_cols) (matBinitfun_v2)
     in
     let matAxB  =
         matrixMuliCUDA (matA_rows) (matA_cols) (matA) (matB_rows) (matB_cols) (matB)
@@ -255,13 +249,10 @@ let main =
     let matAxB_cols  =
         matB_cols
     in
-    let matAxBstr  =
-        matrix2stri (matAxB_rows) (matAxB_cols) (matAxB)
+    let _  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
     in
     let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ' '; '('; 'C'; 'U'; 'D'; 'A'; ')'; ':'; '\n'|])
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (matAxBstr)
+        printMatrixi (matAxB_rows) (matAxB_cols) (matAxB)
     in
     ()

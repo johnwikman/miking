@@ -144,7 +144,7 @@ let func_int2string =
       in
       bind_ recs (
         if_ (lti_ (var_ "n") (int_ 0))
-            (cons_ (char_ '_')
+            (cons_ (char_ '-')
                    (app_ (var_ "int2string_rechelper")
                          (negi_ (var_ "n"))))
             (app_ (var_ "int2string_rechelper") (var_ "n"))
@@ -168,7 +168,7 @@ let func_float2string =
 --    else if eqi (length strs) 1
 --         then head strs
 --         else concat (concat (head strs) delim) (strJoin delim (tail strs))
---end
+--endmatBinitfun_v2
 let func_strJoin =
   reclets_add "strJoin" (tyarrows_ [tystr_, tyseq_ tystr_, tystr_]) (
     lam_ "delim" (tystr_) (

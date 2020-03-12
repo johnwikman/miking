@@ -46,7 +46,7 @@ __device__ int gpudevice_matrixMuliWorker(value *innerDim__a_rows__b_cols, value
 __global__ void gpuglobal_matrixMuliWorker(value *arg0, value *arg1, value *arg2, value *outarr, int n)
 {
 	int i;
-	int start = threadIdx.x * 32;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 32;
 	int end = start + 32;
 	if (end > n)
 		end = n;
@@ -62,6 +62,12 @@ value gpuhost_matrixMuliWorker(value arg0, value arg1, value arg2, value arg3)
 	CAMLlocal1(outarr);
 	int n = Int_val(arg3);
 
+	int threadsPerBlock;
+	int elemPerBlock;
+	int blockCount;
+	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
+	elemPerBlock = threadsPerBlock * 32;
+	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
 	value *cuda_arg0;
 	value *cuda_arg1;
@@ -74,7 +80,7 @@ value gpuhost_matrixMuliWorker(value arg0, value arg1, value arg2, value arg3)
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg2, Op_val(arg2), Wosize_val(arg2) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_matrixMuliWorker<<<1,(n + 31) / 32>>>(cuda_arg0, cuda_arg1, cuda_arg2, cuda_outarr, n);
+	gpuglobal_matrixMuliWorker<<<blockCount,threadsPerBlock>>>(cuda_arg0, cuda_arg1, cuda_arg2, cuda_outarr, n);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 

@@ -33,7 +33,7 @@ let main =
                     Array.append (int2string_rechelper (( / ) (n) (10))) (d)
         in
         if ( < ) (n) (0) then
-            (fun x xs -> Array.append [|x|] xs) ('_') (int2string_rechelper (( ~- ) (n)))
+            (fun x xs -> Array.append [|x|] xs) ('-') (int2string_rechelper (( ~- ) (n)))
         else
             int2string_rechelper (n)
     in
@@ -143,6 +143,6 @@ let main =
         gpuhost_fib (48)
     in
     let _  =
-        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
+        printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; '4'; '8'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     ()

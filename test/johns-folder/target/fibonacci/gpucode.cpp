@@ -37,7 +37,7 @@ __device__ inline int gpu_addi(int x, int y) {return x + y;}
 __global__ void gpuglobal_fib(value *outarr, int n)
 {
 	int i;
-	int start = threadIdx.x * 16;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 16;
 	int end = start + 16;
 	if (end > n)
 		end = n;
@@ -53,10 +53,16 @@ value gpuhost_fib(value arg0)
 	CAMLlocal1(outarr);
 	int n = Int_val(arg0);
 
+	int threadsPerBlock;
+	int elemPerBlock;
+	int blockCount;
+	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
+	elemPerBlock = threadsPerBlock * 16;
+	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
 	cudaMalloc(&cuda_outarr, n * sizeof(value));
 
-	gpuglobal_fib<<<1,(n + 15) / 16>>>(cuda_outarr, n);
+	gpuglobal_fib<<<blockCount,threadsPerBlock>>>(cuda_outarr, n);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 

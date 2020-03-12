@@ -33,7 +33,7 @@ let main =
                     Array.append (int2string_rechelper (( / ) (n) (10))) (d)
         in
         if ( < ) (n) (0) then
-            (fun x xs -> Array.append [|x|] xs) ('_') (int2string_rechelper (( ~- ) (n)))
+            (fun x xs -> Array.append [|x|] xs) ('-') (int2string_rechelper (( ~- ) (n)))
         else
             int2string_rechelper (n)
     in

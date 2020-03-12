@@ -61,7 +61,7 @@ __device__ inline int gpu_addi(int x, int y) {return x + y;}
 __global__ void gpuglobal_saxpy_int(int arg0, int arg1, value *arg2, value *outarr, int n)
 {
 	int i;
-	int start = threadIdx.x * 32;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 32;
 	int end = start + 32;
 	if (end > n)
 		end = n;
@@ -76,7 +76,7 @@ __global__ void gpuglobal_saxpy_int(int arg0, int arg1, value *arg2, value *outa
 __global__ void gpuglobal_id2f_ignore2nd(value *arg0, value *outarr, int n)
 {
 	int i;
-	int start = threadIdx.x * 512;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 512;
 	int end = start + 512;
 	if (end > n)
 		end = n;
@@ -91,7 +91,7 @@ __global__ void gpuglobal_id2f_ignore2nd(value *arg0, value *outarr, int n)
 __global__ void gpuglobal_saxpy_float(double arg0, double arg1, value *arg2, value *outarr, int n)
 {
 	int i;
-	int start = threadIdx.x * 512;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 512;
 	int end = start + 512;
 	if (end > n)
 		end = n;
@@ -106,7 +106,7 @@ __global__ void gpuglobal_saxpy_float(double arg0, double arg1, value *arg2, val
 __global__ void gpuglobal_saxpy_intseq(int arg0, value *arg1, value *arg2, value *outarr, int n)
 {
 	int i;
-	int start = threadIdx.x * 32;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 32;
 	int end = start + 32;
 	if (end > n)
 		end = n;
@@ -124,13 +124,19 @@ value gpuhost_saxpy_int(value arg0, value arg1, value arg2)
 	CAMLlocal1(outarr);
 	int n = Wosize_val(arg2);
 
+	int threadsPerBlock;
+	int elemPerBlock;
+	int blockCount;
+	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
+	elemPerBlock = threadsPerBlock * 32;
+	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
 	value *cuda_arg2;
 	cudaMalloc(&cuda_outarr, n * sizeof(value));
 	cudaMalloc(&cuda_arg2, Wosize_val(arg2) * sizeof(value));
 	cudaMemcpy(cuda_arg2, Op_val(arg2), Wosize_val(arg2) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_saxpy_int<<<1,(n + 31) / 32>>>(Int_val(arg0), Int_val(arg1), cuda_arg2, cuda_outarr, n);
+	gpuglobal_saxpy_int<<<blockCount,threadsPerBlock>>>(Int_val(arg0), Int_val(arg1), cuda_arg2, cuda_outarr, n);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 
@@ -148,13 +154,19 @@ value gpuhost_id2f_ignore2nd(value arg0)
 	CAMLlocal1(outarr);
 	int n = Wosize_val(arg0);
 
+	int threadsPerBlock;
+	int elemPerBlock;
+	int blockCount;
+	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
+	elemPerBlock = threadsPerBlock * 512;
+	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
 	value *cuda_arg0;
 	cudaMalloc(&cuda_outarr, n * sizeof(value));
 	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_id2f_ignore2nd<<<1,(n + 511) / 512>>>(cuda_arg0, cuda_outarr, n);
+	gpuglobal_id2f_ignore2nd<<<blockCount,threadsPerBlock>>>(cuda_arg0, cuda_outarr, n);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -172,13 +184,19 @@ value gpuhost_saxpy_float(value arg0, value arg1, value arg2)
 	CAMLlocal1(outarr);
 	int n = Wosize_val(arg2);
 
+	int threadsPerBlock;
+	int elemPerBlock;
+	int blockCount;
+	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
+	elemPerBlock = threadsPerBlock * 512;
+	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
 	value *cuda_arg2;
 	cudaMalloc(&cuda_outarr, n * sizeof(value));
 	cudaMalloc(&cuda_arg2, Wosize_val(arg2) * sizeof(value));
 	cudaMemcpy(cuda_arg2, Op_val(arg2), Wosize_val(arg2) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_saxpy_float<<<1,(n + 511) / 512>>>(*((double *) arg0), *((double *) arg1), cuda_arg2, cuda_outarr, n);
+	gpuglobal_saxpy_float<<<blockCount,threadsPerBlock>>>(*((double *) arg0), *((double *) arg1), cuda_arg2, cuda_outarr, n);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -196,6 +214,12 @@ value gpuhost_saxpy_intseq(value arg0, value arg1, value arg2)
 	CAMLlocal1(outarr);
 	int n = Wosize_val(arg2);
 
+	int threadsPerBlock;
+	int elemPerBlock;
+	int blockCount;
+	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
+	elemPerBlock = threadsPerBlock * 32;
+	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
 	value *cuda_arg1;
 	value *cuda_arg2;
@@ -205,7 +229,7 @@ value gpuhost_saxpy_intseq(value arg0, value arg1, value arg2)
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg2, Op_val(arg2), Wosize_val(arg2) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_saxpy_intseq<<<1,(n + 31) / 32>>>(Int_val(arg0), cuda_arg1, cuda_arg2, cuda_outarr, n);
+	gpuglobal_saxpy_intseq<<<blockCount,threadsPerBlock>>>(Int_val(arg0), cuda_arg1, cuda_arg2, cuda_outarr, n);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 
