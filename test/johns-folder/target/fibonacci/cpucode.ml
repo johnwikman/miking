@@ -140,7 +140,7 @@ let main =
         fib_helper (0) (n) (1) (0)
     in
     let res  =
-        gpuhost_fib [|48|] [||] 
+        gpuhost_fib [|16; 48|] [||] 
     in
     let _  =
         printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; '4'; '8'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)

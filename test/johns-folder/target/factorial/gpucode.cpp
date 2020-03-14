@@ -37,11 +37,11 @@ __device__ inline int gpu_subi(int x, int y) {return x - y;}
 
 __device__ inline int gpu_muli(int x, int y) {return x * y;}
 
-__global__ void gpuglobal_factidx(value *cuda_arg0, value *outarr, int n)
+__global__ void gpuglobal_factidx(value *cuda_arg0, value *outarr, int n, int elemPerThread)
 {
 	int i;
-	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 8;
-	int end = start + 8;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
+	int end = start + elemPerThread;
 	if (end > n)
 		end = n;
 
@@ -56,13 +56,15 @@ value gpuhost_factidx(value packedInts, value packedFloats, value arg0)
 {
 	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
+
+	int elemPerThread = Int_val(Field(packedInts, 0));
 	int n = Wosize_val(arg0);
 
 	int threadsPerBlock;
 	int elemPerBlock;
 	int blockCount;
 	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
-	elemPerBlock = threadsPerBlock * 8;
+	elemPerBlock = threadsPerBlock * elemPerThread;
 	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
 	value *cuda_arg0;
@@ -70,7 +72,7 @@ value gpuhost_factidx(value packedInts, value packedFloats, value arg0)
 	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_factidx<<<blockCount,threadsPerBlock>>>(cuda_arg0, cuda_outarr, n);
+	gpuglobal_factidx<<<blockCount,threadsPerBlock>>>(cuda_arg0, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 

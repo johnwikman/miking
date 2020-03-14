@@ -60,7 +60,7 @@ let prog = bind_ prog saxpyfuncs_ in
 
 --------- SAXPY (Single Ints) ---------
 let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (
-    cudamap_ 32 -- elem per thread
+    cudamap_ (int_ 32) -- elem per thread
              (app2f_ (var_ "saxpy_int")
                      (int_ 17)
                      (int_ 11))
@@ -75,13 +75,13 @@ let prog = bind_ prog (let_ "_" (tyunit_) (app2f_ (var_ "printintarr")
 
 --------- SAXPY (Single Floats) ---------
 let prog = bind_ prog (let_ "res" (tyseq_ tyfloat_) (
-    cudamapi_ 512 -- elem per thread
+    cudamapi_ (int_ 512) -- elem per thread
               (var_ "id2f_ignore2nd")
               (makeseq_ (int_ 5000) (int_ 0))
   )) in
 
 let prog = bind_ prog (let_ "res" (tyseq_ tyfloat_) (
-    cudamap_ 512 -- elem per thread
+    cudamap_ (int_ 512) -- elem per thread
              (app2f_ (var_ "saxpy_float")
                      (float_ 17.0)
                      (float_ 11.0))
@@ -104,7 +104,7 @@ let prog = bind_ prog (let_ "res" (tyseq_ tyfloat_) (
 
 --------- SAXPY (Sequence of Ints) ---------
 let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (
-    cudamapi_ 32 -- elem per thread
+    cudamapi_ (int_ 32) -- elem per thread
               (app2f_ (var_ "saxpy_intseq")
                       (int_ 17)
                       (seq_ [int_ 9, int_ 8]))

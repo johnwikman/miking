@@ -140,19 +140,19 @@ let main =
         float_of_int (x)
     in
     let res  =
-        gpuhost_saxpy_int [|17; 11|] [||] ([|15; 1|])
+        gpuhost_saxpy_int [|32; 17; 11|] [||] ([|15; 1|])
     in
     let _  =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     let res  =
-        gpuhost_id2f_ignore2nd [||] [||] (Array.make (5000) (0))
+        gpuhost_id2f_ignore2nd [|512|] [||] (Array.make (5000) (0))
     in
     let res  =
-        gpuhost_saxpy_float [||] [|1.70e+1; 1.100000e+1|] (res)
+        gpuhost_saxpy_float [|512|] [|1.70e+1; 1.100000e+1|] (res)
     in
     let res  =
-        gpuhost_saxpy_intseq [|17|] [||] ([|9; 8|]) ([|15; 1|])
+        gpuhost_saxpy_intseq [|32; 17|] [||] ([|9; 8|]) ([|15; 1|])
     in
     let _  =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; '_'; 'i'; 'n'; 't'; 's'; 'e'; 'q'; ' '; '('; 'a'; ':'; ' '; '1'; '7'; ')'; ' '; '('; 'x'; ':'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ')'; ' '; '('; 'y'; ':'; ' '; '['; '9'; ','; ' '; '8'; ']'; ')'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)

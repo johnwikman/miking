@@ -261,6 +261,7 @@ lang CUDACGOCaml = MExprCGExt
       in
       let res = extract_args [] t.func in
       let args = concat res.0 (if t.onlyIndexArg then [t.onlyIndexArgSize] else [t.array]) in
+      let args = cons t.elemPerThread args in
       let hostfuncname = concat "gpuhost_" res.1 in
       let argtypes = map (codegenGetExprType state) args in
       let funrettype = findarrow_endtpe (codegenGetExprType state (TmVar {ident = res.1})) in

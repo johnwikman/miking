@@ -155,7 +155,7 @@ let main =
         factorial (i)
     in
     let res  =
-        gpuhost_factidx [||] [||] (Array.make (16) (0))
+        gpuhost_factidx [|8|] [||] (Array.make (16) (0))
     in
     let _  =
         printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'a'; 'c'; 't'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)

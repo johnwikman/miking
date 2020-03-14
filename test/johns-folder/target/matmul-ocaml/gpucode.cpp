@@ -43,11 +43,11 @@ __device__ int gpudevice_matrixMuliWorker(int innerDim, int a_rows, int b_cols, 
 	return gpudevice_matrixMuliWorkerReduce(innerDim, b_cols, a, b, 0, 0, gpu_muli(innerDim, gpu_divi(idx, b_cols)), gpu_modi(idx, b_cols));
 }
 
-__global__ void gpuglobal_matrixMuliWorker(int cuda_arg0, int cuda_arg1, int cuda_arg2, value *cuda_arg3, value *cuda_arg4, value *outarr, int n)
+__global__ void gpuglobal_matrixMuliWorker(int cuda_arg0, int cuda_arg1, int cuda_arg2, value *cuda_arg3, value *cuda_arg4, value *outarr, int n, int elemPerThread)
 {
 	int i;
-	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 32;
-	int end = start + 32;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
+	int end = start + elemPerThread;
 	if (end > n)
 		end = n;
 
@@ -60,13 +60,15 @@ value gpuhost_matrixMuliWorker(value packedInts, value packedFloats, value arg0,
 {
 	CAMLparam4(packedInts, packedFloats, arg0, arg1);
 	CAMLlocal1(outarr);
-	int n = Int_val(Field(packedInts, 3));
+
+	int elemPerThread = Int_val(Field(packedInts, 0));
+	int n = Int_val(Field(packedInts, 4));
 
 	int threadsPerBlock;
 	int elemPerBlock;
 	int blockCount;
 	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
-	elemPerBlock = threadsPerBlock * 32;
+	elemPerBlock = threadsPerBlock * elemPerThread;
 	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
 	value *cuda_arg0;
@@ -77,7 +79,7 @@ value gpuhost_matrixMuliWorker(value packedInts, value packedFloats, value arg0,
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_matrixMuliWorker<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 0)), Int_val(Field(packedInts, 1)), Int_val(Field(packedInts, 2)), cuda_arg0, cuda_arg1, cuda_outarr, n);
+	gpuglobal_matrixMuliWorker<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), Int_val(Field(packedInts, 2)), Int_val(Field(packedInts, 3)), cuda_arg0, cuda_arg1, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 

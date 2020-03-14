@@ -267,7 +267,7 @@ let func_matrixMuliCUDA =
               lam_ "b" (tymatrixi_) (
                 if_ (neqi_ (var_ "a_cols") (var_ "b_rows"))
                     (error_ (str_ "matrixMuliCUDA: Inner dimensions differ."))
-                    (cudainit_ 32
+                    (cudainit_ (int_ 32)
                                (muli_ (var_ "a_rows") (var_ "b_cols"))
                                (app5f_ (var_ "matrixMuliWorker")
                                        (var_ "a_cols")

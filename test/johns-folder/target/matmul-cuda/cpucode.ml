@@ -205,7 +205,7 @@ let main =
             (fun s -> printf "ERROR: %s
 " (String.of_seq (Array.to_seq s)); exit 1) ([|'m'; 'a'; 't'; 'r'; 'i'; 'x'; 'M'; 'u'; 'l'; 'i'; 'C'; 'U'; 'D'; 'A'; ':'; ' '; 'I'; 'n'; 'n'; 'e'; 'r'; ' '; 'd'; 'i'; 'm'; 'e'; 'n'; 's'; 'i'; 'o'; 'n'; 's'; ' '; 'd'; 'i'; 'f'; 'f'; 'e'; 'r'; '.'|])
         else
-            gpuhost_matrixMuliWorker [|a_cols; a_rows; b_cols; ( * ) (a_rows) (b_cols)|] [||] (a) (b)
+            gpuhost_matrixMuliWorker [|32; a_cols; a_rows; b_cols; ( * ) (a_rows) (b_cols)|] [||] (a) (b)
     in
     let matAinitfun row col =
         ( + ) (( * ) (row) (row)) (col)

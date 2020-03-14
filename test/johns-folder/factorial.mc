@@ -45,7 +45,7 @@ let prog = bind_ prog (let_ "factidx" (tyarrows_ [tyint_, tyint_, tyint_]) (
                             lam_ "i" tyint_ (lam_ "ignored_arg" tyint_ (
                                  app1f_ (var_ "factorial") (var_ "i"))))) in
 
-let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudamapi_ 8
+let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudamapi_ (int_ 8) -- elemPerThread
                                                              (var_ "factidx")
                                                              (makeseq_ (int_ 16) (int_ 0)))) in
 

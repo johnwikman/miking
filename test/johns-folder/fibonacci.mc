@@ -20,7 +20,7 @@ let prog = bind_ prog libio_ in
 let prog = bind_ prog libarith_ in
 
 -- Fibonacci (cudaMapidx)
-let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudainit_ 16
+let prog = bind_ prog (let_ "res" (tyseq_ tyint_) (cudainit_ (int_ 16)
                                                              (int_ 48)
                                                              (var_ "fib"))) in
 

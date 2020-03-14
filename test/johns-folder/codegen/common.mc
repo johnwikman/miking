@@ -177,7 +177,7 @@ end
 
 lang CUDACGExt
     syn Expr =
-    | TmCUDAMap {elemPerThread : Int,
+    | TmCUDAMap {elemPerThread : Expr,
                  includeIndexArg : Bool,
                  onlyIndexArg : Bool,
                  onlyIndexArgSize : Expr,
@@ -199,13 +199,12 @@ lang CUDACGExt
           else
             "cudaMap"
       in
-      let args = [t.func, t.array] in
+      let args = [t.elemPerThread, t.func, t.array] in
       let args = if t.onlyIndexArg then cons t.onlyIndexArgSize args else args in
 
-      let terms = [fname, int2string t.elemPerThread] in
-      let terms = concat terms (map (lam arg. strJoin "" ["(", pprintCode indent arg, ")"]) args) in
+      let argstrs = map (lam arg. strJoin "" ["(", pprintCode indent arg, ")"]) args in
 
-      strJoin " " terms
+      strJoin " " (cons fname argstrs)
 end
 
 lang MainCGExt
