@@ -206,21 +206,25 @@ let func_matrixMuliWorkerReduce =
     )
   ) (reclets_empty)
 let func_matrixMuliWorker =
-  let_ "matrixMuliWorker" (tyarrows_ [tyseq_ tyint_, tymatrixi_, tymatrixi_, tyint_, tyint_]) (
-    lam_ "innerDim__a_rows__b_cols" (tyseq_ tyint_) (
-      lam_ "a" (tymatrixi_) (
-        lam_ "b" (tymatrixi_) (
-          lam_ "idx" (tyint_) (
-            app8f_ (var_ "matrixMuliWorkerReduce")
-                   (nth_ (var_ "innerDim__a_rows__b_cols") (int_ 0))
-                   (nth_ (var_ "innerDim__a_rows__b_cols") (int_ 2))
-                   (var_ "a")
-                   (var_ "b")
-                   (int_ 0)
-                   (int_ 0)
-                   (muli_ (nth_ (var_ "innerDim__a_rows__b_cols") (int_ 0))
-                          (divi_ (var_ "idx") (nth_ (var_ "innerDim__a_rows__b_cols") (int_ 2))))
-                   (modi_ (var_ "idx") (nth_ (var_ "innerDim__a_rows__b_cols") (int_ 2)))
+  let_ "matrixMuliWorker" (tyarrows_ [tyint_, tyint_, tyint_, tymatrixi_, tymatrixi_, tyint_, tyint_]) (
+    lam_ "innerDim" (tyint_) (
+      lam_ "a_rows" (tyint_) (
+        lam_ "b_cols" (tyint_) (
+          lam_ "a" (tymatrixi_) (
+            lam_ "b" (tymatrixi_) (
+              lam_ "idx" (tyint_) (
+                app8f_ (var_ "matrixMuliWorkerReduce")
+                       (var_ "innerDim")
+                       (var_ "b_cols")
+                       (var_ "a")
+                       (var_ "b")
+                       (int_ 0)
+                       (int_ 0)
+                       (muli_ (var_ "innerDim")
+                              (divi_ (var_ "idx") (var_ "b_cols")))
+                       (modi_ (var_ "idx") (var_ "b_cols"))
+              )
+            )
           )
         )
       )
@@ -239,8 +243,10 @@ let func_matrixMuli =
                     (error_ (str_ "matrixMuli: Inner dimensions differ."))
                     (app2f_ (var_ "seqInit")
                             (muli_ (var_ "a_rows") (var_ "b_cols"))
-                            (app3f_ (var_ "matrixMuliWorker")
-                                    (seq_ [(var_ "a_cols"), (var_ "a_rows"), (var_ "b_cols")])
+                            (app5f_ (var_ "matrixMuliWorker")
+                                    (var_ "a_cols")
+                                    (var_ "a_rows")
+                                    (var_ "b_cols")
                                     (var_ "a")
                                     (var_ "b")))
               )
@@ -259,17 +265,16 @@ let func_matrixMuliCUDA =
           lam_ "b_rows" (tyint_) (
             lam_ "b_cols" (tyint_) (
               lam_ "b" (tymatrixi_) (
-                bindall_ [
-                  let_ "size" (tyint_) (muli_ (var_ "a_rows") (var_ "b_cols")),
-                  if_ (neqi_ (var_ "a_cols") (var_ "b_rows"))
-                      (error_ (str_ "matrixMuliCUDA: Inner dimensions differ."))
-                      (cudamapidx_ 32
-                                   (var_ "size")
-                                   (app3f_ (var_ "matrixMuliWorker")
-                                           (seq_ [(var_ "a_cols"), (var_ "a_rows"), (var_ "b_cols")])
-                                           (var_ "a")
-                                           (var_ "b")))
-                ]
+                if_ (neqi_ (var_ "a_cols") (var_ "b_rows"))
+                    (error_ (str_ "matrixMuliCUDA: Inner dimensions differ."))
+                    (cudainit_ 32
+                               (muli_ (var_ "a_rows") (var_ "b_cols"))
+                               (app5f_ (var_ "matrixMuliWorker")
+                                       (var_ "a_cols")
+                                       (var_ "a_rows")
+                                       (var_ "b_cols")
+                                       (var_ "a")
+                                       (var_ "b")))
               )
             )
           )

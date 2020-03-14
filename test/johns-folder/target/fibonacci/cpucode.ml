@@ -1,7 +1,7 @@
 open Printf
 open Array
 
-external gpuhost_fib: int -> int array = "gpuhost_fib"
+external gpuhost_fib: int array -> float array -> int array = "gpuhost_fib"
 
 let main =
     let head s =
@@ -140,7 +140,7 @@ let main =
         fib_helper (0) (n) (1) (0)
     in
     let res  =
-        gpuhost_fib (48)
+        gpuhost_fib [|48|] [||] 
     in
     let _  =
         printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; '4'; '8'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)

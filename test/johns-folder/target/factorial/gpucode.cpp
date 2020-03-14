@@ -12,7 +12,7 @@
 #endif
 
 extern "C" {
-	value gpuhost_factidx(value arg0);
+	value gpuhost_factidx(value packedInts, value packedFloats, value arg0);
 }
 
 __device__ int gpudevice_factidx(int i, int ignored_arg);
@@ -37,7 +37,7 @@ __device__ inline int gpu_subi(int x, int y) {return x - y;}
 
 __device__ inline int gpu_muli(int x, int y) {return x * y;}
 
-__global__ void gpuglobal_factidx(value *arg0, value *outarr, int n)
+__global__ void gpuglobal_factidx(value *cuda_arg0, value *outarr, int n)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * 8;
@@ -47,14 +47,14 @@ __global__ void gpuglobal_factidx(value *arg0, value *outarr, int n)
 
 	for (i = start; i < end; ++i) {
 		int v;
-		v = Int_val(arg0[i]);
+		v = Int_val(cuda_arg0[i]);
 		outarr[i] = Val_int(gpudevice_factidx(i, v));
 	}
 }
 
-value gpuhost_factidx(value arg0)
+value gpuhost_factidx(value packedInts, value packedFloats, value arg0)
 {
-	CAMLparam1(arg0);
+	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
 	int n = Wosize_val(arg0);
 

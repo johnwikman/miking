@@ -266,19 +266,59 @@ lang CUDACGOCaml = MExprCGExt
       let funrettype = findarrow_endtpe (codegenGetExprType state (TmVar {ident = res.1})) in
       let rettype = TySeq {tpe = funrettype} in
 
+      -- Pack integer and floating point arguments together. (Temporarily commented out) --
+      let packedArgs = foldl (lam acc. lam e.
+        let pos = acc.0 in
+        let intacc = acc.1 in
+        let floatacc = acc.2 in
+        let miscacc = acc.3 in
+        let etype = codegenGetExprType state e in
+        match etype with TyInt () then
+          (addi pos 1, cons {pos = pos, val = e} intacc, floatacc, miscacc)
+        else match etype with TyFloat () then
+          (addi pos 1, intacc, cons {pos = pos, val = e} floatacc, miscacc)
+        else
+          (addi pos 1, intacc, floatacc, cons e miscacc)
+      ) (0, [],[],[]) args in
+
+      let packedInts = reverse packedArgs.1 in
+      let packedFloats = reverse packedArgs.2 in
+      let nonPackedArgs = reverse packedArgs.3 in
+      let nonPackedArgTypes = map (codegenGetExprType state) nonPackedArgs in
+
       let externdef =
         strJoin "" ["external ", hostfuncname, ": ",
-                    strJoin " -> " (map type2ocamlstring (concat argtypes [rettype])),
+                    "int array -> float array -> ",
+                    strJoin " -> " (map type2ocamlstring (concat nonPackedArgTypes [rettype])),
                     " = \"", hostfuncname, "\""]
       in
 
-      let argcgr = map (codegenOCaml state) args in
-      let argcode = strJoin " " (map (lam r. strJoin "" ["(", r.code, ")"]) argcgr) in
+      let packedintcgr = codegenOCaml state (TmSeq {tms = map (lam r. r.val) packedInts}) in
+      let packedfloatcgr = codegenOCaml state (TmSeq {tms = map (lam r. r.val) packedFloats}) in
+      let nonpackedcgr = map (codegenOCaml state) nonPackedArgs in
+      let nonpackedcode = strJoin " " (map (lam r. strJoin "" ["(", r.code, ")"]) nonpackedcgr) in
 
-      let cudacgr = codegenCUDA state (TmCUDAMap t) in
-      let retcgr = cgr_merge "" (cons cudacgr argcgr) in
-      {{retcgr with code = strJoin " " [hostfuncname, argcode]}
+      let cudacgr = codegenCUDA state (TmCUDAMap {{{t with packedInts = packedInts}
+                                                      with packedFloats = packedFloats}
+                                                      with nonPackedArgs = nonPackedArgs}) in
+      let retcgr = cgr_merge "" (concat [cudacgr, packedintcgr, packedfloatcgr] nonpackedcgr) in
+      {{retcgr with code = strJoin " " [hostfuncname, packedintcgr.code, packedfloatcgr.code, nonpackedcode]}
                with externs = strset_add externdef retcgr.externs}
+      ---------------------------------------------------------
+
+----      let externdef =
+----        strJoin "" ["external ", hostfuncname, ": ",
+----                    strJoin " -> " (map type2ocamlstring (concat argtypes [rettype])),
+----                    " = \"", hostfuncname, "\""]
+----      in
+----
+----      let argcgr = map (codegenOCaml state) args in
+----      let argcode = strJoin " " (map (lam r. strJoin "" ["(", r.code, ")"]) argcgr) in
+----
+----      let cudacgr = codegenCUDA state (TmCUDAMap t) in
+----      let retcgr = cgr_merge "" (cons cudacgr argcgr) in
+----      {{retcgr with code = strJoin " " [hostfuncname, argcode]}
+----               with externs = strset_add externdef retcgr.externs}
 end
 
 lang MainGCOCaml = MExprCGExt

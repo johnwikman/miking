@@ -1,7 +1,7 @@
 open Printf
 open Array
 
-external gpuhost_factidx: int array -> int array = "gpuhost_factidx"
+external gpuhost_factidx: int array -> float array -> int array -> int array = "gpuhost_factidx"
 
 let main =
     let head s =
@@ -155,7 +155,7 @@ let main =
         factorial (i)
     in
     let res  =
-        gpuhost_factidx (Array.make (16) (0))
+        gpuhost_factidx [||] [||] (Array.make (16) (0))
     in
     let _  =
         printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; ' '; 'f'; 'a'; 'c'; 't'; 'i'; 'd'; 'x'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)

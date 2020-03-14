@@ -1,10 +1,10 @@
 open Printf
 open Array
 
-external gpuhost_saxpy_int: int -> int -> int array -> int array = "gpuhost_saxpy_int"
-external gpuhost_id2f_ignore2nd: int array -> float array = "gpuhost_id2f_ignore2nd"
-external gpuhost_saxpy_float: float -> float -> float array -> float array = "gpuhost_saxpy_float"
-external gpuhost_saxpy_intseq: int -> int array -> int array -> int array = "gpuhost_saxpy_intseq"
+external gpuhost_saxpy_int: int array -> float array -> int array -> int array = "gpuhost_saxpy_int"
+external gpuhost_id2f_ignore2nd: int array -> float array -> int array -> float array = "gpuhost_id2f_ignore2nd"
+external gpuhost_saxpy_float: int array -> float array -> float array -> float array = "gpuhost_saxpy_float"
+external gpuhost_saxpy_intseq: int array -> float array -> int array -> int array -> int array = "gpuhost_saxpy_intseq"
 
 let main =
     let head s =
@@ -140,19 +140,19 @@ let main =
         float_of_int (x)
     in
     let res  =
-        gpuhost_saxpy_int (17) (11) ([|15; 1|])
+        gpuhost_saxpy_int [|17; 11|] [||] ([|15; 1|])
     in
     let _  =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)
     in
     let res  =
-        gpuhost_id2f_ignore2nd (Array.make (5000) (0))
+        gpuhost_id2f_ignore2nd [||] [||] (Array.make (5000) (0))
     in
     let res  =
-        gpuhost_saxpy_float (1.70e+1) (1.100000e+1) (res)
+        gpuhost_saxpy_float [||] [|1.70e+1; 1.100000e+1|] (res)
     in
     let res  =
-        gpuhost_saxpy_intseq (17) ([|9; 8|]) ([|15; 1|])
+        gpuhost_saxpy_intseq [|17|] [||] ([|9; 8|]) ([|15; 1|])
     in
     let _  =
         printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; '_'; 'i'; 'n'; 't'; 's'; 'e'; 'q'; ' '; '('; 'a'; ':'; ' '; '1'; '7'; ')'; ' '; '('; 'x'; ':'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ')'; ' '; '('; 'y'; ':'; ' '; '['; '9'; ','; ' '; '8'; ']'; ')'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (res)

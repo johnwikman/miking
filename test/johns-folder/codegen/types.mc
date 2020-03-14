@@ -18,6 +18,9 @@ lang VarCGType = MExprCGExt
 end
 
 lang AppCGType = MExprCGExt
+    sem codegenGetConstFunRetType (state : CodegenState) =
+    -- intentionally left blank
+
     sem codegenGetExprType (state : CodegenState) =
     | TmApp t ->
       let perror = lam _.
@@ -29,7 +32,8 @@ lang AppCGType = MExprCGExt
         match t1.lhs with TmConst c1 then
           match c1.val with CMakeseq _ then
             TySeq {tpe = codegenGetExprType state t.rhs}
-          else perror ()
+          else
+            codegenGetConstFunRetType state c1.val
         else perror ()
       else perror ()
 end
@@ -66,6 +70,23 @@ lang FloatCGType = MExprCGExt
     | CFloat _ -> TyFloat ()
 end
 
+lang ArithIntCGType = MExprCGExt
+    sem codegenGetConstFunRetType (state : CodegenState) =
+    | CAddi _ -> TyInt ()
+    | CSubi _ -> TyInt ()
+    | CMuli _ -> TyInt ()
+    | CDivi _ -> TyInt ()
+    | CModi _ -> TyInt ()
+end
+
+lang ArithFloatCGType = MExprCGExt
+    sem codegenGetConstFunRetType (state : CodegenState) =
+    | CAddf _ -> TyFloat ()
+    | CSubf _ -> TyFloat ()
+    | CMulf _ -> TyFloat ()
+    | CDivf _ -> TyFloat ()
+end
+
 lang CharCGType = MExprCGExt
     sem codegenGetConstType (state : CodegenState) =
     | CChar _ -> TyChar ()
@@ -86,8 +107,8 @@ lang SeqCGType = MExprCGExt
 end
 
 lang MExprCGType = VarCGType + AppCGType + LetCGType + FunCGType +
-                   ConstCGType + IntCGType + FloatCGType + CharCGType +
-                   SeqCGType
+                   ConstCGType + IntCGType + FloatCGType + ArithIntCGType +
+                   ArithFloatCGType + CharCGType + SeqCGType
 
 -- Helper functions
 let type2cudastr = use MExprCGType in

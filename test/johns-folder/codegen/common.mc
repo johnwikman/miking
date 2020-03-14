@@ -182,20 +182,30 @@ lang CUDACGExt
                  onlyIndexArg : Bool,
                  onlyIndexArgSize : Expr,
                  func : Expr,
-                 array : Expr}
+                 array : Expr,
+                 -- metadata used by codegen
+                 packedInts : [{pos : Int, val : Expr}],
+                 packedFloats : [{pos : Int, val : Expr}],
+                 nonPackedArgs : [Expr]}
 
     sem pprintCode (indent : Int) =
     | TmCUDAMap t ->
-      let suffix =
-        if t.includeIndexArg then "i"
-        else if t.onlyIndexArg then "idx"
-        else ""
+      let fname =
+        if t.onlyIndexArg then
+          "cudaInit"
+        else
+          if t.includeIndexArg then
+            "cudaMapi"
+          else
+            "cudaMap"
       in
-      strJoin "" [
-        "cudaMap", suffix, " ", int2string t.elemPerThread,
-        " (", pprintCode indent t.func, ")",
-        " (", pprintCode indent t.array, ")"
-      ]
+      let args = [t.func, t.array] in
+      let args = if t.onlyIndexArg then cons t.onlyIndexArgSize args else args in
+
+      let terms = [fname, int2string t.elemPerThread] in
+      let terms = concat terms (map (lam arg. strJoin "" ["(", pprintCode indent arg, ")"]) args) in
+
+      strJoin " " terms
 end
 
 lang MainCGExt

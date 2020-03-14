@@ -259,7 +259,10 @@ let cudamap_ = use MExprCGOCaml in
              onlyIndexArg = false,
              onlyIndexArgSize = int_ 0,
              func = f,
-             array = arr}
+             array = arr,
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
 
 let cudamapi_ = use MExprCGOCaml in
   lam ept. lam f. lam arr.
@@ -268,13 +271,19 @@ let cudamapi_ = use MExprCGOCaml in
              onlyIndexArg = false,
              onlyIndexArgSize = int_ 0,
              func = f,
-             array = arr}
+             array = arr,
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
 
-let cudamapidx_ = use MExprCGOCaml in
+let cudainit_ = use MExprCGOCaml in
   lam ept. lam size. lam f.
   TmCUDAMap {elemPerThread = ept,
              includeIndexArg = false,
              onlyIndexArg = true,
              onlyIndexArgSize = size,
              func = f,
-             array = seq_ []}
+             array = seq_ [],
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
