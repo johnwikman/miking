@@ -12,29 +12,29 @@
 #endif
 
 extern "C" {
-	value gpuhost_fib(value packedInts, value packedFloats);
+	value gpuhost_fun69_fib(value packedInts, value packedFloats);
 }
 
 __device__ inline int gpu_addi(int x, int y);
 __device__ inline bool gpu_eqi(int x, int y);
-__device__ int gpudevice_fib_helper(int i, int n, int prev, int current);
-__device__ int gpudevice_fib(int n);
+__device__ int gpudevice_fun63_fib_helper(int arg64_i, int arg65_n, int arg66_prev, int arg67_current);
+__device__ int gpudevice_fun69_fib(int arg68_n);
 
 __device__ inline int gpu_addi(int x, int y) {return x + y;}
 
 __device__ inline bool gpu_eqi(int x, int y) {return x == y;}
 
-__device__ int gpudevice_fib_helper(int i, int n, int prev, int current)
+__device__ int gpudevice_fun63_fib_helper(int arg64_i, int arg65_n, int arg66_prev, int arg67_current)
 {
-	return (gpu_eqi(i, n)) ? (current) : (gpudevice_fib_helper(gpu_addi(i, 1), n, current, gpu_addi(prev, current)));
+	return (gpu_eqi(arg64_i, arg65_n)) ? (arg67_current) : (gpudevice_fun63_fib_helper(gpu_addi(arg64_i, 1), arg65_n, arg67_current, gpu_addi(arg66_prev, arg67_current)));
 }
 
-__device__ int gpudevice_fib(int n)
+__device__ int gpudevice_fun69_fib(int arg68_n)
 {
-	return gpudevice_fib_helper(0, n, 1, 0);
+	return gpudevice_fun63_fib_helper(0, arg68_n, 1, 0);
 }
 
-__global__ void gpuglobal_fib(value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun69_fib(value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -43,11 +43,11 @@ __global__ void gpuglobal_fib(value *outarr, int n, int elemPerThread)
 		end = n;
 
 	for (i = start; i < end; ++i) {
-		outarr[i] = Val_int(gpudevice_fib(i));
+		outarr[i] = Val_int(gpudevice_fun69_fib(i));
 	}
 }
 
-value gpuhost_fib(value packedInts, value packedFloats)
+value gpuhost_fun69_fib(value packedInts, value packedFloats)
 {
 	CAMLparam2(packedInts, packedFloats);
 	CAMLlocal1(outarr);
@@ -64,7 +64,7 @@ value gpuhost_fib(value packedInts, value packedFloats)
 	value *cuda_outarr;
 	cudaMalloc(&cuda_outarr, n * sizeof(value));
 
-	gpuglobal_fib<<<blockCount,threadsPerBlock>>>(cuda_outarr, n, elemPerThread);
+	gpuglobal_fun69_fib<<<blockCount,threadsPerBlock>>>(cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 

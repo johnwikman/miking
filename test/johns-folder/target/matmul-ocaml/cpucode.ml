@@ -1,249 +1,249 @@
 open Printf
 open Array
 
-external gpuhost_matrixMuliWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_matrixMuliWorker"
+external gpuhost_fun124_matrixMuliWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_fun124_matrixMuliWorker"
 
 let main =
-    let head s =
-        Array.get (s) (0)
+    let fun1_head arg0_s =
+        Array.get (arg0_s) (0)
     in
-    let tail s =
-        (fun xs start len -> Array.sub xs (min ((Array.length xs) - 1) start) (min ((Array.length xs) - start) len)) (s) (1) (Array.length (s))
+    let fun3_tail arg2_s =
+        (fun xs start len -> Array.sub xs (min ((Array.length xs) - 1) start) (min ((Array.length xs) - start) len)) (arg2_s) (1) (Array.length (arg2_s))
     in
-    let null l =
-        ( = ) (Array.length (l)) (0)
+    let fun5_null arg4_l =
+        ( = ) (Array.length (arg4_l)) (0)
     in
-    let map f seq =
-        Array.map (f) (seq)
+    let fun8_map arg6_f arg7_seq =
+        Array.map (arg6_f) (arg7_seq)
     in
-    let mapi f seq =
-        Array.mapi (f) (seq)
+    let fun11_mapi arg9_f arg10_seq =
+        Array.mapi (arg9_f) (arg10_seq)
     in
-    let seqInit size f =
-        Array.init (size) (f)
+    let fun14_seqInit arg12_size arg13_f =
+        Array.init (arg12_size) (arg13_f)
     in
-    let int2string n =
-        let rec int2string_rechelper n =
-                if ( < ) (n) (10) then
-                    [|char_of_int (( + ) (n) (int_of_char ('0')))|]
-                else
-                    let d  =
-                        [|char_of_int (( + ) (( mod ) (n) (10)) (int_of_char ('0')))|]
-                    in
-                    Array.append (int2string_rechelper (( / ) (n) (10))) (d)
-        in
-        if ( < ) (n) (0) then
-            (fun x xs -> Array.append [|x|] xs) ('-') (int2string_rechelper (( ~- ) (n)))
+    let rec fun16_int2string_rechelper arg17_n =
+            if ( < ) (arg17_n) (10) then
+                [|char_of_int (( + ) (arg17_n) (int_of_char ('0')))|]
+            else
+                let var18_d  =
+                    [|char_of_int (( + ) (( mod ) (arg17_n) (10)) (int_of_char ('0')))|]
+                in
+                Array.append (fun16_int2string_rechelper (( / ) (arg17_n) (10))) (var18_d)
+    in
+    let fun19_int2string arg15_n =
+        if ( < ) (arg15_n) (0) then
+            (fun x xs -> Array.append [|x|] xs) ('-') (fun16_int2string_rechelper (( ~- ) (arg15_n)))
         else
-            int2string_rechelper (n)
+            fun16_int2string_rechelper (arg15_n)
     in
-    let float2string f =
-        Array.of_seq (String.to_seq (string_of_float (f)))
+    let fun21_float2string arg20_f =
+        Array.of_seq (String.to_seq (string_of_float (arg20_f)))
     in
-    let rec strJoin delim strs =
-            if ( = ) (Array.length (strs)) (0) then
+    let rec fun22_strJoin arg23_delim arg24_strs =
+            if ( = ) (Array.length (arg24_strs)) (0) then
                 [||]
             else
-                if ( = ) (Array.length (strs)) (1) then
-                    head (strs)
+                if ( = ) (Array.length (arg24_strs)) (1) then
+                    fun1_head (arg24_strs)
                 else
-                    Array.append (Array.append (head (strs)) (delim)) (strJoin (delim) (tail (strs)))
+                    Array.append (Array.append (fun1_head (arg24_strs)) (arg23_delim)) (fun22_strJoin (arg23_delim) (fun3_tail (arg24_strs)))
     in
-    let printint i =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (int2string (i))
+    let fun26_printint arg25_i =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (arg25_i))
     in
-    let printintln i =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (int2string (i)) ([|'\n'|]))
+    let fun28_printintln arg27_i =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (fun19_int2string (arg27_i)) ([|'\n'|]))
     in
-    let printintarr name arr =
-        let rec printloop i =
-                if ( = ) (i) (Array.length (arr)) then
-                    ()
-                else
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; ' '; ' '; ' '|])
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (int2string (i))
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (int2string (Array.get (arr) (i)))
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
-                    in
-                    printloop (( + ) (i) (1))
-        in
-        let _  =
+    let rec fun31_printloop arg37_arr arg33_arr arg32_i =
+            if ( = ) (arg32_i) (Array.length (arg33_arr)) then
+                ()
+            else
+                let var34__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; ' '; ' '; ' '|])
+                in
+                let var35__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (arg32_i))
+                in
+                let var36__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
+                in
+                let var38__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (Array.get (arg37_arr) (arg32_i)))
+                in
+                let var39__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+                in
+                fun31_printloop (arg37_arr) (arg33_arr) (( + ) (arg32_i) (1))
+    in
+    let fun43_printintarr arg29_name arg30_arr =
+        let var40__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'C'; 'o'; 'n'; 't'; 'e'; 'n'; 't'; 's'; ' '; 'o'; 'f'; ' '|])
         in
-        let _  =
-            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (name)
+        let var41__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (arg29_name)
         in
-        let _  =
+        let var42__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; '\n'|])
         in
-        printloop (0)
+        fun31_printloop (arg30_arr) (arg30_arr) (0)
     in
-    let printfloatarr name arr =
-        let rec printloop i =
-                if ( = ) (i) (Array.length (arr)) then
-                    ()
-                else
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; ' '; ' '; ' '|])
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (int2string (i))
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (float2string (Array.get (arr) (i)))
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
-                    in
-                    printloop (( + ) (i) (1))
-        in
-        let _  =
+    let rec fun46_printloop arg52_arr arg48_arr arg47_i =
+            if ( = ) (arg47_i) (Array.length (arg48_arr)) then
+                ()
+            else
+                let var49__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; ' '; ' '; ' '|])
+                in
+                let var50__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (arg47_i))
+                in
+                let var51__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
+                in
+                let var53__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (Array.get (arg52_arr) (arg47_i)))
+                in
+                let var54__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+                in
+                fun46_printloop (arg52_arr) (arg48_arr) (( + ) (arg47_i) (1))
+    in
+    let fun58_printfloatarr arg44_name arg45_arr =
+        let var55__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'C'; 'o'; 'n'; 't'; 'e'; 'n'; 't'; 's'; ' '; 'o'; 'f'; ' '|])
         in
-        let _  =
-            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (name)
+        let var56__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (arg44_name)
         in
-        let _  =
+        let var57__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; '\n'|])
         in
-        printloop (0)
+        fun46_printloop (arg45_arr) (arg45_arr) (0)
     in
-    let matrixMki rows cols v =
-        Array.make (( * ) (rows) (cols)) (v)
+    let fun62_matrixMki arg59_rows arg60_cols arg61_v =
+        Array.make (( * ) (arg59_rows) (arg60_cols)) (arg61_v)
     in
-    let matrixGeti row col m_rows m_cols m =
-        Array.get (m) (( + ) (( * ) (m_cols) (row)) (col))
+    let fun68_matrixGeti arg63_row arg64_col arg65_m_rows arg66_m_cols arg67_m =
+        Array.get (arg67_m) (( + ) (( * ) (arg66_m_cols) (arg63_row)) (arg64_col))
     in
-    let matrixIniti rows cols f =
-        let seqInitFun i =
-            let row  =
-                ( / ) (i) (cols)
-            in
-            let col  =
-                ( mod ) (i) (cols)
-            in
-            f (row) (col)
+    let fun78_seqInitFun arg77_f arg75_cols arg73_cols arg72_i =
+        let var74_row  =
+            ( / ) (arg72_i) (arg73_cols)
         in
-        seqInit (( * ) (rows) (cols)) (seqInitFun)
+        let var76_col  =
+            ( mod ) (arg72_i) (arg75_cols)
+        in
+        arg77_f (var74_row) (var76_col)
     in
-    let matrix2stri m_rows m_cols m =
-        let rec printrc row col =
-                if ( = ) (row) (m_rows) then
-                    [||]
+    let fun79_matrixIniti arg69_rows arg70_cols arg71_f =
+        fun14_seqInit (( * ) (arg69_rows) (arg70_cols)) (fun78_seqInitFun (arg71_f) (arg70_cols) (arg70_cols))
+    in
+    let rec fun83_printrc arg92_m arg91_m_cols arg90_m_rows arg87_m_cols arg86_m_rows arg84_row arg85_col =
+            if ( = ) (arg84_row) (arg86_m_rows) then
+                [||]
+            else
+                let var88_next_col  =
+                    ( mod ) (( + ) (arg85_col) (1)) (arg87_m_cols)
+                in
+                let var89_next_row  =
+                    if ( = ) (var88_next_col) (0) then
+                        ( + ) (arg84_row) (1)
+                    else
+                        arg84_row
+                in
+                fun22_strJoin ([||]) ([|fun19_int2string (fun68_matrixGeti (arg84_row) (arg85_col) (arg90_m_rows) (arg91_m_cols) (arg92_m)); if ( = ) (var88_next_col) (0) then
+                    [|'\n'|]
                 else
-                    let next_col  =
-                        ( mod ) (( + ) (col) (1)) (m_cols)
-                    in
-                    let next_row  =
-                        if ( = ) (next_col) (0) then
-                            ( + ) (row) (1)
-                        else
-                            row
-                    in
-                    strJoin ([||]) ([|int2string (matrixGeti (row) (col) (m_rows) (m_cols) (m)); if ( = ) (next_col) (0) then
+                    [|' '|]; fun83_printrc (arg92_m) (arg91_m_cols) (arg90_m_rows) (arg87_m_cols) (arg86_m_rows) (var89_next_row) (var88_next_col)|])
+    in
+    let fun93_matrix2stri arg80_m_rows arg81_m_cols arg82_m =
+        fun83_printrc (arg82_m) (arg81_m_cols) (arg80_m_rows) (arg81_m_cols) (arg80_m_rows) (0) (0)
+    in
+    let rec fun97_printrc arg106_m arg105_m_cols arg104_m_rows arg101_m_cols arg100_m_rows arg98_row arg99_col =
+            if ( = ) (arg98_row) (arg100_m_rows) then
+                [||]
+            else
+                let var102_next_col  =
+                    ( mod ) (( + ) (arg99_col) (1)) (arg101_m_cols)
+                in
+                let var103_next_row  =
+                    if ( = ) (var102_next_col) (0) then
+                        ( + ) (arg98_row) (1)
+                    else
+                        arg98_row
+                in
+                let var107__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun22_strJoin ([||]) ([|fun19_int2string (fun68_matrixGeti (arg98_row) (arg99_col) (arg104_m_rows) (arg105_m_cols) (arg106_m)); if ( = ) (var102_next_col) (0) then
                         [|'\n'|]
                     else
-                        [|' '|]; printrc (next_row) (next_col)|])
-        in
-        printrc (0) (0)
+                        [|' '|]|]))
+                in
+                fun97_printrc (arg106_m) (arg105_m_cols) (arg104_m_rows) (arg101_m_cols) (arg100_m_rows) (var103_next_row) (var102_next_col)
     in
-    let printMatrixi m_rows m_cols m =
-        let rec printrc row col =
-                if ( = ) (row) (m_rows) then
-                    [||]
-                else
-                    let next_col  =
-                        ( mod ) (( + ) (col) (1)) (m_cols)
-                    in
-                    let next_row  =
-                        if ( = ) (next_col) (0) then
-                            ( + ) (row) (1)
-                        else
-                            row
-                    in
-                    let _  =
-                        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (strJoin ([||]) ([|int2string (matrixGeti (row) (col) (m_rows) (m_cols) (m)); if ( = ) (next_col) (0) then
-                            [|'\n'|]
-                        else
-                            [|' '|]|]))
-                    in
-                    printrc (next_row) (next_col)
-        in
-        printrc (0) (0)
+    let fun108_printMatrixi arg94_m_rows arg95_m_cols arg96_m =
+        fun97_printrc (arg96_m) (arg95_m_cols) (arg94_m_rows) (arg95_m_cols) (arg94_m_rows) (0) (0)
     in
-    let rec matrixMuliWorkerReduce innerDim b_cols a b acc p a_offset b_offset =
-            if ( = ) (p) (innerDim) then
-                acc
+    let rec fun109_matrixMuliWorkerReduce arg110_innerDim arg111_b_cols arg112_a arg113_b arg114_acc arg115_p arg116_a_offset arg117_b_offset =
+            if ( = ) (arg115_p) (arg110_innerDim) then
+                arg114_acc
             else
-                matrixMuliWorkerReduce (innerDim) (b_cols) (a) (b) (( + ) (acc) (( * ) (Array.get (a) (a_offset)) (Array.get (b) (b_offset)))) (( + ) (p) (1)) (( + ) (a_offset) (1)) (( + ) (b_offset) (b_cols))
+                fun109_matrixMuliWorkerReduce (arg110_innerDim) (arg111_b_cols) (arg112_a) (arg113_b) (( + ) (arg114_acc) (( * ) (Array.get (arg112_a) (arg116_a_offset)) (Array.get (arg113_b) (arg117_b_offset)))) (( + ) (arg115_p) (1)) (( + ) (arg116_a_offset) (1)) (( + ) (arg117_b_offset) (arg111_b_cols))
     in
-    let matrixMuliWorker innerDim a_rows b_cols a b idx =
-        matrixMuliWorkerReduce (innerDim) (b_cols) (a) (b) (0) (0) (( * ) (innerDim) (( / ) (idx) (b_cols))) (( mod ) (idx) (b_cols))
+    let fun124_matrixMuliWorker arg118_innerDim arg119_a_rows arg120_b_cols arg121_a arg122_b arg123_idx =
+        fun109_matrixMuliWorkerReduce (arg118_innerDim) (arg120_b_cols) (arg121_a) (arg122_b) (0) (0) (( * ) (arg118_innerDim) (( / ) (arg123_idx) (arg120_b_cols))) (( mod ) (arg123_idx) (arg120_b_cols))
     in
-    let matrixMuli a_rows a_cols a b_rows b_cols b =
-        if ( <> ) (a_cols) (b_rows) then
+    let fun131_matrixMuli arg125_a_rows arg126_a_cols arg127_a arg128_b_rows arg129_b_cols arg130_b =
+        if ( <> ) (arg126_a_cols) (arg128_b_rows) then
             (fun s -> printf "ERROR: %s
 " (String.of_seq (Array.to_seq s)); exit 1) ([|'m'; 'a'; 't'; 'r'; 'i'; 'x'; 'M'; 'u'; 'l'; 'i'; ':'; ' '; 'I'; 'n'; 'n'; 'e'; 'r'; ' '; 'd'; 'i'; 'm'; 'e'; 'n'; 's'; 'i'; 'o'; 'n'; 's'; ' '; 'd'; 'i'; 'f'; 'f'; 'e'; 'r'; '.'|])
         else
-            seqInit (( * ) (a_rows) (b_cols)) (matrixMuliWorker (a_cols) (a_rows) (b_cols) (a) (b))
+            fun14_seqInit (( * ) (arg125_a_rows) (arg129_b_cols)) (fun124_matrixMuliWorker (arg126_a_cols) (arg125_a_rows) (arg129_b_cols) (arg127_a) (arg130_b))
     in
-    let matrixMuliCUDA a_rows a_cols a b_rows b_cols b =
-        if ( <> ) (a_cols) (b_rows) then
+    let fun138_matrixMuliCUDA arg132_a_rows arg133_a_cols arg134_a arg135_b_rows arg136_b_cols arg137_b =
+        if ( <> ) (arg133_a_cols) (arg135_b_rows) then
             (fun s -> printf "ERROR: %s
 " (String.of_seq (Array.to_seq s)); exit 1) ([|'m'; 'a'; 't'; 'r'; 'i'; 'x'; 'M'; 'u'; 'l'; 'i'; 'C'; 'U'; 'D'; 'A'; ':'; ' '; 'I'; 'n'; 'n'; 'e'; 'r'; ' '; 'd'; 'i'; 'm'; 'e'; 'n'; 's'; 'i'; 'o'; 'n'; 's'; ' '; 'd'; 'i'; 'f'; 'f'; 'e'; 'r'; '.'|])
         else
-            gpuhost_matrixMuliWorker [|32; a_cols; a_rows; b_cols; ( * ) (a_rows) (b_cols)|] [||] (a) (b)
+            gpuhost_fun124_matrixMuliWorker [|32; arg133_a_cols; arg132_a_rows; arg136_b_cols; ( * ) (arg132_a_rows) (arg136_b_cols)|] [||] (arg134_a) (arg137_b)
     in
-    let matAinitfun row col =
-        ( + ) (( * ) (row) (row)) (col)
+    let fun141_matAinitfun arg139_row arg140_col =
+        ( + ) (( * ) (arg139_row) (arg139_row)) (arg140_col)
     in
-    let matBinitfun row col =
-        ( mod ) (( / ) (( * ) (( + ) (row) (19)) (17)) (( + ) (col) (13))) (( + ) (row) (11))
+    let fun144_matBinitfun arg142_row arg143_col =
+        ( mod ) (( / ) (( * ) (( + ) (arg142_row) (19)) (17)) (( + ) (arg143_col) (13))) (( + ) (arg142_row) (11))
     in
-    let matAinitfun_v2 row col =
-        ( - ) (( mod ) (( + ) (( * ) (row) (row)) (col)) (3)) (1)
+    let fun147_matAinitfun_v2 arg145_row arg146_col =
+        ( - ) (( mod ) (( + ) (( * ) (arg145_row) (arg145_row)) (arg146_col)) (3)) (1)
     in
-    let matBinitfun_v2 row col =
-        ( mod ) (( / ) (( * ) (( + ) (row) (19)) (17)) (( + ) (col) (13))) (2)
+    let fun150_matBinitfun_v2 arg148_row arg149_col =
+        ( mod ) (( / ) (( * ) (( + ) (arg148_row) (19)) (17)) (( + ) (arg149_col) (13))) (2)
     in
-    let matA_rows  =
+    let var151_matA_rows  =
         1024
     in
-    let matA_cols  =
+    let var152_matA_cols  =
         1024
     in
-    let matA  =
-        matrixIniti (matA_rows) (matA_cols) (matAinitfun_v2)
+    let var153_matA  =
+        fun79_matrixIniti (var151_matA_rows) (var152_matA_cols) (fun147_matAinitfun_v2)
     in
-    let matB_rows  =
+    let var154_matB_rows  =
         1024
     in
-    let matB_cols  =
+    let var155_matB_cols  =
         1024
     in
-    let matB  =
-        matrixIniti (matB_rows) (matB_cols) (matBinitfun_v2)
+    let var156_matB  =
+        fun79_matrixIniti (var154_matB_rows) (var155_matB_cols) (fun150_matBinitfun_v2)
     in
-    let matAxB  =
-        seqInit (( * ) (matA_rows) (matB_cols)) (matrixMuliWorker (matA_cols) (matA_rows) (matB_cols) (matA) (matB))
+    let var157_matAxB  =
+        fun14_seqInit (( * ) (var151_matA_rows) (var155_matB_cols)) (fun124_matrixMuliWorker (var152_matA_cols) (var151_matA_rows) (var155_matB_cols) (var153_matA) (var156_matB))
     in
-    let matAxB_rows  =
-        matA_rows
+    let var158_matAxB_rows  =
+        var151_matA_rows
     in
-    let matAxB_cols  =
-        matB_cols
+    let var159_matAxB_cols  =
+        var155_matB_cols
     in
     ()

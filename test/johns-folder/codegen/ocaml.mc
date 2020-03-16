@@ -5,6 +5,7 @@
 -- What needs to happen:
 --  The lambdas need to appear on the left side of the equals sign
 
+include "mexpr/lamlift.mc"
 include "mexpr/pprint.mc"
 
 include "common.mc"
@@ -340,12 +341,51 @@ lang MExprCGOCaml = VarCGOCaml + AppCGOCaml + FunCGOCaml + LetCGOCaml +
                     ArithIntCGOCaml + FloatCGOCaml + ArithFloatCGOCaml +
                     BoolCGOCaml + CmpCGOCaml + CharCGOCaml + SeqCGOCaml +
                     TupleCGOCaml + CUDACGOCaml + MainGCOCaml + MExprCGType +
-                    MExprCGCUDA + MExprPrettyPrint
+                    MExprCGCUDA + MExprPrettyPrint + MExprLamlift
 
 let codegen =
     use MExprCGOCaml in
     lam ast.
-    let res = codegenOCaml cgs_new (TmMain {body = ast}) in
+
+    let ocaml_builtins = ["Array.get", "Array.map", "Array.mapi", "Array.init",
+                          "Array.of_seq", "String.to_seq", "string_of_float"] in
+
+    let ocaml_var_env = map (lam s. {key = s, value = TmVar {ident = s}}) ocaml_builtins in
+    let ocaml_globaldefs = map (lam s. TmLet {ident = s, tpe = None (), body = TmVar {ident = s}, inexpr = TmConst {val = CUnit ()}}) ocaml_builtins in
+
+    let initstate: LiftState = {id = 0,
+                                globaldefs = ocaml_globaldefs,
+                                env = {evar = ocaml_var_env, econ = [], etype = []},
+                                lambdarefs = [],
+                                externrefs = [],
+                                genargs = []}
+    in
+
+    let liftret = lamlift initstate ast in
+
+    let mainexpr = liftret.1 in
+    let liftedexprs = (liftret.0).globaldefs in
+
+    -- liftedexprs is in reverse order, so the let-expression that should be
+    -- first is at the end of the list
+    let convert_from_globaldef = lam acc. lam gd.
+        match gd with TmLet t then
+            -- Ignore the builtins, we know that we will not remove anything
+            -- unwanted as lifted function must be prefixed by "fun#_<name>".
+            if any (eqstr t.ident) ocaml_builtins then
+              acc
+            else
+              TmLet {t with inexpr = acc}
+        else match gd with TmRecLets t then
+            TmRecLets {t with inexpr = acc}
+        else match gd with TmConDef t then
+            TmConDef {t with inexpr = acc}
+        else
+            error "Global definition is not of TmLet, TmRecLets, or TmConDef"
+    in
+    let lifted_ast = foldl convert_from_globaldef mainexpr liftedexprs in
+
+    let res = codegenOCaml cgs_new (TmMain {body = lifted_ast}) in
     -- OCaml Code
     let opens = strJoin "\n" (map (concat "open ") res.opens) in
     let externs = strJoin "\n" res.externs in

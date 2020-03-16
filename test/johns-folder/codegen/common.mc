@@ -188,6 +188,27 @@ lang CUDACGExt
                  packedFloats : [{pos : Int, val : Expr}],
                  nonPackedArgs : [Expr]}
 
+    sem lamlift (state : LiftState) =
+    | TmCUDAMap t ->
+      let eptret = lamlift state t.elemPerThread in
+      let eptstate = {eptret.0 with env = state.env} in
+      let oiasret = lamlift eptstate t.onlyIndexArgSize in
+      let oiasstate = {oiasret.0 with env = state.env} in
+      let funcret = lamlift oiasstate t.func in
+      let funcstate = {funcret.0 with env = state.env} in
+      let arrayret = lamlift funcstate t.array in
+      let arraystate = {arrayret.0 with env = state.env} in
+      (arraystate, TmCUDAMap {{{{t with elemPerThread = eptret.1}
+                                   with onlyIndexArgSize = oiasret.1}
+                                   with func = funcret.1}
+                                   with array = arrayret.1})
+
+    sem lamliftReplaceIdentifiers (newnames : [{ident : String, replacement : Expr}]) =
+    | TmCUDAMap t -> TmCUDAMap {{{{t with elemPerThread = lamliftReplaceIdentifiers newnames t.elemPerThread}
+                                     with onlyIndexArgSize = lamliftReplaceIdentifiers newnames t.onlyIndexArgSize}
+                                     with func = lamliftReplaceIdentifiers newnames t.func}
+                                     with array = lamliftReplaceIdentifiers newnames t.array}
+
     sem pprintCode (indent : Int) =
     | TmCUDAMap t ->
       let fname =

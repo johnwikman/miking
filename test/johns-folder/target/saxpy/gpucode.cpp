@@ -12,37 +12,37 @@
 #endif
 
 extern "C" {
-	value gpuhost_saxpy_int(value packedInts, value packedFloats, value arg0);
-	value gpuhost_id2f_ignore2nd(value packedInts, value packedFloats, value arg0);
-	value gpuhost_saxpy_float(value packedInts, value packedFloats, value arg0);
-	value gpuhost_saxpy_intseq(value packedInts, value packedFloats, value arg0, value arg1);
+	value gpuhost_fun62_saxpy_int(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun77_id2f_ignore2nd(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun66_saxpy_float(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun71_saxpy_intseq(value packedInts, value packedFloats, value arg0, value arg1);
 }
 
-__device__ int gpudevice_saxpy_int(int x, int y, int a);
-__device__ double gpudevice_id2f_ignore2nd(int x, int y);
+__device__ int gpudevice_fun62_saxpy_int(int arg59_x, int arg60_y, int arg61_a);
+__device__ double gpudevice_fun77_id2f_ignore2nd(int arg75_x, int arg76_y);
 __device__ inline double gpu_int2float(int x);
-__device__ double gpudevice_saxpy_float(double x, double y, double a);
+__device__ double gpudevice_fun66_saxpy_float(double arg63_x, double arg64_y, double arg65_a);
 __device__ inline double gpu_mulf(double x, double y);
 __device__ inline double gpu_addf(double x, double y);
 __device__ inline int gpu_addi(int x, int y);
 __device__ inline int gpu_muli(int x, int y);
-__device__ int gpudevice_saxpy_intseq(int a, value *y, int i, int x);
+__device__ int gpudevice_fun71_saxpy_intseq(int arg67_a, value *arg68_y, int arg69_i, int arg70_x);
 
-__device__ int gpudevice_saxpy_int(int x, int y, int a)
+__device__ int gpudevice_fun62_saxpy_int(int arg59_x, int arg60_y, int arg61_a)
 {
-	return gpu_addi(gpu_muli(a, x), y);
+	return gpu_addi(gpu_muli(arg61_a, arg59_x), arg60_y);
 }
 
-__device__ double gpudevice_id2f_ignore2nd(int x, int y)
+__device__ double gpudevice_fun77_id2f_ignore2nd(int arg75_x, int arg76_y)
 {
-	return gpu_int2float(x);
+	return gpu_int2float(arg75_x);
 }
 
 __device__ inline double gpu_int2float(int x) {return (double) x;}
 
-__device__ double gpudevice_saxpy_float(double x, double y, double a)
+__device__ double gpudevice_fun66_saxpy_float(double arg63_x, double arg64_y, double arg65_a)
 {
-	return gpu_addf(gpu_mulf(a, x), y);
+	return gpu_addf(gpu_mulf(arg65_a, arg63_x), arg64_y);
 }
 
 __device__ inline double gpu_mulf(double x, double y) {return x * y;}
@@ -53,12 +53,12 @@ __device__ inline int gpu_addi(int x, int y) {return x + y;}
 
 __device__ inline int gpu_muli(int x, int y) {return x * y;}
 
-__device__ int gpudevice_saxpy_intseq(int a, value *y, int i, int x)
+__device__ int gpudevice_fun71_saxpy_intseq(int arg67_a, value *arg68_y, int arg69_i, int arg70_x)
 {
-	return gpu_addi(gpu_muli(a, x), Int_val((y[i])));
+	return gpu_addi(gpu_muli(arg67_a, arg70_x), Int_val((arg68_y[arg69_i])));
 }
 
-__global__ void gpuglobal_saxpy_int(int cuda_arg0, int cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun62_saxpy_int(int cuda_arg0, int cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -69,11 +69,11 @@ __global__ void gpuglobal_saxpy_int(int cuda_arg0, int cuda_arg1, value *cuda_ar
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(cuda_arg2[i]);
-		outarr[i] = Val_int(gpudevice_saxpy_int(cuda_arg0, cuda_arg1, v));
+		outarr[i] = Val_int(gpudevice_fun62_saxpy_int(cuda_arg0, cuda_arg1, v));
 	}
 }
 
-__global__ void gpuglobal_id2f_ignore2nd(value *cuda_arg0, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun77_id2f_ignore2nd(value *cuda_arg0, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -84,11 +84,11 @@ __global__ void gpuglobal_id2f_ignore2nd(value *cuda_arg0, value *outarr, int n,
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(cuda_arg0[i]);
-		((double *) outarr)[i] = gpudevice_id2f_ignore2nd(i, v);
+		((double *) outarr)[i] = gpudevice_fun77_id2f_ignore2nd(i, v);
 	}
 }
 
-__global__ void gpuglobal_saxpy_float(double cuda_arg0, double cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun66_saxpy_float(double cuda_arg0, double cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -99,11 +99,11 @@ __global__ void gpuglobal_saxpy_float(double cuda_arg0, double cuda_arg1, value 
 	for (i = start; i < end; ++i) {
 		double v;
 		v = ((double *) cuda_arg2)[i];
-		((double *) outarr)[i] = gpudevice_saxpy_float(cuda_arg0, cuda_arg1, v);
+		((double *) outarr)[i] = gpudevice_fun66_saxpy_float(cuda_arg0, cuda_arg1, v);
 	}
 }
 
-__global__ void gpuglobal_saxpy_intseq(int cuda_arg0, value *cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun71_saxpy_intseq(int cuda_arg0, value *cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -114,11 +114,11 @@ __global__ void gpuglobal_saxpy_intseq(int cuda_arg0, value *cuda_arg1, value *c
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(cuda_arg2[i]);
-		outarr[i] = Val_int(gpudevice_saxpy_intseq(cuda_arg0, cuda_arg1, i, v));
+		outarr[i] = Val_int(gpudevice_fun71_saxpy_intseq(cuda_arg0, cuda_arg1, i, v));
 	}
 }
 
-value gpuhost_saxpy_int(value packedInts, value packedFloats, value arg0)
+value gpuhost_fun62_saxpy_int(value packedInts, value packedFloats, value arg0)
 {
 	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
@@ -138,7 +138,7 @@ value gpuhost_saxpy_int(value packedInts, value packedFloats, value arg0)
 	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_saxpy_int<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), Int_val(Field(packedInts, 2)), cuda_arg0, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun62_saxpy_int<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), Int_val(Field(packedInts, 2)), cuda_arg0, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 
@@ -150,7 +150,7 @@ value gpuhost_saxpy_int(value packedInts, value packedFloats, value arg0)
 	CAMLreturn(outarr);
 }
 
-value gpuhost_id2f_ignore2nd(value packedInts, value packedFloats, value arg0)
+value gpuhost_fun77_id2f_ignore2nd(value packedInts, value packedFloats, value arg0)
 {
 	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
@@ -170,7 +170,7 @@ value gpuhost_id2f_ignore2nd(value packedInts, value packedFloats, value arg0)
 	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_id2f_ignore2nd<<<blockCount,threadsPerBlock>>>(cuda_arg0, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun77_id2f_ignore2nd<<<blockCount,threadsPerBlock>>>(cuda_arg0, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -182,7 +182,7 @@ value gpuhost_id2f_ignore2nd(value packedInts, value packedFloats, value arg0)
 	CAMLreturn(outarr);
 }
 
-value gpuhost_saxpy_float(value packedInts, value packedFloats, value arg0)
+value gpuhost_fun66_saxpy_float(value packedInts, value packedFloats, value arg0)
 {
 	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
@@ -202,7 +202,7 @@ value gpuhost_saxpy_float(value packedInts, value packedFloats, value arg0)
 	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_saxpy_float<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Double_field(packedFloats, 1), cuda_arg0, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun66_saxpy_float<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Double_field(packedFloats, 1), cuda_arg0, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -214,7 +214,7 @@ value gpuhost_saxpy_float(value packedInts, value packedFloats, value arg0)
 	CAMLreturn(outarr);
 }
 
-value gpuhost_saxpy_intseq(value packedInts, value packedFloats, value arg0, value arg1)
+value gpuhost_fun71_saxpy_intseq(value packedInts, value packedFloats, value arg0, value arg1)
 {
 	CAMLparam4(packedInts, packedFloats, arg0, arg1);
 	CAMLlocal1(outarr);
@@ -237,7 +237,7 @@ value gpuhost_saxpy_intseq(value packedInts, value packedFloats, value arg0, val
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_saxpy_intseq<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), cuda_arg0, cuda_arg1, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun71_saxpy_intseq<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), cuda_arg0, cuda_arg1, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 
