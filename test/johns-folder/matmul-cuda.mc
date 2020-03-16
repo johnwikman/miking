@@ -32,25 +32,27 @@ let prog = bind_ prog libmatmul_ in
 
 ------- Matrix Multiplication (CUDA) -------
 let prog = bind_ prog (let_ "matAxB" (tymatrixi_) (
-    app6f_ (var_ "matrixMuliCUDA")
-           (var_ "matA_rows")
-           (var_ "matA_cols")
-           (var_ "matA")
-           (var_ "matB_rows")
-           (var_ "matB_cols")
-           (var_ "matB")
+    (cudainit_ (int_ 64) -- elemPerThread
+               (muli_ (var_ "matA_rows") (var_ "matB_cols")) -- size
+               (app5f_ (var_ "matrixMuliWorker")
+                       (var_ "matA_cols")
+                       (var_ "matA_rows")
+                       (var_ "matB_cols")
+                       (var_ "matA")
+                       (var_ "matB")))
   )) in
 
 let prog = bind_ prog (let_ "matAxB_rows" (tyint_) (var_ "matA_rows")) in
 let prog = bind_ prog (let_ "matAxB_cols" (tyint_) (var_ "matB_cols")) in
 
-let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nmatAxB:\n"))) in
-let prog = bind_ prog (let_ "_" (tyunit_) (
-    app3f_ (var_ "printMatrixi")
-           (var_ "matAxB_rows")
-           (var_ "matAxB_cols")
-           (var_ "matAxB")
-  )) in
+-- Uncomment this to verify output
+--let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nmatAxB:\n"))) in
+--let prog = bind_ prog (let_ "_" (tyunit_) (
+--    app3f_ (var_ "printMatrixi")
+--           (var_ "matAxB_rows")
+--           (var_ "matAxB_cols")
+--           (var_ "matAxB")
+--  )) in
 -------------------------------------
 
 

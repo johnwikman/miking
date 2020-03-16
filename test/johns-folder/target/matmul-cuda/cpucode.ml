@@ -1,5 +1,5 @@
-open Array
 open Printf
+open Array
 
 external gpuhost_matrixMuliWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_matrixMuliWorker"
 
@@ -238,18 +238,12 @@ let main =
         matrixIniti (matB_rows) (matB_cols) (matBinitfun_v2)
     in
     let matAxB  =
-        matrixMuliCUDA (matA_rows) (matA_cols) (matA) (matB_rows) (matB_cols) (matB)
+        gpuhost_matrixMuliWorker [|64; matA_cols; matA_rows; matB_cols; ( * ) (matA_rows) (matB_cols)|] [||] (matA) (matB)
     in
     let matAxB_rows  =
         matA_rows
     in
     let matAxB_cols  =
         matB_cols
-    in
-    let _  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
-    in
-    let _  =
-        printMatrixi (matAxB_rows) (matAxB_cols) (matAxB)
     in
     ()
