@@ -1,7 +1,7 @@
-open Printf
 open Array
+open Printf
 
-external gpuhost_fun124_matrixMuliWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_fun124_matrixMuliWorker"
+
 
 let main =
     let fun1_head arg0_s =
@@ -184,66 +184,70 @@ let main =
     let fun108_printMatrixi arg94_m_rows arg95_m_cols arg96_m =
         fun97_printrc (arg96_m) (arg95_m_cols) (arg94_m_rows) (arg95_m_cols) (arg94_m_rows) (0) (0)
     in
-    let rec fun109_matrixMuliWorkerReduce arg110_innerDim arg111_b_cols arg112_a arg113_b arg114_acc arg115_p arg116_a_offset arg117_b_offset =
-            if ( = ) (arg115_p) (arg110_innerDim) then
-                arg114_acc
+    let rec fun115_dotprod arg123_b_cols arg122_b arg121_a arg120_innerDim arg116_acc arg117_p arg118_a_offset arg119_b_offset =
+            if ( = ) (arg117_p) (arg120_innerDim) then
+                arg116_acc
             else
-                fun109_matrixMuliWorkerReduce (arg110_innerDim) (arg111_b_cols) (arg112_a) (arg113_b) (( + ) (arg114_acc) (( * ) (Array.get (arg112_a) (arg116_a_offset)) (Array.get (arg113_b) (arg117_b_offset)))) (( + ) (arg115_p) (1)) (( + ) (arg116_a_offset) (1)) (( + ) (arg117_b_offset) (arg111_b_cols))
+                fun115_dotprod (arg123_b_cols) (arg122_b) (arg121_a) (arg120_innerDim) (( + ) (arg116_acc) (( * ) (Array.get (arg121_a) (arg118_a_offset)) (Array.get (arg122_b) (arg119_b_offset)))) (( + ) (arg117_p) (1)) (( + ) (arg118_a_offset) (1)) (( + ) (arg119_b_offset) (arg123_b_cols))
     in
-    let fun124_matrixMuliWorker arg118_innerDim arg119_a_rows arg120_b_cols arg121_a arg122_b arg123_idx =
-        fun109_matrixMuliWorkerReduce (arg118_innerDim) (arg120_b_cols) (arg121_a) (arg122_b) (0) (0) (( * ) (arg118_innerDim) (( / ) (arg123_idx) (arg120_b_cols))) (( mod ) (arg123_idx) (arg120_b_cols))
+    let fun124_matrixMuliWorker arg109_innerDim arg110_a_rows arg111_b_cols arg112_a arg113_b arg114_idx =
+        fun115_dotprod (arg111_b_cols) (arg113_b) (arg112_a) (arg109_innerDim) (0) (0) (( * ) (arg109_innerDim) (( / ) (arg114_idx) (arg111_b_cols))) (( mod ) (arg114_idx) (arg111_b_cols))
     in
-    let fun131_matrixMuli arg125_a_rows arg126_a_cols arg127_a arg128_b_rows arg129_b_cols arg130_b =
-        if ( <> ) (arg126_a_cols) (arg128_b_rows) then
-            (fun s -> printf "ERROR: %s
-" (String.of_seq (Array.to_seq s)); exit 1) ([|'m'; 'a'; 't'; 'r'; 'i'; 'x'; 'M'; 'u'; 'l'; 'i'; ':'; ' '; 'I'; 'n'; 'n'; 'e'; 'r'; ' '; 'd'; 'i'; 'm'; 'e'; 'n'; 's'; 'i'; 'o'; 'n'; 's'; ' '; 'd'; 'i'; 'f'; 'f'; 'e'; 'r'; '.'|])
-        else
-            fun14_seqInit (( * ) (arg125_a_rows) (arg129_b_cols)) (fun124_matrixMuliWorker (arg126_a_cols) (arg125_a_rows) (arg129_b_cols) (arg127_a) (arg130_b))
+    let rec fun129_dotprod arg138_cols arg137_cols arg136_a arg135_a arg134_rows arg130_acc arg131_p arg132_aT_offset arg133_a_offset =
+            if ( = ) (arg131_p) (arg134_rows) then
+                arg130_acc
+            else
+                fun129_dotprod (arg138_cols) (arg137_cols) (arg136_a) (arg135_a) (arg134_rows) (( + ) (arg130_acc) (( * ) (Array.get (arg135_a) (arg132_aT_offset)) (Array.get (arg136_a) (arg133_a_offset)))) (( + ) (arg131_p) (1)) (( + ) (arg132_aT_offset) (arg137_cols)) (( + ) (arg133_a_offset) (arg138_cols))
     in
-    let fun138_matrixMuliCUDA arg132_a_rows arg133_a_cols arg134_a arg135_b_rows arg136_b_cols arg137_b =
-        if ( <> ) (arg133_a_cols) (arg135_b_rows) then
-            (fun s -> printf "ERROR: %s
-" (String.of_seq (Array.to_seq s)); exit 1) ([|'m'; 'a'; 't'; 'r'; 'i'; 'x'; 'M'; 'u'; 'l'; 'i'; 'C'; 'U'; 'D'; 'A'; ':'; ' '; 'I'; 'n'; 'n'; 'e'; 'r'; ' '; 'd'; 'i'; 'm'; 'e'; 'n'; 's'; 'i'; 'o'; 'n'; 's'; ' '; 'd'; 'i'; 'f'; 'f'; 'e'; 'r'; '.'|])
-        else
-            gpuhost_fun124_matrixMuliWorker [|32; arg133_a_cols; arg132_a_rows; arg136_b_cols; ( * ) (arg132_a_rows) (arg136_b_cols)|] [||] (arg134_a) (arg137_b)
+    let fun139_matrixATAWorker arg125_rows arg126_cols arg127_a arg128_idx =
+        fun129_dotprod (arg126_cols) (arg126_cols) (arg127_a) (arg127_a) (arg125_rows) (0) (0) (( / ) (arg128_idx) (arg126_cols)) (( mod ) (arg128_idx) (arg126_cols))
     in
-    let fun141_matAinitfun arg139_row arg140_col =
-        ( + ) (( * ) (arg139_row) (arg139_row)) (arg140_col)
+    let fun142_matAinitfun arg140_row arg141_col =
+        ( + ) (( * ) (arg140_row) (arg140_row)) (arg141_col)
     in
-    let fun144_matBinitfun arg142_row arg143_col =
-        ( mod ) (( / ) (( * ) (( + ) (arg142_row) (19)) (17)) (( + ) (arg143_col) (13))) (( + ) (arg142_row) (11))
+    let fun145_matBinitfun arg143_row arg144_col =
+        ( mod ) (( / ) (( * ) (( + ) (arg143_row) (19)) (17)) (( + ) (arg144_col) (13))) (( + ) (arg143_row) (11))
     in
-    let fun147_matAinitfun_v2 arg145_row arg146_col =
-        ( - ) (( mod ) (( + ) (( * ) (arg145_row) (arg145_row)) (arg146_col)) (3)) (1)
+    let fun148_matAinitfun_v2 arg146_row arg147_col =
+        ( - ) (( mod ) (( + ) (( * ) (arg146_row) (arg146_row)) (arg147_col)) (3)) (1)
     in
-    let fun150_matBinitfun_v2 arg148_row arg149_col =
-        ( mod ) (( / ) (( * ) (( + ) (arg148_row) (19)) (17)) (( + ) (arg149_col) (13))) (2)
+    let fun151_matBinitfun_v2 arg149_row arg150_col =
+        ( mod ) (( / ) (( * ) (( + ) (arg149_row) (19)) (17)) (( + ) (arg150_col) (13))) (2)
     in
-    let var151_matA_rows  =
+    let var152_matA_rows  =
         1024
     in
-    let var152_matA_cols  =
+    let var153_matA_cols  =
         1024
     in
-    let var153_matA  =
-        fun79_matrixIniti (var151_matA_rows) (var152_matA_cols) (fun147_matAinitfun_v2)
+    let var154_matA  =
+        fun79_matrixIniti (var152_matA_rows) (var153_matA_cols) (fun148_matAinitfun_v2)
     in
-    let var154_matB_rows  =
+    let var155_matB_rows  =
         1024
     in
-    let var155_matB_cols  =
+    let var156_matB_cols  =
         1024
     in
-    let var156_matB  =
-        fun79_matrixIniti (var154_matB_rows) (var155_matB_cols) (fun150_matBinitfun_v2)
+    let var157_matB  =
+        fun79_matrixIniti (var155_matB_rows) (var156_matB_cols) (fun151_matBinitfun_v2)
     in
-    let var157_matAxB  =
-        fun14_seqInit (( * ) (var151_matA_rows) (var155_matB_cols)) (fun124_matrixMuliWorker (var152_matA_cols) (var151_matA_rows) (var155_matB_cols) (var153_matA) (var156_matB))
+    let var158_innerDim  =
+        var153_matA_cols
     in
-    let var158_matAxB_rows  =
-        var151_matA_rows
+    let var159_matAxB  =
+        fun14_seqInit (( * ) (var152_matA_rows) (var156_matB_cols)) (fun124_matrixMuliWorker (var158_innerDim) (var152_matA_rows) (var156_matB_cols) (var154_matA) (var157_matB))
     in
-    let var159_matAxB_cols  =
-        var155_matB_cols
+    let var160_matAxB_rows  =
+        var152_matA_rows
+    in
+    let var161_matAxB_cols  =
+        var156_matB_cols
+    in
+    let var162__  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
+    in
+    let var163__  =
+        fun108_printMatrixi (var160_matAxB_rows) (var161_matAxB_cols) (var159_matAxB)
     in
     ()

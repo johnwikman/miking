@@ -1,7 +1,7 @@
 open Array
 open Printf
 
-external gpuhost_fun124_matrixMuliWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_fun124_matrixMuliWorker"
+
 
 let main =
     let fun1_head arg0_s =
@@ -202,52 +202,64 @@ let main =
     let fun139_matrixATAWorker arg125_rows arg126_cols arg127_a arg128_idx =
         fun129_dotprod (arg126_cols) (arg126_cols) (arg127_a) (arg127_a) (arg125_rows) (0) (0) (( / ) (arg128_idx) (arg126_cols)) (( mod ) (arg128_idx) (arg126_cols))
     in
-    let fun142_matAinitfun arg140_row arg141_col =
-        ( + ) (( * ) (arg140_row) (arg140_row)) (arg141_col)
+    let var140_matA  =
+        [|1; 3; 5; 2; 4; 6|]
     in
-    let fun145_matBinitfun arg143_row arg144_col =
-        ( mod ) (( / ) (( * ) (( + ) (arg143_row) (19)) (17)) (( + ) (arg144_col) (13))) (( + ) (arg143_row) (11))
+    let var141_matA_rows  =
+        2
     in
-    let fun148_matAinitfun_v2 arg146_row arg147_col =
-        ( - ) (( mod ) (( + ) (( * ) (arg146_row) (arg146_row)) (arg147_col)) (3)) (1)
+    let var142_matA_cols  =
+        3
     in
-    let fun151_matBinitfun_v2 arg149_row arg150_col =
-        ( mod ) (( / ) (( * ) (( + ) (arg149_row) (19)) (17)) (( + ) (arg150_col) (13))) (2)
+    let var143_vecX  =
+        [|11; 31; 17|]
     in
-    let var152_matA_rows  =
-        1024
+    let var144_vecX_rows  =
+        3
     in
-    let var153_matA_cols  =
-        1024
+    let var145_vecX_cols  =
+        1
     in
-    let var154_matA  =
-        fun79_matrixIniti (var152_matA_rows) (var153_matA_cols) (fun148_matAinitfun_v2)
+    let var146__  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; ':'; '\n'|])
     in
-    let var155_matB_rows  =
-        1024
+    let var147__  =
+        fun108_printMatrixi (var141_matA_rows) (var142_matA_cols) (var140_matA)
     in
-    let var156_matB_cols  =
-        1024
+    let var148__  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'v'; 'e'; 'c'; 'X'; ':'; '\n'|])
     in
-    let var157_matB  =
-        fun79_matrixIniti (var155_matB_rows) (var156_matB_cols) (fun151_matBinitfun_v2)
+    let var149__  =
+        fun108_printMatrixi (var144_vecX_rows) (var145_vecX_cols) (var143_vecX)
     in
-    let var158_innerDim  =
-        var153_matA_cols
+    let var150_matATA  =
+        fun14_seqInit (( * ) (var142_matA_cols) (var142_matA_cols)) (fun139_matrixATAWorker (var141_matA_rows) (var142_matA_cols) (var140_matA))
     in
-    let var159_matAxB  =
-        gpuhost_fun124_matrixMuliWorker [|64; var158_innerDim; var152_matA_rows; var156_matB_cols; ( * ) (var152_matA_rows) (var156_matB_cols)|] [||] (var154_matA) (var157_matB)
+    let var151_matATA_rows  =
+        var142_matA_cols
     in
-    let var160_matAxB_rows  =
-        var152_matA_rows
+    let var152_matATA_cols  =
+        var142_matA_cols
     in
-    let var161_matAxB_cols  =
-        var156_matB_cols
+    let var153__  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'T'; 'A'; ':'; '\n'|])
     in
-    let var162__  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
+    let var154__  =
+        fun108_printMatrixi (var151_matATA_rows) (var152_matATA_cols) (var150_matATA)
     in
-    let var163__  =
-        fun108_printMatrixi (var160_matAxB_rows) (var161_matAxB_cols) (var159_matAxB)
+    let var155_matATAx  =
+        fun14_seqInit (( * ) (var151_matATA_rows) (var145_vecX_cols)) (fun124_matrixMuliWorker (var152_matATA_cols) (var151_matATA_rows) (var145_vecX_cols) (var150_matATA) (var143_vecX))
+    in
+    let var156_matATAx_rows  =
+        var151_matATA_rows
+    in
+    let var157_matATAx_cols  =
+        var145_vecX_cols
+    in
+    let var158__  =
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'T'; 'A'; 'x'; ':'; '\n'|])
+    in
+    let var159__  =
+        fun108_printMatrixi (var156_matATAx_rows) (var157_matATAx_cols) (var155_matATAx)
     in
     ()

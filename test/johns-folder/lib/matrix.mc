@@ -162,49 +162,17 @@ let func_printMatrixi =
 --   let col = modi idx b_cols in
 --   let a_start_offset = muli innerDim row in
 --   let b_start_offset = col in
---   recursive let matrixMuliWorkerReduce = lam acc. lam p. lam a_offset. lam b_offset.
+--   recursive let dotprod = lam acc. lam p. lam a_offset. lam b_offset.
 --     if (eqi p innerDim)
 --        (acc)
---        (matrixMuliWorkerReduce (addi acc
---                                      (muli (nth a a_offset)
---                                            (nth b b_offset))
---                                (addi p 1)
---                                (addi a_offset 1)
---                                (addi b_offset b_cols)) -- go to next row in b
+--        (dotprod (addi acc
+--                       (muli (nth a a_offset)
+--                             (nth b b_offset))
+--                 (addi p 1)
+--                 (addi a_offset 1)
+--                 (addi b_offset b_cols)) -- go to next row in b
 --   in
---   matrixMuliWorkerReduce 0 0 a_start_offset b_start_offset
-let func_matrixMuliWorkerReduce =
-  reclets_add "matrixMuliWorkerReduce" (tyarrows_ [tyint_, tyint_, tymatrixi_, tymatrixi_, tyint_, tyint_, tyint_, tyint_, tyint_]) (
-    lam_ "innerDim" (tyint_) (
-      lam_ "b_cols" (tyint_) (
-        lam_ "a" (tymatrixi_) (
-          lam_ "b" (tymatrixi_) (
-            lam_ "acc" (tyint_) (
-              lam_ "p" (tyint_) (
-                lam_ "a_offset" (tyint_) (
-                  lam_ "b_offset" (tyint_) (
-                    if_ (eqi_ (var_ "p") (var_ "innerDim"))
-                        (var_ "acc")
-                        (app8f_ (var_ "matrixMuliWorkerReduce")
-                                (var_ "innerDim")
-                                (var_ "b_cols")
-                                (var_ "a")
-                                (var_ "b")
-                                (addi_ (var_ "acc")
-                                       (muli_ (nth_ (var_ "a") (var_ "a_offset"))
-                                              (nth_ (var_ "b") (var_ "b_offset"))))
-                                (addi_ (var_ "p") (int_ 1))
-                                (addi_ (var_ "a_offset") (int_ 1))
-                                (addi_ (var_ "b_offset") (var_ "b_cols")))
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  ) (reclets_empty)
+--   dotprod 0 0 a_start_offset b_start_offset
 let func_matrixMuliWorker =
   let_ "matrixMuliWorker" (tyarrows_ [tyint_, tyint_, tyint_, tymatrixi_, tymatrixi_, tyint_, tyint_]) (
     lam_ "innerDim" (tyint_) (
@@ -213,16 +181,33 @@ let func_matrixMuliWorker =
           lam_ "a" (tymatrixi_) (
             lam_ "b" (tymatrixi_) (
               lam_ "idx" (tyint_) (
-                app8f_ (var_ "matrixMuliWorkerReduce")
-                       (var_ "innerDim")
-                       (var_ "b_cols")
-                       (var_ "a")
-                       (var_ "b")
-                       (int_ 0)
-                       (int_ 0)
-                       (muli_ (var_ "innerDim")
-                              (divi_ (var_ "idx") (var_ "b_cols")))
-                       (modi_ (var_ "idx") (var_ "b_cols"))
+                bindall_ [
+                  reclets_add "dotprod" (tyarrows_ [tyint_, tyint_, tyint_, tyint_, tyint_]) (
+                    lam_ "acc" (tyint_) (
+                      lam_ "p" (tyint_) (
+                        lam_ "a_offset" (tyint_) (
+                          lam_ "b_offset" (tyint_) (
+                            if_ (eqi_ (var_ "p") (var_ "innerDim"))
+                                (var_ "acc")
+                                (app4f_ (var_ "dotprod")
+                                        (addi_ (var_ "acc")
+                                               (muli_ (nth_ (var_ "a") (var_ "a_offset"))
+                                                      (nth_ (var_ "b") (var_ "b_offset"))))
+                                        (addi_ (var_ "p") (int_ 1))
+                                        (addi_ (var_ "a_offset") (int_ 1))
+                                        (addi_ (var_ "b_offset") (var_ "b_cols")))
+                          )
+                        )
+                      )
+                    )
+                  ) (reclets_empty),
+                  app4f_ (var_ "dotprod")
+                         (int_ 0)
+                         (int_ 0)
+                         (muli_ (var_ "innerDim")
+                                (divi_ (var_ "idx") (var_ "b_cols")))
+                         (modi_ (var_ "idx") (var_ "b_cols"))
+                ]
               )
             )
           )
@@ -231,52 +216,61 @@ let func_matrixMuliWorker =
     )
   )
 
-let func_matrixMuli =
-  let_ "matrixMuli" (tyarrows_ [tyint_, tyint_, tymatrixi_, tyint_, tyint_, tymatrixi_, tymatrixi_]) (
-    lam_ "a_rows" (tyint_) (
-      lam_ "a_cols" (tyint_) (
-        lam_ "a" (tymatrixi_) (
-          lam_ "b_rows" (tyint_) (
-            lam_ "b_cols" (tyint_) (
-              lam_ "b" (tymatrixi_) (
-                if_ (neqi_ (var_ "a_cols") (var_ "b_rows"))
-                    (error_ (str_ "matrixMuli: Inner dimensions differ."))
-                    (app2f_ (var_ "seqInit")
-                            (muli_ (var_ "a_rows") (var_ "b_cols"))
-                            (app5f_ (var_ "matrixMuliWorker")
-                                    (var_ "a_cols")
-                                    (var_ "a_rows")
-                                    (var_ "b_cols")
-                                    (var_ "a")
-                                    (var_ "b")))
-              )
-            )
-          )
-        )
-      )
-    )
-  )
-
-let func_matrixMuliCUDA =
-  let_ "matrixMuliCUDA" (tyarrows_ [tyint_, tyint_, tymatrixi_, tyint_, tyint_, tymatrixi_, tymatrixi_]) (
-    lam_ "a_rows" (tyint_) (
-      lam_ "a_cols" (tyint_) (
-        lam_ "a" (tymatrixi_) (
-          lam_ "b_rows" (tyint_) (
-            lam_ "b_cols" (tyint_) (
-              lam_ "b" (tymatrixi_) (
-                if_ (neqi_ (var_ "a_cols") (var_ "b_rows"))
-                    (error_ (str_ "matrixMuliCUDA: Inner dimensions differ."))
-                    (cudainit_ (int_ 32)
-                               (muli_ (var_ "a_rows") (var_ "b_cols"))
-                               (app5f_ (var_ "matrixMuliWorker")
-                                       (var_ "a_cols")
-                                       (var_ "a_rows")
-                                       (var_ "b_cols")
-                                       (var_ "a")
-                                       (var_ "b")))
-              )
-            )
+-- // Computes A^T * A:
+-- // (1 2)             (1*1+2*2  1*3+2*4  1*5+2*6)   ( 5  11  17)
+-- // (3 4) * (1 3 5) = (3*1+4*2  3*3+4*4  3*5+4*6) = (11  25  39)
+-- // (5 6)   (2 4 6)   (5*1+6*2  5*3+6*4  5*5+6*6)   (17  39  61)
+-- //
+-- let matrixATAWorker = lam rows. lam cols. lam a. lam idx.
+--   let innerDim = rows in
+--   let outerDim = cols in
+--   let row = divi idx cols in
+--   let col = modi idx cols in
+--   let aT_start_offset = row in
+--   let a_start_offset = col in
+--   recursive let dotprod = lam acc. lam p. lam aT_offset. lam a_offset.
+--     if (eqi p innerDim)
+--        (acc)
+--        (dotprod (addi acc
+--                       (muli (nth a aT_offset)
+--                             (nth a a_offset))
+--                 (addi p 1)
+--                 (addi aT_offset outerDim)
+--                 (addi a_offset outerDim))
+--   in
+--   dotprod 0 0 aT_start_offset a_start_offset
+let func_matrixATAWorker =
+  let_ "matrixATAWorker" (tyarrows_ [tyint_, tyint_, tyint_, tymatrixi_, tymatrixi_, tyint_, tyint_]) (
+    lam_ "rows" (tyint_) (
+      lam_ "cols" (tyint_) (
+        lam_ "a" (tyint_) (
+          lam_ "idx" (tymatrixi_) (
+            bindall_ [
+              reclets_add "dotprod" (tyarrows_ [tyint_, tyint_, tyint_, tyint_, tyint_]) (
+                lam_ "acc" (tyint_) (
+                  lam_ "p" (tyint_) (
+                    lam_ "aT_offset" (tyint_) (
+                      lam_ "a_offset" (tyint_) (
+                        if_ (eqi_ (var_ "p") (var_ "rows"))
+                            (var_ "acc")
+                            (app4f_ (var_ "dotprod")
+                                    (addi_ (var_ "acc")
+                                           (muli_ (nth_ (var_ "a") (var_ "aT_offset"))
+                                                  (nth_ (var_ "a") (var_ "a_offset"))))
+                                    (addi_ (var_ "p") (int_ 1))
+                                    (addi_ (var_ "aT_offset") (var_ "cols"))
+                                    (addi_ (var_ "a_offset") (var_ "cols")))
+                      )
+                    )
+                  )
+                )
+              ) (reclets_empty),
+              app4f_ (var_ "dotprod")
+                     (int_ 0)
+                     (int_ 0)
+                     (divi_ (var_ "idx") (var_ "cols"))
+                     (modi_ (var_ "idx") (var_ "cols"))
+            ]
           )
         )
       )
@@ -289,8 +283,6 @@ let libmatrix_ = bindall_ [
   func_matrixIniti,
   func_matrix2stri,
   func_printMatrixi,
-  func_matrixMuliWorkerReduce,
   func_matrixMuliWorker,
-  func_matrixMuli,
-  func_matrixMuliCUDA
+  func_matrixATAWorker
 ]
