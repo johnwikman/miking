@@ -17,21 +17,21 @@ extern "C" {
 
 __device__ inline int gpu_addi(int x, int y);
 __device__ inline bool gpu_eqi(int x, int y);
-__device__ int gpudevice_fun63_fib_helper(int arg64_i, int arg65_n, int arg66_prev, int arg67_current);
-__device__ int gpudevice_fun69_fib(int arg68_n);
+__device__ int gpudevice_fun64_helper(int arg68_n, int arg65_i, int arg66_prev, int arg67_current);
+__device__ int gpudevice_fun69_fib(int arg63_n);
 
 __device__ inline int gpu_addi(int x, int y) {return x + y;}
 
 __device__ inline bool gpu_eqi(int x, int y) {return x == y;}
 
-__device__ int gpudevice_fun63_fib_helper(int arg64_i, int arg65_n, int arg66_prev, int arg67_current)
+__device__ int gpudevice_fun64_helper(int arg68_n, int arg65_i, int arg66_prev, int arg67_current)
 {
-	return (gpu_eqi(arg64_i, arg65_n)) ? (arg67_current) : (gpudevice_fun63_fib_helper(gpu_addi(arg64_i, 1), arg65_n, arg67_current, gpu_addi(arg66_prev, arg67_current)));
+	return (gpu_eqi(arg65_i, arg68_n)) ? (arg67_current) : (gpudevice_fun64_helper(arg68_n, gpu_addi(arg65_i, 1), arg67_current, gpu_addi(arg66_prev, arg67_current)));
 }
 
-__device__ int gpudevice_fun69_fib(int arg68_n)
+__device__ int gpudevice_fun69_fib(int arg63_n)
 {
-	return gpudevice_fun63_fib_helper(0, arg68_n, 1, 0);
+	return gpudevice_fun64_helper(arg63_n, 0, 1, 0);
 }
 
 __global__ void gpuglobal_fun69_fib(value *outarr, int n, int elemPerThread)

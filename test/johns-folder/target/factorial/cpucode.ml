@@ -130,14 +130,14 @@ let main =
             else
                 ( * ) (arg62_n) (fun61_factorial (( - ) (arg62_n) (1)))
     in
-    let rec fun63_fib_helper arg64_i arg65_n arg66_prev arg67_current =
-            if ( = ) (arg64_i) (arg65_n) then
+    let rec fun64_helper arg68_n arg65_i arg66_prev arg67_current =
+            if ( = ) (arg65_i) (arg68_n) then
                 arg67_current
             else
-                fun63_fib_helper (( + ) (arg64_i) (1)) (arg65_n) (arg67_current) (( + ) (arg66_prev) (arg67_current))
+                fun64_helper (arg68_n) (( + ) (arg65_i) (1)) (arg67_current) (( + ) (arg66_prev) (arg67_current))
     in
-    let fun69_fib arg68_n =
-        fun63_fib_helper (0) (arg68_n) (1) (0)
+    let fun69_fib arg63_n =
+        fun64_helper (arg63_n) (0) (1) (0)
     in
     let fun76_factidx arg74_i arg75_ignored_arg =
         fun61_factorial (arg74_i)
