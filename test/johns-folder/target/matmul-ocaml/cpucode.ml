@@ -184,70 +184,100 @@ let main =
     let fun108_printMatrixi arg94_m_rows arg95_m_cols arg96_m =
         fun97_printrc (arg96_m) (arg95_m_cols) (arg94_m_rows) (arg95_m_cols) (arg94_m_rows) (0) (0)
     in
-    let rec fun115_dotprod arg123_b_cols arg122_b arg121_a arg120_innerDim arg116_acc arg117_p arg118_a_offset arg119_b_offset =
-            if ( = ) (arg117_p) (arg120_innerDim) then
-                arg116_acc
+    let rec fun119_dotprod arg127_b_cols arg126_b arg125_a arg124_innerDim arg120_acc arg121_p arg122_a_offset arg123_b_offset =
+            if ( = ) (arg121_p) (arg124_innerDim) then
+                arg120_acc
             else
-                fun115_dotprod (arg123_b_cols) (arg122_b) (arg121_a) (arg120_innerDim) (( + ) (arg116_acc) (( * ) (Array.get (arg121_a) (arg118_a_offset)) (Array.get (arg122_b) (arg119_b_offset)))) (( + ) (arg117_p) (1)) (( + ) (arg118_a_offset) (1)) (( + ) (arg119_b_offset) (arg123_b_cols))
+                fun119_dotprod (arg127_b_cols) (arg126_b) (arg125_a) (arg124_innerDim) (( + ) (arg120_acc) (( * ) (Array.get (arg125_a) (arg122_a_offset)) (Array.get (arg126_b) (arg123_b_offset)))) (( + ) (arg121_p) (1)) (( + ) (arg122_a_offset) (1)) (( + ) (arg123_b_offset) (arg127_b_cols))
     in
-    let fun124_matrixMuliWorker arg109_innerDim arg110_a_rows arg111_b_cols arg112_a arg113_b arg114_idx =
-        fun115_dotprod (arg111_b_cols) (arg113_b) (arg112_a) (arg109_innerDim) (0) (0) (( * ) (arg109_innerDim) (( / ) (arg114_idx) (arg111_b_cols))) (( mod ) (arg114_idx) (arg111_b_cols))
+    let fun128_matrixMuliWorker arg109_innerDim arg110_a_rows arg111_b_cols arg112_a arg113_b arg114_idx =
+        let var115_row  =
+            ( / ) (arg114_idx) (arg111_b_cols)
+        in
+        let var116_col  =
+            ( mod ) (arg114_idx) (arg111_b_cols)
+        in
+        let var117_a_start_offset  =
+            ( * ) (arg109_innerDim) (var115_row)
+        in
+        let var118_b_start_offset  =
+            var116_col
+        in
+        fun119_dotprod (arg111_b_cols) (arg113_b) (arg112_a) (arg109_innerDim) (0) (0) (var117_a_start_offset) (var118_b_start_offset)
     in
-    let rec fun129_dotprod arg138_cols arg137_cols arg136_a arg135_a arg134_rows arg130_acc arg131_p arg132_aT_offset arg133_a_offset =
-            if ( = ) (arg131_p) (arg134_rows) then
-                arg130_acc
+    let rec fun139_dotprod arg148_outerDim arg147_outerDim arg146_a arg145_a arg144_innerDim arg140_acc arg141_p arg142_aT_offset arg143_a_offset =
+            if ( = ) (arg141_p) (arg144_innerDim) then
+                arg140_acc
             else
-                fun129_dotprod (arg138_cols) (arg137_cols) (arg136_a) (arg135_a) (arg134_rows) (( + ) (arg130_acc) (( * ) (Array.get (arg135_a) (arg132_aT_offset)) (Array.get (arg136_a) (arg133_a_offset)))) (( + ) (arg131_p) (1)) (( + ) (arg132_aT_offset) (arg137_cols)) (( + ) (arg133_a_offset) (arg138_cols))
+                fun139_dotprod (arg148_outerDim) (arg147_outerDim) (arg146_a) (arg145_a) (arg144_innerDim) (( + ) (arg140_acc) (( * ) (Array.get (arg145_a) (arg142_aT_offset)) (Array.get (arg146_a) (arg143_a_offset)))) (( + ) (arg141_p) (1)) (( + ) (arg142_aT_offset) (arg147_outerDim)) (( + ) (arg143_a_offset) (arg148_outerDim))
     in
-    let fun139_matrixATAWorker arg125_rows arg126_cols arg127_a arg128_idx =
-        fun129_dotprod (arg126_cols) (arg126_cols) (arg127_a) (arg127_a) (arg125_rows) (0) (0) (( / ) (arg128_idx) (arg126_cols)) (( mod ) (arg128_idx) (arg126_cols))
+    let fun149_matrixATAWorker arg129_rows arg130_cols arg131_a arg132_idx =
+        let var133_innerDim  =
+            arg129_rows
+        in
+        let var134_outerDim  =
+            arg130_cols
+        in
+        let var135_row  =
+            ( / ) (arg132_idx) (arg130_cols)
+        in
+        let var136_col  =
+            ( mod ) (arg132_idx) (arg130_cols)
+        in
+        let var137_aT_start_offset  =
+            var135_row
+        in
+        let var138_a_start_offset  =
+            var136_col
+        in
+        fun139_dotprod (var134_outerDim) (var134_outerDim) (arg131_a) (arg131_a) (var133_innerDim) (0) (0) (var137_aT_start_offset) (var138_a_start_offset)
     in
-    let fun142_matAinitfun arg140_row arg141_col =
-        ( + ) (( * ) (arg140_row) (arg140_row)) (arg141_col)
+    let fun152_matAinitfun arg150_row arg151_col =
+        ( + ) (( * ) (arg150_row) (arg150_row)) (arg151_col)
     in
-    let fun145_matBinitfun arg143_row arg144_col =
-        ( mod ) (( / ) (( * ) (( + ) (arg143_row) (19)) (17)) (( + ) (arg144_col) (13))) (( + ) (arg143_row) (11))
+    let fun155_matBinitfun arg153_row arg154_col =
+        ( mod ) (( / ) (( * ) (( + ) (arg153_row) (19)) (17)) (( + ) (arg154_col) (13))) (( + ) (arg153_row) (11))
     in
-    let fun148_matAinitfun_v2 arg146_row arg147_col =
-        ( - ) (( mod ) (( + ) (( * ) (arg146_row) (arg146_row)) (arg147_col)) (3)) (1)
+    let fun158_matAinitfun_v2 arg156_row arg157_col =
+        ( - ) (( mod ) (( + ) (( * ) (arg156_row) (arg156_row)) (arg157_col)) (3)) (1)
     in
-    let fun151_matBinitfun_v2 arg149_row arg150_col =
-        ( mod ) (( / ) (( * ) (( + ) (arg149_row) (19)) (17)) (( + ) (arg150_col) (13))) (2)
+    let fun161_matBinitfun_v2 arg159_row arg160_col =
+        ( mod ) (( / ) (( * ) (( + ) (arg159_row) (19)) (17)) (( + ) (arg160_col) (13))) (2)
     in
-    let var152_matA_rows  =
+    let var162_matA_rows  =
         1024
     in
-    let var153_matA_cols  =
+    let var163_matA_cols  =
         1024
     in
-    let var154_matA  =
-        fun79_matrixIniti (var152_matA_rows) (var153_matA_cols) (fun148_matAinitfun_v2)
+    let var164_matA  =
+        fun79_matrixIniti (var162_matA_rows) (var163_matA_cols) (fun158_matAinitfun_v2)
     in
-    let var155_matB_rows  =
+    let var165_matB_rows  =
         1024
     in
-    let var156_matB_cols  =
+    let var166_matB_cols  =
         1024
     in
-    let var157_matB  =
-        fun79_matrixIniti (var155_matB_rows) (var156_matB_cols) (fun151_matBinitfun_v2)
+    let var167_matB  =
+        fun79_matrixIniti (var165_matB_rows) (var166_matB_cols) (fun161_matBinitfun_v2)
     in
-    let var158_innerDim  =
-        var153_matA_cols
+    let var168_innerDim  =
+        var163_matA_cols
     in
-    let var159_matAxB  =
-        fun14_seqInit (( * ) (var152_matA_rows) (var156_matB_cols)) (fun124_matrixMuliWorker (var158_innerDim) (var152_matA_rows) (var156_matB_cols) (var154_matA) (var157_matB))
+    let var169_matAxB  =
+        fun14_seqInit (( * ) (var162_matA_rows) (var166_matB_cols)) (fun128_matrixMuliWorker (var168_innerDim) (var162_matA_rows) (var166_matB_cols) (var164_matA) (var167_matB))
     in
-    let var160_matAxB_rows  =
-        var152_matA_rows
+    let var170_matAxB_rows  =
+        var162_matA_rows
     in
-    let var161_matAxB_cols  =
-        var156_matB_cols
+    let var171_matAxB_cols  =
+        var166_matB_cols
     in
-    let var162__  =
+    let var172__  =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'm'; 'a'; 't'; 'A'; 'x'; 'B'; ':'; '\n'|])
     in
-    let var163__  =
-        fun108_printMatrixi (var160_matAxB_rows) (var161_matAxB_cols) (var159_matAxB)
+    let var173__  =
+        fun108_printMatrixi (var170_matAxB_rows) (var171_matAxB_cols) (var169_matAxB)
     in
     ()

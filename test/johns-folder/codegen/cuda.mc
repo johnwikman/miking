@@ -119,9 +119,14 @@ lang VarCGCUDA = MExprCGExt
     | TmVar x ->
       let v = cgs_envLookup x.ident state in
       match v with TmLet t then
-        codegenCUDA state v
+        match t.body with TmLam _ then
+          -- This refers to a function
+          codegenCUDA {state with cudaNestedLevel = 0} v
+        else
+          -- This refers to a variable
+          {cgr_new with code = t.ident}
       else match v with TmRecLetsRef t then
-        codegenCUDA state v
+        codegenCUDA {state with cudaNestedLevel = 0} v
       else match v with TmLam t then
         {cgr_new with code = t.ident}
       else match v with TmVar t then
@@ -187,6 +192,9 @@ lang FunCGCUDA = MExprCGExt
 end
 
 lang LetCGCUDA = MExprCGExt
+    syn Expr =
+    | TmCGCUDANestedLet {expr : Expr}
+
     sem codegenGetExprType (state : CodegenState) =
     -- Intentionally left blank
 
@@ -221,21 +229,47 @@ lang LetCGCUDA = MExprCGExt
       let argtypes = reverse (tail types) in
       let argdecls = zipWith concat (map type2cudastr argtypes) args in
 
-      let cudaret = codegenCUDA internalstate letexpr in
+      let cudaret = codegenCUDA {internalstate with cudaNestedLevel = addi internalstate.cudaNestedLevel 1} letexpr in
 
-      let prototype = strJoin "" [
-        "__device__ ", rettypestr, devname t.ident, "(", strJoin ", " argdecls, ")"
-      ] in
+      if null args then
+        -- This let expression is a variable
+        if eqi internalstate.cudaNestedLevel 0 then
+          let _ = dprint (TmLet t) in
+          let _ = print "\n" in
+          error "codegenCUDA: Let expression without arguments (a variable) cannot be at the top level."
+        else if gti internalstate.cudaNestedLevel 1 then
+          let _ = dprint (TmLet t) in
+          let _ = print "\n" in
+          error "codegenCUDA: Let expression without arguments (a variable) cannot be doubly nested."
+        else -- continue
 
-      let devicebody = strJoin "" [
-        prototype, "\n",
-        "{\n",
-        "\treturn ", cudaret.code, ";\n",
-        "}"
-      ] in
-      {{{cudaret with code = devname t.ident}
-                 with deviceprototypes = strset_add prototype cudaret.deviceprototypes}
-                 with devicefuncs = strset_add devicebody cudaret.devicefuncs}
+        let varcode = strJoin "" ["\t", type2cudastr rettype, t.ident, " = ", cudaret.code, ";\n"] in
+
+        -- This might seem wierd, but since we have applied lambda lifting on
+        -- the AST, we know that all identifiers are unique and have already
+        -- had their scope checked out. So no need to worry about anything wierd
+        -- being able to access this variable identifier.
+        let instate = cgs_envAdd t.ident (TmVar {ident = t.ident}) internalstate in
+        let inret = codegenCUDA instate t.inexpr in
+
+        cgr_merge (concat varcode inret.code) [cudaret, inret]
+      else
+        -- This let expression is a function
+        let prototype = strJoin "" [
+          "__device__ ", rettypestr, devname t.ident, "(", strJoin ", " argdecls, ")"
+        ] in
+
+        let devicebody = strJoin "" [
+          prototype, "\n",
+          "{\n",
+          -- The code could contain variable definitions, only apply the return on the last line.
+          let parts = (strSplit ";\n" cudaret.code) in
+          strJoin ";\n" (concat (init parts) [strJoin "" ["\treturn ", last parts, ";\n"]]),
+          "}"
+        ] in
+        {{{cudaret with code = devname t.ident}
+                   with deviceprototypes = strset_add prototype cudaret.deviceprototypes}
+                   with devicefuncs = strset_add devicebody cudaret.devicefuncs}
 end
 
 lang RecLetsCGCUDA = MExprCGExt

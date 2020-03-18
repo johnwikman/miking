@@ -53,10 +53,12 @@ let cgr_merge = lam newcode. lam cgrs.
 
 -- indent: The indentation level on the OCaml code
 -- env: Lookup for bound expressions.
-type CodegenState = {indent : Int,
-                     env    : [{key : String, value : Expr}]}
+-- cudaNestedLevel: Used by the CUDA codegen to determine how a Let expression is nested
+type CodegenState = {indent        : Int,
+                     env           : [{key : String, value : Expr}],
+                     cudaNestedLevel : Int}
 
-let cgs_new = {indent = 0, env = []}
+let cgs_new = {indent = 0, env = [], cudaNestedLevel = 0}
 let cgs_envAdd = lam key. lam value. lam state.
     {state with env = cons {key = key, value = value} state.env}
 let cgs_envLookup = lam key. lam state.

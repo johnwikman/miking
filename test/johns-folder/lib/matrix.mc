@@ -182,6 +182,10 @@ let func_matrixMuliWorker =
             lam_ "b" (tymatrixi_) (
               lam_ "idx" (tyint_) (
                 bindall_ [
+                  let_ "row" (tyint_) (divi_ (var_ "idx") (var_ "b_cols")),
+                  let_ "col" (tyint_) (modi_ (var_ "idx") (var_ "b_cols")),
+                  let_ "a_start_offset" (tyint_) (muli_ (var_ "innerDim") (var_ "row")),
+                  let_ "b_start_offset" (tyint_) (var_ "col"),
                   reclets_add "dotprod" (tyarrows_ [tyint_, tyint_, tyint_, tyint_, tyint_]) (
                     lam_ "acc" (tyint_) (
                       lam_ "p" (tyint_) (
@@ -204,9 +208,8 @@ let func_matrixMuliWorker =
                   app4f_ (var_ "dotprod")
                          (int_ 0)
                          (int_ 0)
-                         (muli_ (var_ "innerDim")
-                                (divi_ (var_ "idx") (var_ "b_cols")))
-                         (modi_ (var_ "idx") (var_ "b_cols"))
+                         (var_ "a_start_offset")
+                         (var_ "b_start_offset")
                 ]
               )
             )
@@ -246,20 +249,26 @@ let func_matrixATAWorker =
         lam_ "a" (tyint_) (
           lam_ "idx" (tymatrixi_) (
             bindall_ [
+              let_ "innerDim" (tyint_) (var_ "rows"),
+              let_ "outerDim" (tyint_) (var_ "cols"),
+              let_ "row" (tyint_) (divi_ (var_ "idx") (var_ "cols")),
+              let_ "col" (tyint_) (modi_ (var_ "idx") (var_ "cols")),
+              let_ "aT_start_offset" (tyint_) (var_ "row"),
+              let_ "a_start_offset" (tyint_) (var_ "col"),
               reclets_add "dotprod" (tyarrows_ [tyint_, tyint_, tyint_, tyint_, tyint_]) (
                 lam_ "acc" (tyint_) (
                   lam_ "p" (tyint_) (
                     lam_ "aT_offset" (tyint_) (
                       lam_ "a_offset" (tyint_) (
-                        if_ (eqi_ (var_ "p") (var_ "rows"))
+                        if_ (eqi_ (var_ "p") (var_ "innerDim"))
                             (var_ "acc")
                             (app4f_ (var_ "dotprod")
                                     (addi_ (var_ "acc")
                                            (muli_ (nth_ (var_ "a") (var_ "aT_offset"))
                                                   (nth_ (var_ "a") (var_ "a_offset"))))
                                     (addi_ (var_ "p") (int_ 1))
-                                    (addi_ (var_ "aT_offset") (var_ "cols"))
-                                    (addi_ (var_ "a_offset") (var_ "cols")))
+                                    (addi_ (var_ "aT_offset") (var_ "outerDim"))
+                                    (addi_ (var_ "a_offset") (var_ "outerDim")))
                       )
                     )
                   )
@@ -268,8 +277,8 @@ let func_matrixATAWorker =
               app4f_ (var_ "dotprod")
                      (int_ 0)
                      (int_ 0)
-                     (divi_ (var_ "idx") (var_ "cols"))
-                     (modi_ (var_ "idx") (var_ "cols"))
+                     (var_ "aT_start_offset")
+                     (var_ "a_start_offset")
             ]
           )
         )
