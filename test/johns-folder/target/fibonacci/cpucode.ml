@@ -1,7 +1,7 @@
 open Array
 open Printf
 
-external gpuhost_fun69_fib: int array -> float array -> int array = "gpuhost_fun69_fib"
+external gpuhost_fun67_fib: int array -> float array -> int array = "gpuhost_fun67_fib"
 
 let main =
     let fun1_head arg0_s =
@@ -55,7 +55,7 @@ let main =
     let fun28_printintln arg27_i =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (fun19_int2string (arg27_i)) ([|'\n'|]))
     in
-    let rec fun31_printloop arg37_arr arg33_arr arg32_i =
+    let rec fun31_printloop arg33_arr arg32_i =
             if ( = ) (arg32_i) (Array.length (arg33_arr)) then
                 ()
             else
@@ -68,81 +68,81 @@ let main =
                 let var36__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
                 in
-                let var38__  =
-                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (Array.get (arg37_arr) (arg32_i)))
+                let var37__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (Array.get (arg33_arr) (arg32_i)))
                 in
-                let var39__  =
+                let var38__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
                 in
-                fun31_printloop (arg37_arr) (arg33_arr) (( + ) (arg32_i) (1))
+                fun31_printloop (arg33_arr) (( + ) (arg32_i) (1))
     in
-    let fun43_printintarr arg29_name arg30_arr =
-        let var40__  =
+    let fun42_printintarr arg29_name arg30_arr =
+        let var39__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'C'; 'o'; 'n'; 't'; 'e'; 'n'; 't'; 's'; ' '; 'o'; 'f'; ' '|])
         in
-        let var41__  =
+        let var40__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (arg29_name)
         in
-        let var42__  =
+        let var41__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; '\n'|])
         in
-        fun31_printloop (arg30_arr) (arg30_arr) (0)
+        fun31_printloop (arg30_arr) (0)
     in
-    let rec fun46_printloop arg52_arr arg48_arr arg47_i =
-            if ( = ) (arg47_i) (Array.length (arg48_arr)) then
+    let rec fun45_printloop arg47_arr arg46_i =
+            if ( = ) (arg46_i) (Array.length (arg47_arr)) then
                 ()
             else
-                let var49__  =
+                let var48__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; ' '; ' '; ' '|])
                 in
-                let var50__  =
-                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (arg47_i))
+                let var49__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (arg46_i))
                 in
-                let var51__  =
+                let var50__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
                 in
-                let var53__  =
-                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (Array.get (arg52_arr) (arg47_i)))
+                let var51__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (Array.get (arg47_arr) (arg46_i)))
                 in
-                let var54__  =
+                let var52__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
                 in
-                fun46_printloop (arg52_arr) (arg48_arr) (( + ) (arg47_i) (1))
+                fun45_printloop (arg47_arr) (( + ) (arg46_i) (1))
     in
-    let fun58_printfloatarr arg44_name arg45_arr =
-        let var55__  =
+    let fun56_printfloatarr arg43_name arg44_arr =
+        let var53__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'C'; 'o'; 'n'; 't'; 'e'; 'n'; 't'; 's'; ' '; 'o'; 'f'; ' '|])
         in
-        let var56__  =
-            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (arg44_name)
+        let var54__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (arg43_name)
         in
-        let var57__  =
+        let var55__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; '\n'|])
         in
-        fun46_printloop (arg45_arr) (arg45_arr) (0)
+        fun45_printloop (arg44_arr) (0)
     in
-    let fun60_id arg59_x =
-        arg59_x
+    let fun58_id arg57_x =
+        arg57_x
     in
-    let rec fun61_factorial arg62_n =
-            if ( = ) (arg62_n) (0) then
+    let rec fun59_factorial arg60_n =
+            if ( = ) (arg60_n) (0) then
                 1
             else
-                ( * ) (arg62_n) (fun61_factorial (( - ) (arg62_n) (1)))
+                ( * ) (arg60_n) (fun59_factorial (( - ) (arg60_n) (1)))
     in
-    let rec fun64_helper arg68_n arg65_i arg66_prev arg67_current =
-            if ( = ) (arg65_i) (arg68_n) then
-                arg67_current
+    let rec fun62_helper arg66_n arg63_i arg64_prev arg65_current =
+            if ( = ) (arg63_i) (arg66_n) then
+                arg65_current
             else
-                fun64_helper (arg68_n) (( + ) (arg65_i) (1)) (arg67_current) (( + ) (arg66_prev) (arg67_current))
+                fun62_helper (arg66_n) (( + ) (arg63_i) (1)) (arg65_current) (( + ) (arg64_prev) (arg65_current))
     in
-    let fun69_fib arg63_n =
-        fun64_helper (arg63_n) (0) (1) (0)
+    let fun67_fib arg61_n =
+        fun62_helper (arg61_n) (0) (1) (0)
     in
-    let var70_res  =
-        gpuhost_fun69_fib [|16; 48|] [||] 
+    let var68_res  =
+        gpuhost_fun67_fib [|16; 48|] [||] 
     in
-    let var71__  =
-        fun43_printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; '4'; '8'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (var70_res)
+    let var69__  =
+        fun42_printintarr ([|'c'; 'u'; 'd'; 'a'; 'M'; 'a'; 'p'; 'i'; 'd'; 'x'; ' '; '4'; '8'; ' '; 'f'; 'i'; 'b'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (var68_res)
     in
     ()

@@ -1,10 +1,10 @@
 open Printf
 open Array
 
-external gpuhost_fun62_saxpy_int: int array -> float array -> int array -> int array = "gpuhost_fun62_saxpy_int"
-external gpuhost_fun77_id2f_ignore2nd: int array -> float array -> int array -> float array = "gpuhost_fun77_id2f_ignore2nd"
-external gpuhost_fun66_saxpy_float: int array -> float array -> float array -> float array = "gpuhost_fun66_saxpy_float"
-external gpuhost_fun71_saxpy_intseq: int array -> float array -> int array -> int array -> int array = "gpuhost_fun71_saxpy_intseq"
+external gpuhost_fun60_saxpy_int: int array -> float array -> int array -> int array = "gpuhost_fun60_saxpy_int"
+external gpuhost_fun75_id2f_ignore2nd: int array -> float array -> int array -> float array = "gpuhost_fun75_id2f_ignore2nd"
+external gpuhost_fun64_saxpy_float: int array -> float array -> float array -> float array = "gpuhost_fun64_saxpy_float"
+external gpuhost_fun69_saxpy_intseq: int array -> float array -> int array -> int array -> int array = "gpuhost_fun69_saxpy_intseq"
 
 let main =
     let fun1_head arg0_s =
@@ -58,7 +58,7 @@ let main =
     let fun28_printintln arg27_i =
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (Array.append (fun19_int2string (arg27_i)) ([|'\n'|]))
     in
-    let rec fun31_printloop arg37_arr arg33_arr arg32_i =
+    let rec fun31_printloop arg33_arr arg32_i =
             if ( = ) (arg32_i) (Array.length (arg33_arr)) then
                 ()
             else
@@ -71,90 +71,90 @@ let main =
                 let var36__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
                 in
-                let var38__  =
-                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (Array.get (arg37_arr) (arg32_i)))
+                let var37__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (Array.get (arg33_arr) (arg32_i)))
                 in
-                let var39__  =
+                let var38__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
                 in
-                fun31_printloop (arg37_arr) (arg33_arr) (( + ) (arg32_i) (1))
+                fun31_printloop (arg33_arr) (( + ) (arg32_i) (1))
     in
-    let fun43_printintarr arg29_name arg30_arr =
-        let var40__  =
+    let fun42_printintarr arg29_name arg30_arr =
+        let var39__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'C'; 'o'; 'n'; 't'; 'e'; 'n'; 't'; 's'; ' '; 'o'; 'f'; ' '|])
         in
-        let var41__  =
+        let var40__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (arg29_name)
         in
-        let var42__  =
+        let var41__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; '\n'|])
         in
-        fun31_printloop (arg30_arr) (arg30_arr) (0)
+        fun31_printloop (arg30_arr) (0)
     in
-    let rec fun46_printloop arg52_arr arg48_arr arg47_i =
-            if ( = ) (arg47_i) (Array.length (arg48_arr)) then
+    let rec fun45_printloop arg47_arr arg46_i =
+            if ( = ) (arg46_i) (Array.length (arg47_arr)) then
                 ()
             else
-                let var49__  =
+                let var48__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; ' '; ' '; ' '|])
                 in
-                let var50__  =
-                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (arg47_i))
+                let var49__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (arg46_i))
                 in
-                let var51__  =
+                let var50__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; ' '|])
                 in
-                let var53__  =
-                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (Array.get (arg52_arr) (arg47_i)))
+                let var51__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (Array.get (arg47_arr) (arg46_i)))
                 in
-                let var54__  =
+                let var52__  =
                     (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
                 in
-                fun46_printloop (arg52_arr) (arg48_arr) (( + ) (arg47_i) (1))
+                fun45_printloop (arg47_arr) (( + ) (arg46_i) (1))
     in
-    let fun58_printfloatarr arg44_name arg45_arr =
-        let var55__  =
+    let fun56_printfloatarr arg43_name arg44_arr =
+        let var53__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'C'; 'o'; 'n'; 't'; 'e'; 'n'; 't'; 's'; ' '; 'o'; 'f'; ' '|])
         in
-        let var56__  =
-            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (arg44_name)
+        let var54__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (arg43_name)
         in
-        let var57__  =
+        let var55__  =
             (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|':'; '\n'|])
         in
-        fun46_printloop (arg45_arr) (arg45_arr) (0)
+        fun45_printloop (arg44_arr) (0)
     in
-    let fun62_saxpy_int arg59_x arg60_y arg61_a =
-        ( + ) (( * ) (arg61_a) (arg59_x)) (arg60_y)
+    let fun60_saxpy_int arg57_x arg58_y arg59_a =
+        ( + ) (( * ) (arg59_a) (arg57_x)) (arg58_y)
     in
-    let fun66_saxpy_float arg63_x arg64_y arg65_a =
-        ( +. ) (( *. ) (arg65_a) (arg63_x)) (arg64_y)
+    let fun64_saxpy_float arg61_x arg62_y arg63_a =
+        ( +. ) (( *. ) (arg63_a) (arg61_x)) (arg62_y)
     in
-    let fun71_saxpy_intseq arg67_a arg68_y arg69_i arg70_x =
-        ( + ) (( * ) (arg67_a) (arg70_x)) (Array.get (arg68_y) (arg69_i))
+    let fun69_saxpy_intseq arg65_a arg66_y arg67_i arg68_x =
+        ( + ) (( * ) (arg65_a) (arg68_x)) (Array.get (arg66_y) (arg67_i))
     in
-    let fun74_id_ignore2nd arg72_x arg73_y =
-        arg72_x
+    let fun72_id_ignore2nd arg70_x arg71_y =
+        arg70_x
     in
-    let fun77_id2f_ignore2nd arg75_x arg76_y =
-        float_of_int (arg75_x)
+    let fun75_id2f_ignore2nd arg73_x arg74_y =
+        float_of_int (arg73_x)
+    in
+    let var76_res  =
+        gpuhost_fun60_saxpy_int [|32; 17; 11|] [||] ([|15; 1|])
+    in
+    let var77__  =
+        fun42_printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (var76_res)
     in
     let var78_res  =
-        gpuhost_fun62_saxpy_int [|32; 17; 11|] [||] ([|15; 1|])
+        gpuhost_fun75_id2f_ignore2nd [|512|] [||] (Array.make (5000) (0))
     in
-    let var79__  =
-        fun43_printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; ' '; '1'; '7'; ' '; '1'; '1'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (var78_res)
+    let var79_res  =
+        gpuhost_fun64_saxpy_float [|512|] [|1.70e+1; 1.100000e+1|] (var78_res)
     in
     let var80_res  =
-        gpuhost_fun77_id2f_ignore2nd [|512|] [||] (Array.make (5000) (0))
+        gpuhost_fun69_saxpy_intseq [|32; 17|] [||] ([|9; 8|]) ([|15; 1|])
     in
-    let var81_res  =
-        gpuhost_fun66_saxpy_float [|512|] [|1.70e+1; 1.100000e+1|] (var80_res)
-    in
-    let var82_res  =
-        gpuhost_fun71_saxpy_intseq [|32; 17|] [||] ([|9; 8|]) ([|15; 1|])
-    in
-    let var83__  =
-        fun43_printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; '_'; 'i'; 'n'; 't'; 's'; 'e'; 'q'; ' '; '('; 'a'; ':'; ' '; '1'; '7'; ')'; ' '; '('; 'x'; ':'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ')'; ' '; '('; 'y'; ':'; ' '; '['; '9'; ','; ' '; '8'; ']'; ')'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (var82_res)
+    let var81__  =
+        fun42_printintarr ([|'s'; 'a'; 'x'; 'p'; 'y'; '_'; 'i'; 'n'; 't'; 's'; 'e'; 'q'; ' '; '('; 'a'; ':'; ' '; '1'; '7'; ')'; ' '; '('; 'x'; ':'; ' '; '['; '1'; '5'; ','; ' '; '1'; ']'; ')'; ' '; '('; 'y'; ':'; ' '; '['; '9'; ','; ' '; '8'; ']'; ')'; ' '; 'r'; 'e'; 's'; 'u'; 'l'; 't'|]) (var80_res)
     in
     ()

@@ -12,16 +12,16 @@
 #endif
 
 extern "C" {
-	value gpuhost_fun128_matrixMuliWorker(value packedInts, value packedFloats, value arg0, value arg1);
+	value gpuhost_fun121_matrixMuliWorker(value packedInts, value packedFloats, value arg0, value arg1);
 }
 
 __device__ inline int gpu_muli(int x, int y);
 __device__ inline int gpu_addi(int x, int y);
 __device__ inline bool gpu_eqi(int x, int y);
-__device__ int gpudevice_fun119_dotprod(int arg127_b_cols, value *arg126_b, value *arg125_a, int arg124_innerDim, int arg120_acc, int arg121_p, int arg122_a_offset, int arg123_b_offset);
+__device__ int gpudevice_fun112_dotprod(int arg120_b_cols, value *arg119_b, value *arg118_a, int arg117_innerDim, int arg113_acc, int arg114_p, int arg115_a_offset, int arg116_b_offset);
 __device__ inline int gpu_modi(int x, int y);
 __device__ inline int gpu_divi(int x, int y);
-__device__ int gpudevice_fun128_matrixMuliWorker(int arg109_innerDim, int arg110_a_rows, int arg111_b_cols, value *arg112_a, value *arg113_b, int arg114_idx);
+__device__ int gpudevice_fun121_matrixMuliWorker(int arg102_innerDim, int arg103_a_rows, int arg104_b_cols, value *arg105_a, value *arg106_b, int arg107_idx);
 
 __device__ inline int gpu_muli(int x, int y) {return x * y;}
 
@@ -29,25 +29,25 @@ __device__ inline int gpu_addi(int x, int y) {return x + y;}
 
 __device__ inline bool gpu_eqi(int x, int y) {return x == y;}
 
-__device__ int gpudevice_fun119_dotprod(int arg127_b_cols, value *arg126_b, value *arg125_a, int arg124_innerDim, int arg120_acc, int arg121_p, int arg122_a_offset, int arg123_b_offset)
+__device__ int gpudevice_fun112_dotprod(int arg120_b_cols, value *arg119_b, value *arg118_a, int arg117_innerDim, int arg113_acc, int arg114_p, int arg115_a_offset, int arg116_b_offset)
 {
-	return (gpu_eqi(arg121_p, arg124_innerDim)) ? (arg120_acc) : (gpudevice_fun119_dotprod(arg127_b_cols, arg126_b, arg125_a, arg124_innerDim, gpu_addi(arg120_acc, gpu_muli(Int_val((arg125_a[arg122_a_offset])), Int_val((arg126_b[arg123_b_offset])))), gpu_addi(arg121_p, 1), gpu_addi(arg122_a_offset, 1), gpu_addi(arg123_b_offset, arg127_b_cols)));
+	return (gpu_eqi(arg114_p, arg117_innerDim)) ? (arg113_acc) : (gpudevice_fun112_dotprod(arg120_b_cols, arg119_b, arg118_a, arg117_innerDim, gpu_addi(arg113_acc, gpu_muli(Int_val((arg118_a[arg115_a_offset])), Int_val((arg119_b[arg116_b_offset])))), gpu_addi(arg114_p, 1), gpu_addi(arg115_a_offset, 1), gpu_addi(arg116_b_offset, arg120_b_cols)));
 }
 
 __device__ inline int gpu_modi(int x, int y) {return x % y;}
 
 __device__ inline int gpu_divi(int x, int y) {return x / y;}
 
-__device__ int gpudevice_fun128_matrixMuliWorker(int arg109_innerDim, int arg110_a_rows, int arg111_b_cols, value *arg112_a, value *arg113_b, int arg114_idx)
+__device__ int gpudevice_fun121_matrixMuliWorker(int arg102_innerDim, int arg103_a_rows, int arg104_b_cols, value *arg105_a, value *arg106_b, int arg107_idx)
 {
-	int var115_row = gpu_divi(arg114_idx, arg111_b_cols);
-	int var116_col = gpu_modi(arg114_idx, arg111_b_cols);
-	int var117_a_start_offset = gpu_muli(arg109_innerDim, var115_row);
-	int var118_b_start_offset = var116_col;
-	return gpudevice_fun119_dotprod(arg111_b_cols, arg113_b, arg112_a, arg109_innerDim, 0, 0, var117_a_start_offset, var118_b_start_offset);
+	int var108_row = gpu_divi(arg107_idx, arg104_b_cols);
+	int var109_col = gpu_modi(arg107_idx, arg104_b_cols);
+	int var110_a_start_offset = gpu_muli(arg102_innerDim, var108_row);
+	int var111_b_start_offset = var109_col;
+	return gpudevice_fun112_dotprod(arg104_b_cols, arg106_b, arg105_a, arg102_innerDim, 0, 0, var110_a_start_offset, var111_b_start_offset);
 }
 
-__global__ void gpuglobal_fun128_matrixMuliWorker(int cuda_arg0, int cuda_arg1, int cuda_arg2, value *cuda_arg3, value *cuda_arg4, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun121_matrixMuliWorker(int cuda_arg0, int cuda_arg1, int cuda_arg2, value *cuda_arg3, value *cuda_arg4, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -56,11 +56,11 @@ __global__ void gpuglobal_fun128_matrixMuliWorker(int cuda_arg0, int cuda_arg1, 
 		end = n;
 
 	for (i = start; i < end; ++i) {
-		outarr[i] = Val_int(gpudevice_fun128_matrixMuliWorker(cuda_arg0, cuda_arg1, cuda_arg2, cuda_arg3, cuda_arg4, i));
+		outarr[i] = Val_int(gpudevice_fun121_matrixMuliWorker(cuda_arg0, cuda_arg1, cuda_arg2, cuda_arg3, cuda_arg4, i));
 	}
 }
 
-value gpuhost_fun128_matrixMuliWorker(value packedInts, value packedFloats, value arg0, value arg1)
+value gpuhost_fun121_matrixMuliWorker(value packedInts, value packedFloats, value arg0, value arg1)
 {
 	CAMLparam4(packedInts, packedFloats, arg0, arg1);
 	CAMLlocal1(outarr);
@@ -83,7 +83,7 @@ value gpuhost_fun128_matrixMuliWorker(value packedInts, value packedFloats, valu
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun128_matrixMuliWorker<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), Int_val(Field(packedInts, 2)), Int_val(Field(packedInts, 3)), cuda_arg0, cuda_arg1, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun121_matrixMuliWorker<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), Int_val(Field(packedInts, 2)), Int_val(Field(packedInts, 3)), cuda_arg0, cuda_arg1, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 
