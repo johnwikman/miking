@@ -255,6 +255,7 @@ let makeseq_ = use MExprCGOCaml in
 let cudamap_ = use MExprCGOCaml in
   lam ept. lam f. lam arr.
   TmCUDAMap {elemPerThread = ept,
+             autoScanElemPerThread = false,
              includeIndexArg = false,
              onlyIndexArg = false,
              onlyIndexArgSize = int_ 0,
@@ -267,6 +268,7 @@ let cudamap_ = use MExprCGOCaml in
 let cudamapi_ = use MExprCGOCaml in
   lam ept. lam f. lam arr.
   TmCUDAMap {elemPerThread = ept,
+             autoScanElemPerThread = false,
              includeIndexArg = true,
              onlyIndexArg = false,
              onlyIndexArgSize = int_ 0,
@@ -279,6 +281,46 @@ let cudamapi_ = use MExprCGOCaml in
 let cudainit_ = use MExprCGOCaml in
   lam ept. lam size. lam f.
   TmCUDAMap {elemPerThread = ept,
+             autoScanElemPerThread = false,
+             includeIndexArg = false,
+             onlyIndexArg = true,
+             onlyIndexArgSize = size,
+             func = f,
+             array = seq_ [],
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
+
+let cudamapautoept_ = use MExprCGOCaml in
+  lam f. lam arr.
+  TmCUDAMap {elemPerThread = int_ 1, -- temporary expression, will be replaced in the codegen
+             autoScanElemPerThread = true,
+             includeIndexArg = false,
+             onlyIndexArg = false,
+             onlyIndexArgSize = int_ 0,
+             func = f,
+             array = arr,
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
+
+let cudamapiautoept_ = use MExprCGOCaml in
+  lam f. lam arr.
+  TmCUDAMap {elemPerThread = int_ 1, -- temporary expression, will be replaced in the codegen
+             autoScanElemPerThread = true,
+             includeIndexArg = true,
+             onlyIndexArg = false,
+             onlyIndexArgSize = int_ 0,
+             func = f,
+             array = arr,
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
+
+let cudainitautoept_ = use MExprCGOCaml in
+  lam size. lam f.
+  TmCUDAMap {elemPerThread = int_ 1, -- temporary expression, will be replaced in the codegen
+             autoScanElemPerThread = true,
              includeIndexArg = false,
              onlyIndexArg = true,
              onlyIndexArgSize = size,

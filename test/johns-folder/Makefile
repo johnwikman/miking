@@ -1,11 +1,11 @@
-.PHONY: upload clean
+.PHONY: all upload clean
 
 all:
-	make $(shell ls *.mc)
+	$(eval TESTCASES := $(shell ls -d testcases/*/))
+	make $(foreach testcase,$(TESTCASES),$(testcase).dir)
 
-%.mc: FORCE
-	mkdir -p target/$*
-	miking run $@ target/$*
+%.dir: FORCE
+	make -C $*
 FORCE:
 
 upload:

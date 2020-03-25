@@ -9,6 +9,8 @@ include "mexpr/lamlift.mc"
 include "mexpr/pprint.mc"
 
 include "common.mc"
+include "cost-estimate.mc"
+include "cost-profiles.mc"
 include "cuda.mc"
 include "types.mc"
 
@@ -232,7 +234,7 @@ lang TupleCGOCaml = MExprCGExt
 end
 
 -- Syntax fragments
-lang CUDACGOCaml = MExprCGExt
+lang CUDACGOCaml = MExprCGExt + MExprCGCostEstimate
     sem codegenGetExprType (state : CodegenState) =
     -- Intentionally left blank
 
@@ -262,13 +264,28 @@ lang CUDACGOCaml = MExprCGExt
       in
       let res = extract_args [] t.func in
       let args = concat res.0 (if t.onlyIndexArg then [t.onlyIndexArgSize] else [t.array]) in
-      let args = cons t.elemPerThread args in
+
+      let args =
+        if t.autoScanElemPerThread then
+          let costexpr = TmApp {lhs = t.func, rhs = TmConst {val = CInt {val = 1}}} in
+          let cudacost = codegenCostEstimate state costprof_cuda costexpr in
+          -- let c = addi (divi capacity_per_thread cudacost) 1 // the last 1 is there to avoid 0 threads.
+          let c = TmApp {lhs = TmApp {lhs = TmConst {val = CAddi ()},
+                                      rhs = TmApp {lhs = TmApp {lhs = TmConst {val = CDivi ()},
+                                                                rhs = TmConst {val = CInt {val = costprof_cuda_capacity_per_thread}}},
+                                                   rhs = cudacost}},
+                         rhs = TmConst {val = CInt {val = 1}}} in
+          cons c args
+        else
+          cons t.elemPerThread args
+      in
+
       let hostfuncname = concat "gpuhost_" res.1 in
       let argtypes = map (codegenGetExprType state) args in
       let funrettype = findarrow_endtpe (codegenGetExprType state (TmVar {ident = res.1})) in
       let rettype = TySeq {tpe = funrettype} in
 
-      -- Pack integer and floating point arguments together. (Temporarily commented out) --
+      -- Pack integer and floating point arguments together --
       let packedArgs = foldl (lam acc. lam e.
         let pos = acc.0 in
         let intacc = acc.1 in
@@ -306,21 +323,6 @@ lang CUDACGOCaml = MExprCGExt
       let retcgr = cgr_merge "" (concat [cudacgr, packedintcgr, packedfloatcgr] nonpackedcgr) in
       {{retcgr with code = strJoin " " [hostfuncname, packedintcgr.code, packedfloatcgr.code, nonpackedcode]}
                with externs = strset_add externdef retcgr.externs}
-      ---------------------------------------------------------
-
-----      let externdef =
-----        strJoin "" ["external ", hostfuncname, ": ",
-----                    strJoin " -> " (map type2ocamlstring (concat argtypes [rettype])),
-----                    " = \"", hostfuncname, "\""]
-----      in
-----
-----      let argcgr = map (codegenOCaml state) args in
-----      let argcode = strJoin " " (map (lam r. strJoin "" ["(", r.code, ")"]) argcgr) in
-----
-----      let cudacgr = codegenCUDA state (TmCUDAMap t) in
-----      let retcgr = cgr_merge "" (cons cudacgr argcgr) in
-----      {{retcgr with code = strJoin " " [hostfuncname, argcode]}
-----               with externs = strset_add externdef retcgr.externs}
 end
 
 lang MainGCOCaml = MExprCGExt

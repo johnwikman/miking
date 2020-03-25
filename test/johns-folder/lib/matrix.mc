@@ -243,11 +243,11 @@ let func_matrixMuliWorker =
 --   in
 --   dotprod 0 0 aT_start_offset a_start_offset
 let func_matrixATAWorker =
-  let_ "matrixATAWorker" (tyarrows_ [tyint_, tyint_, tyint_, tymatrixi_, tymatrixi_, tyint_, tyint_]) (
+  let_ "matrixATAWorker" (tyarrows_ [tyint_, tyint_, tymatrixi_, tyint_, tyint_]) (
     lam_ "rows" (tyint_) (
       lam_ "cols" (tyint_) (
-        lam_ "a" (tyint_) (
-          lam_ "idx" (tymatrixi_) (
+        lam_ "a" (tymatrixi_) (
+          lam_ "idx" (tyint_) (
             bindall_ [
               let_ "innerDim" (tyint_) (var_ "rows"),
               let_ "outerDim" (tyint_) (var_ "cols"),
