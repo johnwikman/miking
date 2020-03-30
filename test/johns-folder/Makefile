@@ -23,5 +23,9 @@ upload-tuning:
 clean:
 	$(eval TARGETS := $(shell ls -d target/*/))
 	$(eval TUNINGTARGETS := $(shell ls -d tuningtarget/*/))
+	$(eval INTERNALTESTTARGETS := $(foreach tc,$(shell ls -d testcases/*/),$(tc)/target))
+	$(eval INTERNALTUNINGTARGETS := $(foreach tc,$(shell ls -d tuningcases/*/),$(tc)/target))
 	rm -rf $(TARGETS)
 	rm -rf $(TUNINGTARGETS)
+	rm -rf $(INTERNALTESTTARGETS)
+	rm -rf $(INTERNALTUNINGTARGETS)
