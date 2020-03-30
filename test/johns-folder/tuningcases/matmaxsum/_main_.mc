@@ -7,6 +7,10 @@ include "../../lib/io.mc"
 include "../../lib/macros.mc"
 include "../../lib/matrix.mc"
 
+-- This determines how many times that matrix max sum should be applied.
+-- Unlike other options, this contains a direct number instead of an AST node.
+include "_iter_.mc"
+
 -- This should define the following variables: matB_rows, matB_cols, matA_rows, matA_cols
 -- Should be included by defsize_
 include "_size_.mc"
@@ -164,20 +168,20 @@ let prog = bind_ prog libmatrix_ in
 let prog = bind_ prog defcommon_ in
 
 ------- Matrix Max Sum -------
-let prog = bind_ prog defspecific_ in
+let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
 ------------------------------
 
 ------- Output Verification -------
-let prog = bind_ prog (let_ "matAmB_rows" (tyint_) (var_ "matA_rows")) in
-let prog = bind_ prog (let_ "matAmB_cols" (tyint_) (var_ "matB_cols")) in
-
-let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nmatAmB:\n"))) in
-let prog = bind_ prog (let_ "_" (tyunit_) (
-    app3f_ (var_ "printMatrixi")
-           (var_ "matAmB_rows")
-           (var_ "matAmB_cols")
-           (var_ "matAmB")
-  )) in
+--let prog = bind_ prog (let_ "matAmB_rows" (tyint_) (var_ "matA_rows")) in
+--let prog = bind_ prog (let_ "matAmB_cols" (tyint_) (var_ "matB_cols")) in
+--
+--let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nmatAmB:\n"))) in
+--let prog = bind_ prog (let_ "_" (tyunit_) (
+--    app3f_ (var_ "printMatrixi")
+--           (var_ "matAmB_rows")
+--           (var_ "matAmB_cols")
+--           (var_ "matAmB")
+--  )) in
 -----------------------------------
 
 let res = codegen prog in
@@ -188,7 +192,8 @@ let _ = print "\n" in
 let ocamlfilename = concat targetdir "/cpucode.ml" in
 let cudafilename = concat targetdir "/gpucode.cpp" in
 
-let _ = writeFile ocamlfilename res.0 in
+--let _ = writeFile ocamlfilename res.0 in
+let _ = print (int2string (length res.0)) in
 let _ = writeFile cudafilename res.1 in
 
 ()

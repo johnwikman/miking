@@ -170,7 +170,7 @@ let main =
         fun14_seqInit (var67_vecsize) (fun84_vecYinitfun)
     in
     let var87_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var85_vecX)) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var67_vecsize) then
+        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var85_vecX)) (( + ) (24) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var67_vecsize) then
             var67_vecsize
         else
             1) (Array.get (var86_vecY) (0)) then
@@ -179,16 +179,16 @@ let main =
             if ( < ) (1) (var67_vecsize) then
                 var67_vecsize
             else
-                1)) (( + ) (12) (if ( < ) (1) (( + ) (15) (( + ) (10) (( + ) (5) (( + ) (1) (( + ) (10) (( + ) (0) (( * ) (34) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
+                1)) (( + ) (8) (if ( < ) (1) (( + ) (6) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (7) (( + ) (0) (( * ) (19) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
             Array.get (var86_vecY) (0)
         else
             1)))))))) then
-            ( + ) (15) (( + ) (10) (( + ) (5) (( + ) (1) (( + ) (10) (( + ) (0) (( * ) (34) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
+            ( + ) (6) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (7) (( + ) (0) (( * ) (19) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
                 Array.get (var86_vecY) (0)
             else
                 1)))))))
         else
-            1)))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var85_vecX)) (Array.length (var86_vecY))) (Array.length (var85_vecX))) (2)) (150000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var67_vecsize) then
+            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var85_vecX)) (Array.length (var86_vecY))) (Array.length (var85_vecX))) (3)) (30000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var67_vecsize) then
             var67_vecsize
         else
             1) (Array.get (var86_vecY) (0)) then
@@ -197,16 +197,16 @@ let main =
             if ( < ) (1) (var67_vecsize) then
                 var67_vecsize
             else
-                1)) (( + ) (324) (if ( < ) (1) (( + ) (70005) (( + ) (27) (( + ) (22) (( + ) (1) (( + ) (205) (( + ) (0) (( * ) (70357) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
+                1)) (( + ) (702) (if ( < ) (1) (( + ) (50005) (( + ) (35) (( + ) (30) (( + ) (1) (( + ) (1005) (( + ) (0) (( * ) (51707) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
             Array.get (var86_vecY) (0)
         else
             1)))))))) then
-            ( + ) (70005) (( + ) (27) (( + ) (22) (( + ) (1) (( + ) (205) (( + ) (0) (( * ) (70357) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
+            ( + ) (50005) (( + ) (35) (( + ) (30) (( + ) (1) (( + ) (1005) (( + ) (0) (( * ) (51707) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
                 Array.get (var86_vecY) (0)
             else
                 1)))))))
         else
-            1))))))) (( / ) (Array.length (var85_vecX)) (1024)))) in if (( < ) (( * ) (Array.length (var85_vecX)) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var67_vecsize) then
+            1))))))) (( / ) (Array.length (var85_vecX)) (1024)))) in if (( < ) (( * ) (Array.length (var85_vecX)) (( + ) (24) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var67_vecsize) then
             var67_vecsize
         else
             1) (Array.get (var86_vecY) (0)) then
@@ -215,16 +215,16 @@ let main =
             if ( < ) (1) (var67_vecsize) then
                 var67_vecsize
             else
-                1)) (( + ) (12) (if ( < ) (1) (( + ) (15) (( + ) (10) (( + ) (5) (( + ) (1) (( + ) (10) (( + ) (0) (( * ) (34) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
+                1)) (( + ) (8) (if ( < ) (1) (( + ) (6) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (7) (( + ) (0) (( * ) (19) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
             Array.get (var86_vecY) (0)
         else
             1)))))))) then
-            ( + ) (15) (( + ) (10) (( + ) (5) (( + ) (1) (( + ) (10) (( + ) (0) (( * ) (34) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
+            ( + ) (6) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (7) (( + ) (0) (( * ) (19) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
                 Array.get (var86_vecY) (0)
             else
                 1)))))))
         else
-            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var85_vecX)) (Array.length (var86_vecY))) (Array.length (var85_vecX))) (2)) (150000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var67_vecsize) then
+            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var85_vecX)) (Array.length (var86_vecY))) (Array.length (var85_vecX))) (3)) (30000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var67_vecsize) then
             var67_vecsize
         else
             1) (Array.get (var86_vecY) (0)) then
@@ -233,11 +233,11 @@ let main =
             if ( < ) (1) (var67_vecsize) then
                 var67_vecsize
             else
-                1)) (( + ) (324) (if ( < ) (1) (( + ) (70005) (( + ) (27) (( + ) (22) (( + ) (1) (( + ) (205) (( + ) (0) (( * ) (70357) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
+                1)) (( + ) (702) (if ( < ) (1) (( + ) (50005) (( + ) (35) (( + ) (30) (( + ) (1) (( + ) (1005) (( + ) (0) (( * ) (51707) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
             Array.get (var86_vecY) (0)
         else
             1)))))))) then
-            ( + ) (70005) (( + ) (27) (( + ) (22) (( + ) (1) (( + ) (205) (( + ) (0) (( * ) (70357) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
+            ( + ) (50005) (( + ) (35) (( + ) (30) (( + ) (1) (( + ) (1005) (( + ) (0) (( * ) (51707) (if ( < ) (1) (Array.get (var86_vecY) (0)) then
                 Array.get (var86_vecY) (0)
             else
                 1)))))))

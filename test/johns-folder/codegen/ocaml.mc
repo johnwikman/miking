@@ -366,7 +366,7 @@ lang CUDACGOCaml = MExprCGExt + MExprCGCostEstimate
         --                      multiplied by the number of total applications
         --                      that will be made.
         let ocamlseqlen = if t.onlyIndexArg then t.onlyIndexArgSize else apply_length t.array in
-        let ocamlcost = apply_muli ocamlseqlen ocamlsinglecost in
+        let ocamlcost = apply_muli ocamlseqlen (apply_addi (mkint costprof_ocaml_costperelem) ocamlsinglecost) in
 
         let cudaappcode = strJoin " " [hostfuncname, packedintcgr.code, packedfloatcgr.code, nonpackedcode] in
         let ocamlappcgr =

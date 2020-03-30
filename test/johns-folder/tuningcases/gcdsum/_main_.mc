@@ -5,6 +5,10 @@ include "../../lib/std.mc"
 include "../../lib/io.mc"
 include "../../lib/macros.mc"
 
+-- This determines how many times that gcdsum should be applied.
+-- Unlike other options, this contains a direct number instead of an AST node.
+include "_iter_.mc"
+
 -- This should define the vecsize variable
 -- Included by binding defsize_
 include "_size_.mc"
@@ -118,7 +122,7 @@ let prog = bind_ prog libio_ in
 let prog = bind_ prog defcommon_ in
 
 ------- Perform GCDsum -------
-let prog = bind_ prog defspecific_ in
+let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
 ------------------------------
 
 ------- Output Verification -------
