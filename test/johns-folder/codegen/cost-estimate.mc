@@ -38,7 +38,7 @@ type CostProfile = {c_addi : Int,
                     c_if : Int,
                     c_seqoverhead : Int,
                     c_argapply : Int,
-                    c_fncall : Int,
+                    c_reccall : Int,
                     c_varaccess : Int,
                     c_intaccess : Int,
                     c_floataccess : Int,
@@ -48,7 +48,7 @@ type CostProfile = {c_addi : Int,
 let costprof_vanilla = {c_addi = 1, c_muli = 1, c_subi = 1, c_divi = 1, c_modi = 1,
                         c_addf = 1, c_mulf = 1, c_subf = 1, c_divf = 1,
                         c_eqi = 1, c_lti = 1, c_nth = 1, c_int2float = 1, c_if = 1,
-                        c_argapply = 1, c_fncall = 1, c_varaccess = 1,
+                        c_argapply = 1, c_reccall = 1, c_varaccess = 1,
                         c_intaccess = 1, c_floataccess = 1, c_unitaccess = 0,
                         c_boolaccess = 1}
 
@@ -299,7 +299,10 @@ lang LetCGCostEstimate = MExprCGExt + WrapperCGCostEstimate
       else -- continue
       let newcas = {cas with scannedFunctions = strset_add t.ident cas.scannedFunctions} in
       let bodyret = codegenCostEstimate_RECSCAN state newcas t.body in
-      let inret = codegenCostEstimate_RECSCAN state newcas t.inexpr in
+      -- if this is a variable, make sure that we bind the variable name in the in-expression
+      let incas = {newcas with argNameReplacement = cons (t.ident, bodyret.0) newcas.argNameReplacement} in
+      let inret = codegenCostEstimate_RECSCAN state incas t.inexpr in
+
       let ret = costarr_merge [bodyret.1, inret.1] in
       let newlet = TmLet {{t with body = bodyret.0} with inexpr = inret.0} in
       if strset_in t.ident ret.recursiveFunctions then
@@ -312,7 +315,7 @@ lang LetCGCostEstimate = MExprCGExt + WrapperCGCostEstimate
       if strset_in t.ident cas.scannedFunctions then
         -- this is a recursive call, cost should be multiplicatively handled at
         -- a higher level
-        TmConst {val = CInt {val = cas.profile.c_fncall}}
+        TmConst {val = CInt {val = cas.profile.c_reccall}}
       else
       let newcas = {cas with scannedFunctions = strset_add t.ident cas.scannedFunctions} in
       let internalcost = codegenCostEstimate_COSTSCAN state newcas t.body in
@@ -323,12 +326,12 @@ lang LetCGCostEstimate = MExprCGExt + WrapperCGCostEstimate
         let cccost = codegenCostEstimate_COSTSCAN state newcas ccexpr in
         let prodexpr = TmProdCost {exprs = [cccost, internalcost]} in
         let prodcost = codegenCostEstimate_COSTSCAN state newcas prodexpr in
-        let sumexpr = TmSumCost {exprs = [prodcost, incost, TmConst {val = CInt {val = cas.profile.c_fncall}}]} in
+        let sumexpr = TmSumCost {exprs = [prodcost, incost]} in
         let sumcost = codegenCostEstimate_COSTSCAN state newcas sumexpr in
         sumcost
       else
         -- not recursively called
-        let sumexpr = TmSumCost {exprs = [internalcost, incost, TmConst {val = CInt {val = cas.profile.c_fncall}}]} in
+        let sumexpr = TmSumCost {exprs = [internalcost, incost]} in
         codegenCostEstimate_COSTSCAN state newcas sumexpr
 end
 

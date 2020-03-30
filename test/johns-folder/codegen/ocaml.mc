@@ -321,8 +321,89 @@ lang CUDACGOCaml = MExprCGExt + MExprCGCostEstimate
                                                       with packedFloats = packedFloats}
                                                       with nonPackedArgs = nonPackedArgs}) in
       let retcgr = cgr_merge "" (concat [cudacgr, packedintcgr, packedfloatcgr] nonpackedcgr) in
-      {{retcgr with code = strJoin " " [hostfuncname, packedintcgr.code, packedfloatcgr.code, nonpackedcode]}
-               with externs = strset_add externdef retcgr.externs}
+
+      if t.autoDetermineParallelization then
+        -- Try to predict cost, only run code on CUDA if it seems benefitial
+        let costexpr = TmApp {lhs = t.func, rhs = TmConst {val = CInt {val = 1}}} in
+
+        -- Convenience functions
+        let mkint = lam i. TmConst {val = CInt {val = i}} in
+        let apply_length = lam seq. TmApp {lhs = TmConst {val = CLength ()}, rhs = seq} in
+        let apply_addi = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CAddi ()}, rhs = a}, rhs = b} in
+        let apply_muli = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CMuli ()}, rhs = a}, rhs = b} in
+        let apply_divi = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CDivi ()}, rhs = a}, rhs = b} in
+        let apply_lti = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CLti ()}, rhs = a}, rhs = b} in
+
+        -- Single cost = cost to apply the mapped function on a single element
+        let cudasinglecost = codegenCostEstimate state costprof_cuda costexpr in
+        let ocamlsinglecost = codegenCostEstimate state costprof_ocaml costexpr in
+
+        -- Length of what is being mapped
+        let mappedlen = if t.onlyIndexArg then t.onlyIndexArgSize else apply_length t.array in
+
+        -- CUDA overhead cost: Latency between host & device communication
+        --                     where no computation is taking place plus the
+        --                     cost of performing a single application on a
+        --                     single element.
+        -- All sequence args
+        let seqs = filter (lam arg. match codegenGetExprType state arg with TySeq _ then true else false) args in
+        -- Length of all sequence args
+        let seqlengths = map apply_length seqs in
+        -- Length of the result array
+        let seqlengths = cons mappedlen seqlengths in
+        -- Sum of all sequence lengths (total memory copied)
+        let seqlensum = foldl1 (lam acc. lam e. apply_addi acc e) seqlengths in
+        -- Memory overhead
+        let cudamemcost = apply_muli seqlensum (TmConst {val = CInt {val = costprof_cuda_relative_latency}}) in
+        -- Fixed cost
+        let cudafixedcost = TmConst {val = CInt {val = costprof_cuda_fixed_latency}} in
+        -- Computation cost
+        let cudacompcost = apply_muli cudasinglecost (apply_divi mappedlen (mkint costprof_cuda_paralleldenominator)) in
+        -- Cuda overhead = memory overhead + fixed latency + cost of single operation (assuming perfect parallelism)
+        let cudacost = apply_addi (apply_addi cudamemcost cudafixedcost) cudacompcost in
+
+        -- OCaml overhead cost: Cost of performing a single application
+        --                      multiplied by the number of total applications
+        --                      that will be made.
+        let ocamlseqlen = if t.onlyIndexArg then t.onlyIndexArgSize else apply_length t.array in
+        let ocamlcost = apply_muli ocamlseqlen ocamlsinglecost in
+
+        let cudaappcode = strJoin " " [hostfuncname, packedintcgr.code, packedfloatcgr.code, nonpackedcode] in
+        let ocamlappcgr =
+          let funccgr = codegenOCaml state t.func in
+          if t.onlyIndexArg then
+            let sizecgr = codegenOCaml state t.onlyIndexArgSize in
+            cgr_merge (
+              strJoin "" ["Array.init (", sizecgr.code, ") (", funccgr.code, ")"]
+            ) [sizecgr, funccgr]
+          else if t.includeIndexArg then
+            let arrcgr = codegenOCaml state t.array in
+            cgr_merge (
+              strJoin "" ["Array.mapi (", funccgr.code, ") (", arrcgr.code, ")"]
+            ) [funccgr, arrcgr]
+          else
+            let arrcgr = codegenOCaml state t.array in
+            cgr_merge (
+              strJoin "" ["Array.map (", funccgr.code, ") (", arrcgr.code, ")"]
+            ) [funccgr, arrcgr]
+        in
+        let condcgr = codegenOCaml state (apply_lti ocamlcost cudacost) in
+        let code =
+          strJoin "" [
+            -- TEMPORARY PRINTOUTS! --
+            "let _ = printf \"ocamlcost: %d\\n\" (", (codegenOCaml state ocamlcost).code, ") in ",
+            "let _ = printf \"cudacost: %d\\n\" (", (codegenOCaml state cudacost).code, ") in ",
+            --------------------------
+            "if (", condcgr.code, ") then (", ocamlappcgr.code, ") else (", cudaappcode, ")"
+          ]
+        in
+        let cgr = cgr_merge "" [retcgr, ocamlappcgr, condcgr] in
+        {{cgr with code = code}
+              with externs = strset_add externdef retcgr.externs}
+      else
+        -- Always run CUDA code
+        {{retcgr with code = strJoin " " [hostfuncname, packedintcgr.code, packedfloatcgr.code, nonpackedcode]}
+                 with externs = strset_add externdef retcgr.externs}
 end
 
 lang MainGCOCaml = MExprCGExt

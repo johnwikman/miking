@@ -12,23 +12,23 @@
 #endif
 
 extern "C" {
-	value gpuhost_fun62_saxpy(value packedInts, value packedFloats, value arg0, value arg1);
+	value gpuhost_fun72_saxpy(value packedInts, value packedFloats, value arg0, value arg1);
 }
 
 __device__ inline int gpu_addi(int x, int y);
 __device__ inline int gpu_muli(int x, int y);
-__device__ int gpudevice_fun62_saxpy(int arg58_a, value *arg59_y, int arg60_i, int arg61_xelem);
+__device__ int gpudevice_fun72_saxpy(int arg68_a, value *arg69_y, int arg70_i, int arg71_xelem);
 
 __device__ inline int gpu_addi(int x, int y) {return x + y;}
 
 __device__ inline int gpu_muli(int x, int y) {return x * y;}
 
-__device__ int gpudevice_fun62_saxpy(int arg58_a, value *arg59_y, int arg60_i, int arg61_xelem)
+__device__ int gpudevice_fun72_saxpy(int arg68_a, value *arg69_y, int arg70_i, int arg71_xelem)
 {
-	return gpu_addi(gpu_muli(arg58_a, arg61_xelem), Int_val((arg59_y[arg60_i])));
+	return gpu_addi(gpu_muli(arg68_a, arg71_xelem), Int_val((arg69_y[arg70_i])));
 }
 
-__global__ void gpuglobal_fun62_saxpy(int cuda_arg0, value *cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun72_saxpy(int cuda_arg0, value *cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -39,11 +39,11 @@ __global__ void gpuglobal_fun62_saxpy(int cuda_arg0, value *cuda_arg1, value *cu
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(cuda_arg2[i]);
-		outarr[i] = Val_int(gpudevice_fun62_saxpy(cuda_arg0, cuda_arg1, i, v));
+		outarr[i] = Val_int(gpudevice_fun72_saxpy(cuda_arg0, cuda_arg1, i, v));
 	}
 }
 
-value gpuhost_fun62_saxpy(value packedInts, value packedFloats, value arg0, value arg1)
+value gpuhost_fun72_saxpy(value packedInts, value packedFloats, value arg0, value arg1)
 {
 	CAMLparam4(packedInts, packedFloats, arg0, arg1);
 	CAMLlocal1(outarr);
@@ -66,7 +66,7 @@ value gpuhost_fun62_saxpy(value packedInts, value packedFloats, value arg0, valu
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun62_saxpy<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), cuda_arg0, cuda_arg1, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun72_saxpy<<<blockCount,threadsPerBlock>>>(Int_val(Field(packedInts, 1)), cuda_arg0, cuda_arg1, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 

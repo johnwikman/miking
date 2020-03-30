@@ -1,7 +1,7 @@
-open Array
 open Printf
+open Array
 
-external gpuhost_fun62_saxpy: int array -> float array -> int array -> int array -> int array = "gpuhost_fun62_saxpy"
+external gpuhost_fun72_saxpy: int array -> float array -> int array -> int array -> int array = "gpuhost_fun72_saxpy"
 
 let main =
     let fun1_head arg0_s =
@@ -121,70 +121,73 @@ let main =
         in
         fun45_printloop (arg44_arr) (0)
     in
-    let fun62_saxpy arg58_a arg59_y arg60_i arg61_xelem =
-        ( + ) (( * ) (arg58_a) (arg61_xelem)) (Array.get (arg59_y) (arg60_i))
+    let rec fun59_printloop arg62_vec arg61_size arg60_i =
+            if ( = ) (arg60_i) (arg61_size) then
+                ()
+            else
+                let var63__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (Array.get (arg62_vec) (arg60_i)))
+                in
+                let var64__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '|])
+                in
+                fun59_printloop (arg62_vec) (arg61_size) (( + ) (arg60_i) (1))
     in
-    let fun64_vecXinitfun arg63_i =
-        ( mod ) (( * ) (arg63_i) (arg63_i)) (7)
-    in
-    let fun66_vecYinitfun arg65_i =
-        ( mod ) (( * ) (( * ) (arg65_i) (arg65_i)) (arg65_i)) (19)
-    in
-    let rec fun72_printloop arg74_vec arg73_i =
-            let var75__  =
-                (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun19_int2string (Array.get (arg74_vec) (arg73_i)))
-            in
-            let var76__  =
-                (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '|])
-            in
-            fun72_printloop (arg74_vec) (( + ) (arg73_i) (1))
-    in
-    let fun78_printVec arg70_size arg71_vec =
-        let var77__  =
-            fun72_printloop (arg71_vec) (0)
+    let fun66_printVec arg57_size arg58_vec =
+        let var65__  =
+            fun59_printloop (arg58_vec) (arg57_size) (0)
         in
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
     in
-    let var57_vecsize  =
+    let fun72_saxpy arg68_a arg69_y arg70_i arg71_xelem =
+        ( + ) (( * ) (arg68_a) (arg71_xelem)) (Array.get (arg69_y) (arg70_i))
+    in
+    let fun74_vecXinitfun arg73_i =
+        ( mod ) (( * ) (arg73_i) (arg73_i)) (7)
+    in
+    let fun76_vecYinitfun arg75_i =
+        ( mod ) (( * ) (( * ) (arg75_i) (arg75_i)) (arg75_i)) (19)
+    in
+    let var67_vecsize  =
         50000000
     in
-    let var67_scalarA  =
+    let var77_scalarA  =
         239
     in
-    let var68_vecX  =
-        fun14_seqInit (var57_vecsize) (fun64_vecXinitfun)
+    let var78_vecX  =
+        fun14_seqInit (var67_vecsize) (fun74_vecXinitfun)
     in
-    let var69_vecY  =
-        fun14_seqInit (var57_vecsize) (fun66_vecYinitfun)
-    in
-    let var79_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+    let var79_vecY  =
+        fun14_seqInit (var67_vecsize) (fun76_vecYinitfun)
     in
     let var80_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     let var81_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     let var82_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     let var83_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     let var84_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     let var85_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     let var86_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     let var87_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     let var88_vecS  =
-        gpuhost_fun62_saxpy [|1; var67_scalarA|] [||] (var69_vecY) (var68_vecX)
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
+    in
+    let var89_vecS  =
+        gpuhost_fun72_saxpy [|1; var77_scalarA|] [||] (var79_vecY) (var78_vecX)
     in
     ()

@@ -252,9 +252,10 @@ let makeseq_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CMakeseq ()})
 
 -- cuda macros --
-let cudamap_ = use MExprCGOCaml in
+let cudamapxpept_ = use MExprCGOCaml in
   lam ept. lam f. lam arr.
   TmCUDAMap {elemPerThread = ept,
+             autoDetermineParallelization = false,
              autoScanElemPerThread = false,
              includeIndexArg = false,
              onlyIndexArg = false,
@@ -265,9 +266,10 @@ let cudamap_ = use MExprCGOCaml in
              packedFloats = [],
              nonPackedArgs = []}
 
-let cudamapi_ = use MExprCGOCaml in
+let cudamapixpept_ = use MExprCGOCaml in
   lam ept. lam f. lam arr.
   TmCUDAMap {elemPerThread = ept,
+             autoDetermineParallelization = false,
              autoScanElemPerThread = false,
              includeIndexArg = true,
              onlyIndexArg = false,
@@ -278,9 +280,10 @@ let cudamapi_ = use MExprCGOCaml in
              packedFloats = [],
              nonPackedArgs = []}
 
-let cudainit_ = use MExprCGOCaml in
+let cudainitxpept_ = use MExprCGOCaml in
   lam ept. lam size. lam f.
   TmCUDAMap {elemPerThread = ept,
+             autoDetermineParallelization = false,
              autoScanElemPerThread = false,
              includeIndexArg = false,
              onlyIndexArg = true,
@@ -294,6 +297,7 @@ let cudainit_ = use MExprCGOCaml in
 let cudamapautoept_ = use MExprCGOCaml in
   lam f. lam arr.
   TmCUDAMap {elemPerThread = int_ 1, -- temporary expression, will be replaced in the codegen
+             autoDetermineParallelization = false,
              autoScanElemPerThread = true,
              includeIndexArg = false,
              onlyIndexArg = false,
@@ -307,6 +311,7 @@ let cudamapautoept_ = use MExprCGOCaml in
 let cudamapiautoept_ = use MExprCGOCaml in
   lam f. lam arr.
   TmCUDAMap {elemPerThread = int_ 1, -- temporary expression, will be replaced in the codegen
+             autoDetermineParallelization = false,
              autoScanElemPerThread = true,
              includeIndexArg = true,
              onlyIndexArg = false,
@@ -320,7 +325,50 @@ let cudamapiautoept_ = use MExprCGOCaml in
 let cudainitautoept_ = use MExprCGOCaml in
   lam size. lam f.
   TmCUDAMap {elemPerThread = int_ 1, -- temporary expression, will be replaced in the codegen
+             autoDetermineParallelization = false,
              autoScanElemPerThread = true,
+             includeIndexArg = false,
+             onlyIndexArg = true,
+             onlyIndexArgSize = size,
+             func = f,
+             array = seq_ [],
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
+
+let cudamappredictive_ = use MExprCGOCaml in
+  lam f. lam arr.
+  TmCUDAMap {elemPerThread = int_ 1,
+             autoDetermineParallelization = true,
+             autoScanElemPerThread = false,
+             includeIndexArg = false,
+             onlyIndexArg = false,
+             onlyIndexArgSize = int_ 0,
+             func = f,
+             array = arr,
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
+
+let cudamapipredictive_ = use MExprCGOCaml in
+  lam f. lam arr.
+  TmCUDAMap {elemPerThread = int_ 1,
+             autoDetermineParallelization = true,
+             autoScanElemPerThread = false,
+             includeIndexArg = true,
+             onlyIndexArg = false,
+             onlyIndexArgSize = int_ 0,
+             func = f,
+             array = arr,
+             packedInts = [],
+             packedFloats = [],
+             nonPackedArgs = []}
+
+let cudainitpredictive_ = use MExprCGOCaml in
+  lam size. lam f.
+  TmCUDAMap {elemPerThread = int_ 1,
+             autoDetermineParallelization = true,
+             autoScanElemPerThread = false,
              includeIndexArg = false,
              onlyIndexArg = true,
              onlyIndexArgSize = size,

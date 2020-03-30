@@ -69,32 +69,6 @@ let var_vecY =
             (var_ "vecYinitfun"))
   )
 
-let func_printVec =
-  let_ "printVec" (tyarrows_ [tyint_, tyseq_ tyint_, tyunit_]) (
-    lam_ "size" (tyint_) (
-      lam_ "vec" (tyseq_ tyint_) (
-        bindall_ [
-          reclets_add "printloop" (tyarrows_ [tyint_, tyunit_]) (
-            lam_ "i" (tyint_) (
-              bindall_ [
-                let_ "_" (tyunit_) (
-                  print_ (app_ (var_ "int2string")
-                               (nth_ (var_ "vec")
-                                     (var_ "i")))
-                ),
-                let_ "_" (tyunit_) (print_ (str_ " ")),
-                app_ (var_ "printloop")
-                     (addi_ (var_ "i") (int_ 1))
-              ]
-            )
-          ) (reclets_empty),
-          let_ "_" (tyunit_) (app1f_ (var_ "printloop") (int_ 0)),
-          print_ (str_ "\n")
-        ]
-      )
-    )
-  )
-
 let defcommon_ = bindall_ [
   defsize_,
   func_saxpy,
@@ -102,8 +76,7 @@ let defcommon_ = bindall_ [
   func_vecYinitfun,
   var_scalarA,
   var_vecX,
-  var_vecY,
-  func_printVec
+  var_vecY
 ]
 
 mexpr

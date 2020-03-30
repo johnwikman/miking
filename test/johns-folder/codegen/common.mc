@@ -180,6 +180,7 @@ end
 lang CUDACGExt
     syn Expr =
     | TmCUDAMap {elemPerThread : Expr,
+                 autoDetermineParallelization : Bool,
                  autoScanElemPerThread : Bool,
                  includeIndexArg : Bool,
                  onlyIndexArg : Bool,
@@ -223,12 +224,23 @@ lang CUDACGExt
           else
             "cudaMap"
       in
+      let fname =
+        if t.autoDetermineParallelization then
+          concat fname "Predictive"
+        else if t.autoScanElemPerThread then
+          concat fname "AutoEpt"
+        else
+          concat fname "ExplicitEpt"
+      in
+
       let args = [t.func, t.array] in
-
       let args = if t.onlyIndexArg then cons t.onlyIndexArgSize args else args in
-
-      let args = if t.autoScanElemPerThread then args else cons t.elemPerThread args in
-      let fname = if t.autoScanElemPerThread then fname else concat fname "ExplicitEpt" in
+      let args =
+        if or t.autoScanElemPerThread t.autoDetermineParallelization then
+          args
+        else
+          cons t.elemPerThread args
+      in
 
       let argstrs = map (lam arg. strJoin "" ["(", pprintCode indent arg, ")"]) args in
 
