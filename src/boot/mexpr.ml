@@ -13,34 +13,35 @@ open Printf
 (* Mapping between named builtin functions (intrinsics) and the
    correspond constants *)
 let builtin =
-  [("unit",Cunit);
-   ("not",Cnot);("and",Cand(None));("or",Cor(None));
-   ("addi",Caddi(None));("subi",Csubi(None));("muli",Cmuli(None));
-   ("divi",Cdivi(None));("modi",Cmodi(None));("negi",Cnegi);
-   ("lti",Clti(None));("leqi",Cleqi(None));("gti",Cgti(None));("geqi",Cgeqi(None));
-   ("eqi",Ceqi(None));("neqi",Cneqi(None));
-   ("slli",Cslli(None));("srli",Csrli(None));("srai",Csrai(None));
-   ("arity",Carity);
-   ("addf",Caddf(None));("subf",Csubf(None));("mulf",Cmulf(None));
-   ("divf",Cdivf(None));("negf",Cnegf);
-   ("ltf",Cltf(None));("leqf",Cleqf(None));("gtf",Cgtf(None));("geqf",Cgeqf(None));
-   ("eqf",Ceqf(None));("neqf",Cneqf(None));
-   ("floorfi", Cfloorfi); ("ceilfi", Cceilfi); ("roundfi", Croundfi);
-   ("int2float", CInt2float); ("string2float", CString2float);
-   ("char2int",CChar2int);("int2char",CInt2char);
-   ("makeseq",Cmakeseq(None)); ("length",Clength);("concat",Cconcat(None));
-   ("nth",Cnth(None)); ("cons",Ccons(None));
-   ("slice",Cslice(None,None)); ("reverse",Creverse);
-   ("print",Cprint);("dprint",Cdprint);
-   ("argv",CSeq(Sys.argv |> Array.to_list |>
+  let f c = TmConst(NoInfo,c) in
+  [("unit",f(Cunit));
+   ("not",f(Cnot));("and",f(Cand(None)));("or",f(Cor(None)));
+   ("addi",f(Caddi(None)));("subi",f(Csubi(None)));("muli",f(Cmuli(None)));
+   ("divi",f(Cdivi(None)));("modi",f(Cmodi(None)));("negi",f(Cnegi));
+   ("lti",f(Clti(None)));("leqi",f(Cleqi(None)));("gti",f(Cgti(None)));("geqi",f(Cgeqi(None)));
+   ("eqi",f(Ceqi(None)));("neqi",f(Cneqi(None)));
+   ("slli",f(Cslli(None)));("srli",f(Csrli(None)));("srai",f(Csrai(None)));
+   ("arity",f(Carity));
+   ("addf",f(Caddf(None)));("subf",f(Csubf(None)));("mulf",f(Cmulf(None)));
+   ("divf",f(Cdivf(None)));("negf",f(Cnegf));
+   ("ltf",f(Cltf(None)));("leqf",f(Cleqf(None)));("gtf",f(Cgtf(None)));("geqf",f(Cgeqf(None)));
+   ("eqf",f(Ceqf(None)));("neqf",f(Cneqf(None)));
+   ("floorfi", f(Cfloorfi)); ("ceilfi", f(Cceilfi)); ("roundfi", f(Croundfi));
+   ("int2float", f(CInt2float)); ("string2float", f(CString2float));
+   ("char2int",f(CChar2int));("int2char",f(CInt2char));
+   ("makeseq",f(Cmakeseq(None))); ("length",f(Clength));("concat",f(Cconcat(None)));
+   ("nth",f(Cnth(None))); ("cons",f(Ccons(None)));
+   ("slice",f(Cslice(None,None))); ("reverse",f(Creverse));
+   ("print",f(Cprint));("dprint",f(Cdprint));
+   ("argv",TmSeq(NoInfo,Sys.argv |> Array.to_list |>
                   List.map (fun s ->
-                      TmConst(NoInfo,CSeq(s |> us |> ustring2list |>
-                                            List.map (fun x->TmConst(NoInfo,CChar(x))))))));
-   ("readFile",CreadFile); ("writeFile",CwriteFile(None));
-   ("fileExists", CfileExists); ("deleteFile", CdeleteFile);
-   ("error",Cerror);
-   ("debugShow", CdebugShow);
-   ("eqs", Ceqs(None)); ("gensym", Cgensym)
+                      TmSeq(NoInfo,s |> us |> ustring2list |>
+                                            List.map (fun x->TmConst(NoInfo,CChar(x)))))));
+   ("readFile",f(CreadFile)); ("writeFile",f(CwriteFile(None)));
+   ("fileExists", f(CfileExists)); ("deleteFile", f(CdeleteFile));
+   ("error",f(Cerror));
+   ("debugShow", f(CdebugShow));
+   ("eqs", f(Ceqs(None))); ("gensym", f(Cgensym))
   ]
   (* Append external functions TODO: Should not be part of core language *)
   @ Ext.externals
@@ -96,7 +97,6 @@ let arity = function
   | CChar2int   -> 1
   | CInt2char   -> 1
   (* MCore intrinsic: sequences *)
-  | CSeq(_)           -> 0
   | Cmakeseq(None)    -> 2 | Cmakeseq(Some(_)) -> 1
   | Clength           -> 1
   | Cconcat(None)     -> 2 | Cconcat(Some(_)) -> 1
@@ -269,7 +269,7 @@ let delta eval env fi c v  =
     | Cneqf(None),TmConst(fi,CFloat(v)) -> TmConst(fi,Cneqf(Some(v)))
     | Cneqf(Some(v1)),TmConst(fi,CFloat(v2)) -> TmConst(fi,CBool(v1 <> v2))
     | Cneqf(None),_ | Cneqf(Some(_)),_  -> fail_constapp fi
-    | CString2float,TmConst(fi,CSeq(s)) ->
+    | CString2float,TmSeq(fi,s) ->
         let to_char = function
           | TmConst(_, CChar(c)) -> c
           | _ -> fail_constapp fi
@@ -302,30 +302,28 @@ let delta eval env fi c v  =
     | CInt2char,_ -> fail_constapp fi
 
     (* MCore intrinsic: sequences *)
-    | CSeq(_),_ -> fail_constapp fi
-
     | Cmakeseq(None),TmConst(fi,CInt(v)) -> TmConst(fi,Cmakeseq(Some(v)))
-    | Cmakeseq(Some(v1)),t -> TmConst(tm_info t,CSeq(List.init v1 (fun _ -> t)))
+    | Cmakeseq(Some(v1)),t -> TmSeq(tm_info t,List.init v1 (fun _ -> t))
     | Cmakeseq(None),_ -> fail_constapp fi
 
-    | Clength,TmConst(fi,CSeq(lst)) -> TmConst(fi,CInt(List.length lst))
+    | Clength,TmSeq(fi,lst) -> TmConst(fi,CInt(List.length lst))
     | Clength,_ -> fail_constapp fi
 
-    | Cconcat(None),TmConst(fi,CSeq(lst1)) -> TmConst(fi,Cconcat(Some(lst1)))
-    | Cconcat(Some(lst1)),TmConst(fi,CSeq(lst2)) ->
-       TmConst(fi,CSeq(List.append lst1 lst2))
+    | Cconcat(None),TmSeq(fi,lst1) -> TmConst(fi,Cconcat(Some(lst1)))
+    | Cconcat(Some(lst1)),TmSeq(fi,lst2) ->
+       TmSeq(fi,List.append lst1 lst2)
     | Cconcat(None),_ | Cconcat(Some(_)),_  -> fail_constapp fi
 
-    | Cnth(None),TmConst(fi,CSeq(lst)) -> TmConst(fi,Cnth(Some(lst)))
+    | Cnth(None),TmSeq(fi,lst) -> TmConst(fi,Cnth(Some(lst)))
     | Cnth(Some(lst)),TmConst(_,CInt(n)) ->
        (try List.nth lst n with _ -> raise_error fi "Out of bound access in sequence.")
     | Cnth(None),_ | Cnth(Some(_)),_  -> fail_constapp fi
 
     | Ccons(None),t -> TmConst(tm_info t,Ccons(Some(t)))
-    | Ccons(Some(t)),TmConst(fi,CSeq(lst)) -> TmConst(fi,CSeq(t::lst))
+    | Ccons(Some(t)),TmSeq(fi,lst) -> TmSeq(fi,t::lst)
     | Ccons(Some(_)),_  -> fail_constapp fi
 
-    | Cslice(None,None),TmConst(fi,CSeq(lst)) -> TmConst(fi,Cslice(Some(lst),None))
+    | Cslice(None,None),TmSeq(fi,lst) -> TmConst(fi,Cslice(Some(lst),None))
     | Cslice(Some(lst),None),TmConst(fi,CInt(s)) -> TmConst(fi,Cslice(Some(lst),Some(s)))
     | Cslice(Some(lst),Some(s)),TmConst(fi,CInt(l)) ->
        let slice s l lst =
@@ -336,41 +334,41 @@ let delta eval env fi c v  =
            | _::xs -> slice' (i+1) xs
          in
          slice' 0 lst
-       in TmConst(fi, CSeq(slice s l lst))
+       in TmSeq(fi, slice s l lst)
     | Cslice(_,_),_ -> fail_constapp fi
 
-    | Creverse,TmConst(fi,CSeq(lst)) -> TmConst(fi,CSeq(List.rev lst))
+    | Creverse,TmSeq(fi,lst) -> TmSeq(fi,List.rev lst)
     | Creverse,_ -> fail_constapp fi
 
     (* MCore intrinsic: records *)
     | CRecord(_),_ -> fail_constapp fi
 
     (* MCore debug and stdio intrinsics *)
-    | Cprint, TmConst(fi,CSeq(lst)) ->
+    | Cprint, TmSeq(fi,lst) ->
        uprint_string (tmlist2ustring fi lst); TmConst(NoInfo,Cunit)
     | Cprint, _ -> raise_error fi "The argument to print must be a string"
 
     | Cdprint, t -> uprint_string (pprintME t); TmConst(NoInfo,Cunit)
 
-    | CreadFile,TmConst(fi,CSeq(lst)) ->
-       TmConst(fi,CSeq(Ustring.read_file (Ustring.to_utf8 (tmlist2ustring fi lst))
-                       |> (ustring2tmlist fi)))
+    | CreadFile,TmSeq(fi,lst) ->
+       TmSeq(fi,Ustring.read_file (Ustring.to_utf8 (tmlist2ustring fi lst))
+                       |> (ustring2tmlist fi))
     | CreadFile,_ -> fail_constapp fi
 
-    | CwriteFile(None),TmConst(fi,CSeq(l)) -> TmConst(fi,CwriteFile(Some(tmlist2ustring fi l)))
-    | CwriteFile(Some(fname)),TmConst(fi,CSeq(lst)) ->
+    | CwriteFile(None),TmSeq(fi,l) -> TmConst(fi,CwriteFile(Some(tmlist2ustring fi l)))
+    | CwriteFile(Some(fname)),TmSeq(fi,lst) ->
         Ustring.write_file (Ustring.to_utf8 fname) (tmlist2ustring fi lst); TmConst(NoInfo,Cunit)
     | CwriteFile(None),_ | CwriteFile(Some(_)),_  -> fail_constapp fi
 
-    | CfileExists,TmConst(fi,CSeq(lst)) ->
+    | CfileExists,TmSeq(fi,lst) ->
         TmConst(fi,CBool(Sys.file_exists (Ustring.to_utf8 (tmlist2ustring fi lst))))
     | CfileExists,_ -> fail_constapp fi
 
-    | CdeleteFile,TmConst(fi,CSeq(lst)) ->
+    | CdeleteFile,TmSeq(fi,lst) ->
         Sys.remove (Ustring.to_utf8 (tmlist2ustring fi lst)); TmConst(NoInfo,Cunit)
     | CdeleteFile,_ -> fail_constapp fi
 
-    | Cerror, TmConst(fi,CSeq(lst)) ->
+    | Cerror, TmSeq(fi,lst) ->
        (uprint_endline ((us"ERROR: ") ^. (tmlist2ustring fi lst)); exit 1)
     | Cerror,_ -> fail_constapp fi
     | CdebugShow,t ->
@@ -409,13 +407,14 @@ let unittest_failed fi t1 t2=
 (* Check if two value terms are equal *)
 let rec val_equal v1 v2 =
   match v1,v2 with
-  | TmConst(_,CSeq(lst1)), TmConst(_,CSeq(lst2)) -> (
+  | TmSeq(_,lst1), TmSeq(_,lst2) ->
      List.length lst1 = List.length lst2 &&
-     List.for_all (fun (x,y) -> val_equal x y) (List.combine lst1 lst2))
+      List.for_all (fun (x,y) -> val_equal x y) (List.combine lst1 lst2)
   | TmConst(_,CRecord(r1)), TmConst(_,CRecord(r2)) ->
      Record.equal val_equal r1 r2
   | TmConst(_,c1),TmConst(_,c2) -> c1 = c2
   | TmTuple(_,tms1),TmTuple(_,tms2) ->
+     List.length tms1 = List.length tms2 &&
      List.for_all (fun (x,y) -> val_equal x y) (List.combine tms1 tms2)
   | TmConsym(_,_,sym1,None),TmConsym(_,_,sym2,None) ->sym1 = sym2
   | TmConsym(_,_,sym1,Some(v1)),TmConsym(_,_,sym2,Some(v2)) -> sym1 = sym2 && val_equal v1 v2
@@ -429,7 +428,15 @@ let rec debruijn env t =
      | VarTm(y)::ee -> if y =. x then n else find fi ee (n+1) x
      | [] -> raise_error fi ("Unknown variable '" ^ Ustring.to_utf8 x ^ "'")) in
   let rec dbPat env = function
-    | PatNamed(fi,x) -> (VarTm(x)::env, PatNamed(fi,x))
+    | PatNamed(_,NameStr(x)) as pat -> (VarTm(x)::env, pat)
+    | PatNamed(_,NameWildcard) as pat -> (env, pat)
+    | PatSeq(fi,ps,seqMP) ->
+       let go p (env,ps) = let (env,p) = dbPat env p in (env,p::ps) in
+       let (env,ps) = List.fold_right go ps (env,[]) in
+       let env = (match seqMP with
+       | SeqMatchPrefix(NameStr(x)) | SeqMatchPostfix(NameStr(x)) -> VarTm(x)::env
+       | SeqMatchPrefix(NameWildcard) | SeqMatchPostfix(NameWildcard) | SeqMatchTotal -> env) in
+       (env,PatSeq(fi,ps,seqMP))
     | PatTuple(fi,ps) -> (* NOTE: this causes patterns to introduce names right-to-left, which will cause errors if a later pattern binds a name that is seen as a constructor in a pattern to the left *)
        let go p (env,ps) = let (env,p) = dbPat env p in (env,p::ps) in
        let (env,ps) = List.fold_right go ps (env,[])
@@ -453,7 +460,6 @@ let rec debruijn env t =
      TmRecLets(fi,List.map (fun (fi,s,t) -> (fi,s, debruijn env2 t)) lst, debruijn env2 tm)
   | TmApp(fi,t1,t2) -> TmApp(fi,debruijn env t1,debruijn env t2)
   | TmConst(_,_) -> t
-  | TmIf(fi,t1,t2,t3) -> TmIf(fi,debruijn env t1,debruijn env t2,debruijn env t3)
   | TmFix(_) -> t
   | TmSeq(fi,tms) -> TmSeq(fi,List.map (debruijn env) tms)
   | TmTuple(fi,tms) -> TmTuple(fi,List.map (debruijn env) tms)
@@ -468,13 +474,34 @@ let rec debruijn env t =
      TmMatch(fi,debruijn env t1,p,debruijn matchedEnv t2,debruijn env t3)
   | TmUse(fi,l,t) -> TmUse(fi,l,debruijn env t)
   | TmUtest(fi,t1,t2,tnext)
-      -> TmUtest(fi,debruijn env t1,debruijn env t2,debruijn env tnext)
+     -> TmUtest(fi,debruijn env t1,debruijn env t2,debruijn env tnext)
 
-let rec tryMatch env value = function
-  | PatNamed _ -> Some (value :: env)
+
+
+let rec tryMatch env value pat =
+  let go v p env = Option.bind (fun env -> tryMatch env v p) env in
+  let rec splitNth n = function [] -> ([],[]) | x::xs ->
+    if n > 0 then let (pre,post) = splitNth (n-1) xs in (x::pre,post) else ([],x::xs) in
+  let bindIfName fi tms seqMP env = match seqMP with
+    | SeqMatchPrefix(_) | SeqMatchPostfix(_) -> env |> Option.bind (fun env -> Some(TmSeq(fi,tms)::env))
+    | SeqMatchTotal -> env |> Option.bind (fun env -> Some(env))
+  in
+  match pat with
+  | PatNamed(_,NameStr(_)) -> Some(value::env)
+  | PatNamed(_,NameWildcard)-> Some(env)
+  | PatSeq(_,pats,seqMP) ->
+    (match value,seqMP with
+     | TmSeq(fi,vs),SeqMatchPrefix(_) when List.length pats <= List.length vs ->
+       let (pre,post) = vs |> splitNth (List.length pats) in
+       List.fold_right2 go pre pats (Some env) |> bindIfName fi post seqMP
+     | TmSeq(fi,vs),SeqMatchPostfix(_) when List.length pats <= List.length vs ->
+       let (pre,post) = vs |> splitNth (List.length vs - List.length pats) in
+       List.fold_right2 go post pats (Some env) |> bindIfName fi pre seqMP
+     | TmSeq(_,vs),SeqMatchTotal when List.length pats = List.length vs ->
+       List.fold_right2 go vs pats (Some env)
+     | _ -> None)
   | PatTuple(_,pats) ->
-     let go v p env = Option.bind (fun env -> tryMatch env v p) env in
-     (match value with
+    (match value with
       | TmTuple(_,vs) when List.length pats = List.length vs ->
          List.fold_right2 go vs pats (Some env)
       | _ -> None)
@@ -541,15 +568,8 @@ let rec eval env t =
                                  ^ Ustring.to_utf8 (pprintME f)))
   (* Constant and fix *)
   | TmConst(_,_) | TmFix(_) -> t
-  (* If expression *)
-  | TmIf(fi,t1,t2,t3) -> (
-    match eval env t1 with
-    | TmConst(_,CBool(true)) -> eval env t2
-    | TmConst(_,CBool(false)) -> eval env t3
-    | _ -> raise_error fi "The guard of the if expression is not a boolean value"
-  )
   (* Sequences *)
-  | TmSeq(fi,tms) -> TmConst(fi,CSeq(List.map (eval env) tms))
+  | TmSeq(fi,tms) -> TmSeq(fi,List.map (eval env) tms)
   (* Records *)
   | TmRecord(fi,r) ->
      let add_mapping m = function

@@ -79,7 +79,6 @@ and const =
 | CChar2int
 | CInt2char
 (* MCore intrinsic: sequences *)
-| CSeq     of tm list
 | Cmakeseq of int option
 | Clength
 | Cconcat  of (tm list) option
@@ -135,13 +134,10 @@ and program = Program of include_ list * top list * tm
 and tm =
 | TmVar     of info * ustring * int                                 (* Variable *)
 | TmLam     of info * ustring * ty * tm                             (* Lambda abstraction *)
-| TmClos    of info * ustring * ty * tm * env Lazy.t                (* Closure *)
 | TmLet     of info * ustring * tm * tm                             (* Let *)
 | TmRecLets of info * (info * ustring * tm) list * tm               (* Recursive lets *)
 | TmApp     of info * tm * tm                                       (* Application *)
 | TmConst   of info * const                                         (* Constant *)
-| TmIf      of info * tm * tm * tm                                  (* If expression *)
-| TmFix     of info                                                 (* Fix point *)
 | TmSeq     of info * tm list                                       (* Sequence *)
 | TmTuple   of info * tm list                                       (* Tuple *)
 | TmRecord  of info * (ustring * tm) list                           (* Record *)
@@ -152,20 +148,38 @@ and tm =
 | TmMatch   of info * tm * pat * tm * tm                            (* Match data *)
 | TmUse     of info * ustring * tm                                  (* Use a language *)
 | TmUtest   of info * tm * tm * tm                                  (* Unit testing *)
+(* Only part of the runtime system *)
+| TmClos    of info * ustring * ty * tm * env Lazy.t                (* Closure *)
+| TmFix     of info                                                 (* Fix point *)
+
+
 
 and label =
 | LabIdx of int                                   (* Tuple index *)
 | LabStr of ustring                               (* Record label *)
 
+(* Kind of pattern name *)
+and patName =
+| NameStr of ustring                              (* A normal pattern name *)
+| NameWildcard                                    (* Pattern wildcard *)
+
+(* Kind of sequence matching in patterns *)
+and seqMatchType =
+| SeqMatchPrefix of patName
+| SeqMatchPostfix of patName
+| SeqMatchTotal
+
 (* Patterns *)
 and pat =
-| PatNamed of info * ustring                      (* Named, capturing wildcard *)
+| PatNamed of info * patName                      (* Named, capturing wildcard *)
+| PatSeq   of info * pat list * seqMatchType      (* Sequence pattern *)
 | PatTuple of info * pat list                     (* Tuple pattern *)
 | PatCon   of info * ustring * sym * pat          (* Constructor pattern *)
 | PatInt   of info * int                          (* Int pattern *)
 | PatChar  of info * int                          (* Char pattern *)
 | PatBool  of info * bool                         (* Boolean pattern *)
 | PatUnit  of info                                (* Unit pattern *)
+
 
 (* Types *)
 and ty =
@@ -218,7 +232,6 @@ let rec map_tm f = function
   | TmConst(_,_) as t -> f t
   | TmFix(_) as t -> f t
   | TmSeq(fi, tms) -> f (TmSeq(fi, List.map (map_tm f) tms))
-  | TmIf(fi,t1,t2,t3) -> f (TmIf(fi,map_tm f t1,map_tm f t2,map_tm f t3))
   | TmTuple(fi,tms) -> f (TmTuple(fi,List.map (map_tm f) tms))
   | TmRecord(fi, r) -> f (TmRecord(fi, List.map (function (l, t) -> (l, map_tm f t)) r))
   | TmProj(fi,t1,l) -> f (TmProj(fi,map_tm f t1,l))
@@ -240,7 +253,6 @@ let tm_info = function
   | TmRecLets(fi,_,_) -> fi
   | TmApp(fi,_,_) -> fi
   | TmConst(fi,_) -> fi
-  | TmIf(fi,_,_,_) -> fi
   | TmFix(fi) -> fi
   | TmSeq(fi,_) -> fi
   | TmTuple(fi,_) -> fi
@@ -255,6 +267,7 @@ let tm_info = function
 
 let pat_info = function
   | PatNamed(fi,_) -> fi
+  | PatSeq(fi,_,_) -> fi
   | PatTuple(fi,_) -> fi
   | PatCon(fi,_,_,_) -> fi
   | PatInt(fi,_) -> fi
@@ -263,7 +276,7 @@ let pat_info = function
   | PatUnit(fi) -> fi
 
 
-(* Converts a list of terms (typically from CSeq) to a ustring *)
+(* Converts a list of terms  to a ustring *)
 let tmlist2ustring fi lst =
   List.map (fun x ->
       match x with | TmConst(_,CChar(i)) -> i

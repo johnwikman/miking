@@ -105,10 +105,6 @@ let rec pprint_const c =
   | CChar2int -> us"char2int"
   | CInt2char -> us"int2char"
   (* MCore intrinsic: sequences *)
-  | CSeq(tms) ->
-     if List.for_all (fun x -> match x with | TmConst(_,CChar(_)) -> true | _ -> false) tms
-     then us"\"" ^. tmlist2ustring NoInfo tms ^. us"\""
-     else us"[" ^. Ustring.concat (us",") (List.map pprintME tms) ^. us"]"
   | Cmakeseq(_) -> us"makeseq"
   | Clength -> us"length"
   | Cconcat(_) -> us"concat"
@@ -165,8 +161,6 @@ and pprintME t =
   | TmApp(_,t1,t2) ->
        left inside ^. ppt true t1  ^. us" " ^. ppt true t2 ^. right inside
   | TmConst(_,c) -> pprint_const c
-  | TmIf(_,t1,t2,t3) -> left inside ^. us"if " ^. ppt false t1 ^. us" then " ^.
-                          ppt false t2 ^. us" else " ^. ppt false t3 ^.right inside
   | TmFix(_) -> us"fix"
   | TmSeq(_,tms) -> us"[" ^. Ustring.concat (us",") (List.map (ppt false) tms) ^. us"]"
   | TmTuple(_,tms) -> us"(" ^. Ustring.concat (us",") (List.map (ppt false) tms) ^. us")"
@@ -179,6 +173,8 @@ and pprintME t =
                            (match tmop with
                             | Some(t) -> ppt true t
                             | None -> us"") ^. right inside
+  | TmMatch(_,t1,PatBool(_,true),t2,t3) -> left inside ^. us"if " ^. ppt false t1 ^. us" then " ^.
+                          ppt false t2 ^. us" else " ^. ppt false t3 ^.right inside
   | TmMatch(_,t,p,then_,else_) -> left inside ^. us"match " ^. ppt false t ^.
         us" with " ^. pprintPat p ^.
         us" then " ^. ppt false then_ ^.
@@ -187,9 +183,19 @@ and pprintME t =
   | TmUtest(_,t1,t2,_) -> us"utest " ^. ppt false t1  ^. us" " ^. ppt false t2
   in ppt false t
 
+and pprintTmList p = us"[" ^. (p |> List.map pprintME |> Ustring.concat (us",")) ^. us"]"
+
+
 and pprintPat p =
-  let rec ppp inside = function
-    | PatNamed(_,x) -> x
+  let rec ppp inside pat =
+    let ppSeq lst = lst |> List.map (ppp inside) |> Ustring.concat (us",") in
+    let ppName = function NameStr(x) -> x | NameWildcard -> us"_" in
+    match pat with
+    | PatNamed(_,NameStr(x)) -> x
+    | PatSeq(_,lst,SeqMatchPrefix(x)) -> us"[" ^. ppSeq lst ^. us"] ++ " ^. ppName x
+    | PatSeq(_,lst,SeqMatchPostfix(x)) -> ppName x ^. us" ++ [" ^. ppSeq lst ^. us"]"
+    | PatSeq(_,lst,SeqMatchTotal) -> us"[" ^. ppSeq lst ^. us"]"
+    | PatNamed(_,NameWildcard) -> us"_"
     | PatTuple(_,ps) -> us"(" ^. Ustring.concat (us",") (List.map (ppp false) ps) ^. us")"
     | PatCon(_,x,n,p) ->
        left inside ^.
@@ -200,6 +206,8 @@ and pprintPat p =
     | PatBool(_,b) -> Ustring.Op.ustring_of_bool b
     | PatUnit _ -> us"()"
   in ppp false p
+
+and pprintPatList p = us"[" ^. (p |> List.map pprintPat |> Ustring.concat (us",")) ^. us"]"
 
 (* Pretty prints the environment *)
 and pprint_env env =

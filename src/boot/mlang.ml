@@ -159,7 +159,7 @@ let translate_cases f target cases =
   let translate_case case inner =
     match case with
     | (ConPattern (fi, k, x), handler) ->
-      TmMatch (fi, target, PatCon(fi, k, noidx, PatNamed(fi, x)), handler, inner)
+      TmMatch (fi, target, PatCon(fi, k, noidx, PatNamed(fi, NameStr(x))), handler, inner)
     | (VarPattern (fi, x), handler) ->
       TmLet(fi, x, target, handler)
   in
@@ -169,7 +169,7 @@ let translate_cases f target cases =
   let no_match =
     let_ (us"_")
       (app (TmConst (NoInfo, CdebugShow)) target)
-      (app (TmConst (NoInfo, Cerror)) (TmConst(NoInfo, CSeq msg)))
+      (app (TmConst (NoInfo, Cerror)) (TmSeq(NoInfo, msg)))
   in
   let case_compare c1 c2 = match c1, c2 with
     | (p1, _), (p2, _) -> pattern_compare p1 p2
@@ -232,8 +232,19 @@ let rec desugar_tm nss env =
   | (TmClos _) as tm -> tm
   (* Both introducing and referencing *)
   | TmMatch(fi, target, pat, thn, els) ->
-     let rec desugar_pat env = function
-       | PatNamed(fi, name) -> (delete_id_and_con env name, PatNamed(fi, empty_mangle name))
+    let desugar_pname env = function
+      | NameStr(n) -> (delete_id_and_con env n, NameStr(empty_mangle n))
+      | NameWildcard -> (env, NameWildcard) in
+    let rec desugar_pat env = function
+       | PatNamed(fi,name) -> name |> desugar_pname env |> map_right (fun n -> PatNamed(fi,n))
+       | PatSeq(fi,pats,seqMT) ->
+         let (env', pats') = List.fold_right (fun p (env, pats) -> desugar_pat env p |> map_right
+             (fun p -> p::pats)) pats (env, []) in
+         let (env'',seqMT') = match seqMT with
+           | SeqMatchPrefix(n) -> n |> desugar_pname env' |> map_right (fun n -> SeqMatchPrefix(n))
+           | SeqMatchPostfix(n) -> n |> desugar_pname env' |> map_right (fun n -> SeqMatchPostfix(n))
+           | SeqMatchTotal -> (env', SeqMatchTotal) in
+         (env'',PatSeq(fi,pats',seqMT'))
        | PatTuple(fi, pats) ->
           List.fold_right (fun p (env, pats) -> desugar_pat env p |> map_right (fun p -> p::pats)) pats (env, [])
           |> map_right (fun pats -> PatTuple(fi, pats))
@@ -250,7 +261,6 @@ let rec desugar_tm nss env =
       | Some ns -> desugar_tm nss (merge_env_overwrite env ns) body)
   (* Simple recursions *)
   | TmApp(fi, a, b) -> TmApp(fi, desugar_tm nss env a, desugar_tm nss env b)
-  | TmIf(fi, c, th, el) -> TmIf(fi, desugar_tm nss env c, desugar_tm nss env th, desugar_tm nss env el)
   | TmSeq(fi, tms) -> TmSeq(fi, List.map (desugar_tm nss env) tms)
   | TmTuple(fi, tms) -> TmTuple(fi, List.map (desugar_tm nss env) tms)
   | TmRecord(fi, tms) -> TmRecord(fi, List.map (desugar_tm nss env |> map_right) tms)
