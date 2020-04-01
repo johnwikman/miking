@@ -146,7 +146,7 @@ let main =
         arg70_i
     in
     let var67_vecsize  =
-        25000000
+        50000
     in
     let var72_vecX  =
         fun14_seqInit (var67_vecsize) (fun71_vecXinitfun)

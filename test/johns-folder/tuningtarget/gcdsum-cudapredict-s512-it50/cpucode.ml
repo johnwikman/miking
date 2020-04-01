@@ -161,7 +161,7 @@ let main =
         ( mod ) (( * ) (( - ) (923487321) (arg83_i)) (( + ) (1) (arg83_i))) (53)
     in
     let var67_vecsize  =
-        2048
+        512
     in
     let var85_vecX  =
         fun14_seqInit (var67_vecsize) (fun82_vecXinitfun)

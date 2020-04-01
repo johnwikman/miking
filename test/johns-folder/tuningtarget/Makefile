@@ -1,6 +1,7 @@
 .PHONY: all run clean
 
 BINDIR=bin
+SHELL=bash
 
 all:
 	@sh -c 'for dir in $$(ls -d */); do make $${dir%%/}.build; done'
@@ -13,17 +14,24 @@ all:
 	ocamlopt $*/gpudevice.o $*/gpuhost.o $*/cpucode.ml \
 	         -cclib -lcudart                           \
 	         -cclib -lstdc++                           \
+	         -O3                                       \
 	         -o $(BINDIR)/$*.out
 
 %.out: FORCE
 	$(eval PROGBASE := $(shell basename $@ .out))
-	/usr/bin/time -apo $*.txt ./$@ >> $*.txt
+	{ time ./$@; } &> $*.txt
 FORCE:
 
 run:
-	$(eval OUTFILES := $(shell ls -I *cudapredict* bin/*.out))
+	$(eval OUTFILES := $(shell ls bin/*.out))
 	make $(OUTFILES)
-	mkdir -p results
+	mkdir -p raw-results
+	mv bin/*.txt raw-results/
+
+run-predict:
+	$(eval OUTFILES := $(shell ls bin/*predict*.out))
+	make $(OUTFILES)
+	mkdir -p raw-results
 	mv bin/*.txt raw-results/
 
 clean:

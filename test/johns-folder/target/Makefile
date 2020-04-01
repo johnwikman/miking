@@ -13,6 +13,7 @@ all:
 	ocamlopt $*/gpudevice.o $*/gpuhost.o $*/cpucode.ml \
 	         -cclib -lcudart                           \
 	         -cclib -lstdc++                           \
+	         -O3                                       \
 	         -o $(BINDIR)/$*.out
 
 clean:

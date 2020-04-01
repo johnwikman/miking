@@ -192,8 +192,7 @@ let _ = print "\n" in
 let ocamlfilename = concat targetdir "/cpucode.ml" in
 let cudafilename = concat targetdir "/gpucode.cpp" in
 
---let _ = writeFile ocamlfilename res.0 in
-let _ = print (int2string (length res.0)) in
+let _ = writeFile ocamlfilename res.0 in
 let _ = writeFile cudafilename res.1 in
 
 ()

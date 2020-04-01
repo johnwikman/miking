@@ -330,8 +330,10 @@ lang CUDACGOCaml = MExprCGExt + MExprCGCostEstimate
         let mkint = lam i. TmConst {val = CInt {val = i}} in
         let apply_length = lam seq. TmApp {lhs = TmConst {val = CLength ()}, rhs = seq} in
         let apply_addi = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CAddi ()}, rhs = a}, rhs = b} in
+        let apply_subi = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CSubi ()}, rhs = a}, rhs = b} in
         let apply_muli = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CMuli ()}, rhs = a}, rhs = b} in
         let apply_divi = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CDivi ()}, rhs = a}, rhs = b} in
+        let apply_divirndup = lam a. lam b. apply_divi (apply_addi a (apply_subi b (mkint 1))) b in -- (a + b - 1) / b
         let apply_lti = lam a. lam b. TmApp {lhs = TmApp {lhs = TmConst {val = CLti ()}, rhs = a}, rhs = b} in
 
         -- Single cost = cost to apply the mapped function on a single element
@@ -358,7 +360,7 @@ lang CUDACGOCaml = MExprCGExt + MExprCGCostEstimate
         -- Fixed cost
         let cudafixedcost = TmConst {val = CInt {val = costprof_cuda_fixed_latency}} in
         -- Computation cost
-        let cudacompcost = apply_muli cudasinglecost (apply_divi mappedlen (mkint costprof_cuda_paralleldenominator)) in
+        let cudacompcost = apply_muli cudasinglecost (apply_divirndup mappedlen (mkint costprof_cuda_paralleldenominator)) in
         -- Cuda overhead = memory overhead + fixed latency + cost of single operation (assuming perfect parallelism)
         let cudacost = apply_addi (apply_addi cudamemcost cudafixedcost) cudacompcost in
 
