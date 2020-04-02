@@ -16,58 +16,58 @@ include "_size_.mc"
 include "_specific_.mc"
 
 let func_matAinitfun =
-  let_ "matAinitfun" (tyarrows_ [tyint_, tyint_, tyint_]) (
+  let_ "matAinitfun" (tyarrows_ [tyint_, tyint_, tyfloat_]) (
     lam_ "row" (tyint_) (
       lam_ "col" (tyint_) (
-        addi_ (muli_ (var_ "row") (var_ "row"))
-              (var_ "col")
+        int2float_ (addi_ (muli_ (var_ "row") (var_ "row"))
+                          (var_ "col"))
       )
     )
   )
 
 let func_matBinitfun =
-  let_ "matBinitfun" (tyarrows_ [tyint_, tyint_, tyint_]) (
+  let_ "matBinitfun" (tyarrows_ [tyint_, tyint_, tyfloat_]) (
     lam_ "row" (tyint_) (
       lam_ "col" (tyint_) (
-        modi_ (divi_ (muli_ (addi_ (var_ "row") (int_ 19)) (int_ 17)) (addi_ (var_ "col") (int_ 13)))
-              (addi_ (var_ "row") (int_ 11))
+        divf_ (int2float_ (divi_ (muli_ (addi_ (var_ "row") (int_ 19)) (int_ 17)) (addi_ (var_ "col") (int_ 13))))
+              (int2float_ (addi_ (var_ "row") (int_ 11)))
       )
     )
   )
 
 let func_matAinitfun_v2 =
-  let_ "matAinitfun_v2" (tyarrows_ [tyint_, tyint_, tyint_]) (
+  let_ "matAinitfun_v2" (tyarrows_ [tyint_, tyint_, tyfloat_]) (
     lam_ "row" (tyint_) (
       lam_ "col" (tyint_) (
-        subi_ (modi_ (addi_ (muli_ (var_ "row") (var_ "row"))
-                            (var_ "col"))
-                     (int_ 3))
-              (int_ 1)
+        subf_ (divf_ (int2float_ (addi_ (muli_ (var_ "row") (var_ "row"))
+                                        (var_ "col")))
+                     (float_ 3.0))
+              (float_ 0.014)
       )
     )
   )
 
 let func_matBinitfun_v2 =
-  let_ "matBinitfun_v2" (tyarrows_ [tyint_, tyint_, tyint_]) (
+  let_ "matBinitfun_v2" (tyarrows_ [tyint_, tyint_, tyfloat_]) (
     lam_ "row" (tyint_) (
       lam_ "col" (tyint_) (
-        modi_ (divi_ (muli_ (addi_ (var_ "row") (int_ 19)) (int_ 17)) (addi_ (var_ "col") (int_ 13)))
-              (int_ 2)
+        int2float_ (modi_ (divi_ (muli_ (addi_ (var_ "row") (int_ 19)) (int_ 17)) (addi_ (var_ "col") (int_ 13)))
+                          (int_ 2))
       )
     )
   )
 
 let var_matA =
-  let_ "matA" (tymatrixi_) (
-    app3f_ (var_ "matrixIniti")
+  let_ "matA" (tymatrixf_) (
+    app3f_ (var_ "matrixInitf")
            (var_ "matA_rows")
            (var_ "matA_cols")
            (var_ "matAinitfun_v2")
   )
 
 let var_matB =
-  let_ "matB" (tymatrixi_) (
-    app3f_ (var_ "matrixIniti")
+  let_ "matB" (tymatrixf_) (
+    app3f_ (var_ "matrixInitf")
            (var_ "matB_rows")
            (var_ "matB_cols")
            (var_ "matBinitfun_v2")
@@ -99,7 +99,7 @@ let targetdir = nth argv 3 in
 
 let prog = libstd_ in
 let prog = bind_ prog libio_ in
-let prog = bind_ prog libmatrix_ in
+let prog = bind_ prog libmatrixf_ in
 let prog = bind_ prog defcommon_ in
 
 ------- Matrix Multiplication -------
@@ -112,7 +112,7 @@ let prog = bind_ prog defspecific_ in
 --
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nmatAxB:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
---    app3f_ (var_ "printMatrixi")
+--    app3f_ (var_ "printMatrixf")
 --           (var_ "matAxB_rows")
 --           (var_ "matAxB_cols")
 --           (var_ "matAxB")

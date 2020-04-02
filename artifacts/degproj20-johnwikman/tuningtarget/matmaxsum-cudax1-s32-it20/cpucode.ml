@@ -1,7 +1,7 @@
 open Printf
 open Array
 
-external gpuhost_fun177_matrixMaxSumiWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_fun177_matrixMaxSumiWorker"
+external gpuhost_fun187_matrixMaxSumiWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_fun187_matrixMaxSumiWorker"
 
 let main =
     let fun1_head arg0_s =
@@ -133,241 +133,259 @@ let main =
                 in
                 fun59_printloop (arg62_vec) (arg61_size) (( + ) (arg60_i) (1))
     in
-    let fun66_printVec arg57_size arg58_vec =
+    let fun66_printSeqi arg57_size arg58_vec =
         let var65__  =
             fun59_printloop (arg58_vec) (arg57_size) (0)
         in
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
     in
-    let fun70_matrixMki arg67_rows arg68_cols arg69_v =
-        Array.make (( * ) (arg67_rows) (arg68_cols)) (arg69_v)
+    let rec fun69_printloop arg72_vec arg71_size arg70_i =
+            if ( = ) (arg70_i) (arg71_size) then
+                ()
+            else
+                let var73__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (Array.get (arg72_vec) (arg70_i)))
+                in
+                let var74__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '|])
+                in
+                fun69_printloop (arg72_vec) (arg71_size) (( + ) (arg70_i) (1))
     in
-    let fun76_matrixGeti arg71_row arg72_col arg73_m_rows arg74_m_cols arg75_m =
-        Array.get (arg75_m) (( + ) (( * ) (arg74_m_cols) (arg71_row)) (arg72_col))
-    in
-    let fun85_seqInitFun arg84_f arg81_cols arg80_i =
-        let var82_row  =
-            ( / ) (arg80_i) (arg81_cols)
+    let fun76_printSeqf arg67_size arg68_vec =
+        let var75__  =
+            fun69_printloop (arg68_vec) (arg67_size) (0)
         in
-        let var83_col  =
-            ( mod ) (arg80_i) (arg81_cols)
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+    in
+    let fun80_matrixMki arg77_rows arg78_cols arg79_v =
+        Array.make (( * ) (arg77_rows) (arg78_cols)) (arg79_v)
+    in
+    let fun86_matrixGeti arg81_row arg82_col arg83_m_rows arg84_m_cols arg85_m =
+        Array.get (arg85_m) (( + ) (( * ) (arg84_m_cols) (arg81_row)) (arg82_col))
+    in
+    let fun95_seqInitFun arg94_f arg91_cols arg90_i =
+        let var92_row  =
+            ( / ) (arg90_i) (arg91_cols)
         in
-        arg84_f (var82_row) (var83_col)
+        let var93_col  =
+            ( mod ) (arg90_i) (arg91_cols)
+        in
+        arg94_f (var92_row) (var93_col)
     in
-    let fun86_matrixIniti arg77_rows arg78_cols arg79_f =
-        fun14_seqInit (( * ) (arg77_rows) (arg78_cols)) (fun85_seqInitFun (arg79_f) (arg78_cols))
+    let fun96_matrixIniti arg87_rows arg88_cols arg89_f =
+        fun14_seqInit (( * ) (arg87_rows) (arg88_cols)) (fun95_seqInitFun (arg89_f) (arg88_cols))
     in
-    let rec fun90_printrc arg97_m arg94_m_cols arg93_m_rows arg91_row arg92_col =
-            if ( = ) (arg91_row) (arg93_m_rows) then
+    let rec fun100_printrc arg107_m arg104_m_cols arg103_m_rows arg101_row arg102_col =
+            if ( = ) (arg101_row) (arg103_m_rows) then
                 [||]
             else
-                let var95_next_col  =
-                    ( mod ) (( + ) (arg92_col) (1)) (arg94_m_cols)
+                let var105_next_col  =
+                    ( mod ) (( + ) (arg102_col) (1)) (arg104_m_cols)
                 in
-                let var96_next_row  =
-                    if ( = ) (var95_next_col) (0) then
-                        ( + ) (arg91_row) (1)
+                let var106_next_row  =
+                    if ( = ) (var105_next_col) (0) then
+                        ( + ) (arg101_row) (1)
                     else
-                        arg91_row
+                        arg101_row
                 in
-                fun22_strJoin ([||]) ([|fun19_int2string (fun76_matrixGeti (arg91_row) (arg92_col) (arg93_m_rows) (arg94_m_cols) (arg97_m)); if ( = ) (var95_next_col) (0) then
+                fun22_strJoin ([||]) ([|fun19_int2string (fun86_matrixGeti (arg101_row) (arg102_col) (arg103_m_rows) (arg104_m_cols) (arg107_m)); if ( = ) (var105_next_col) (0) then
                     [|'\n'|]
                 else
-                    [|' '|]; fun90_printrc (arg97_m) (arg94_m_cols) (arg93_m_rows) (var96_next_row) (var95_next_col)|])
+                    [|' '|]; fun100_printrc (arg107_m) (arg104_m_cols) (arg103_m_rows) (var106_next_row) (var105_next_col)|])
     in
-    let fun98_matrix2stri arg87_m_rows arg88_m_cols arg89_m =
-        fun90_printrc (arg89_m) (arg88_m_cols) (arg87_m_rows) (0) (0)
+    let fun108_matrix2stri arg97_m_rows arg98_m_cols arg99_m =
+        fun100_printrc (arg99_m) (arg98_m_cols) (arg97_m_rows) (0) (0)
     in
-    let rec fun102_printrc arg109_m arg106_m_cols arg105_m_rows arg103_row arg104_col =
-            if ( = ) (arg103_row) (arg105_m_rows) then
+    let rec fun112_printrc arg119_m arg116_m_cols arg115_m_rows arg113_row arg114_col =
+            if ( = ) (arg113_row) (arg115_m_rows) then
                 [||]
             else
-                let var107_next_col  =
-                    ( mod ) (( + ) (arg104_col) (1)) (arg106_m_cols)
+                let var117_next_col  =
+                    ( mod ) (( + ) (arg114_col) (1)) (arg116_m_cols)
                 in
-                let var108_next_row  =
-                    if ( = ) (var107_next_col) (0) then
-                        ( + ) (arg103_row) (1)
+                let var118_next_row  =
+                    if ( = ) (var117_next_col) (0) then
+                        ( + ) (arg113_row) (1)
                     else
-                        arg103_row
+                        arg113_row
                 in
-                let var110__  =
-                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun22_strJoin ([||]) ([|fun19_int2string (fun76_matrixGeti (arg103_row) (arg104_col) (arg105_m_rows) (arg106_m_cols) (arg109_m)); if ( = ) (var107_next_col) (0) then
+                let var120__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun22_strJoin ([||]) ([|fun19_int2string (fun86_matrixGeti (arg113_row) (arg114_col) (arg115_m_rows) (arg116_m_cols) (arg119_m)); if ( = ) (var117_next_col) (0) then
                         [|'\n'|]
                     else
                         [|' '|]|]))
                 in
-                fun102_printrc (arg109_m) (arg106_m_cols) (arg105_m_rows) (var108_next_row) (var107_next_col)
+                fun112_printrc (arg119_m) (arg116_m_cols) (arg115_m_rows) (var118_next_row) (var117_next_col)
     in
-    let fun111_printMatrixi arg99_m_rows arg100_m_cols arg101_m =
-        fun102_printrc (arg101_m) (arg100_m_cols) (arg99_m_rows) (0) (0)
+    let fun121_printMatrixi arg109_m_rows arg110_m_cols arg111_m =
+        fun112_printrc (arg111_m) (arg110_m_cols) (arg109_m_rows) (0) (0)
     in
-    let rec fun122_dotprod arg130_b_cols arg129_b arg128_a arg127_innerDim arg123_acc arg124_p arg125_a_offset arg126_b_offset =
-            if ( = ) (arg124_p) (arg127_innerDim) then
-                arg123_acc
+    let rec fun132_dotprod arg140_b_cols arg139_b arg138_a arg137_innerDim arg133_acc arg134_p arg135_a_offset arg136_b_offset =
+            if ( = ) (arg134_p) (arg137_innerDim) then
+                arg133_acc
             else
-                fun122_dotprod (arg130_b_cols) (arg129_b) (arg128_a) (arg127_innerDim) (( + ) (arg123_acc) (( * ) (Array.get (arg128_a) (arg125_a_offset)) (Array.get (arg129_b) (arg126_b_offset)))) (( + ) (arg124_p) (1)) (( + ) (arg125_a_offset) (1)) (( + ) (arg126_b_offset) (arg130_b_cols))
+                fun132_dotprod (arg140_b_cols) (arg139_b) (arg138_a) (arg137_innerDim) (( + ) (arg133_acc) (( * ) (Array.get (arg138_a) (arg135_a_offset)) (Array.get (arg139_b) (arg136_b_offset)))) (( + ) (arg134_p) (1)) (( + ) (arg135_a_offset) (1)) (( + ) (arg136_b_offset) (arg140_b_cols))
     in
-    let fun131_matrixMuliWorker arg112_innerDim arg113_a_rows arg114_b_cols arg115_a arg116_b arg117_idx =
-        let var118_row  =
-            ( / ) (arg117_idx) (arg114_b_cols)
+    let fun141_matrixMuliWorker arg122_innerDim arg123_a_rows arg124_b_cols arg125_a arg126_b arg127_idx =
+        let var128_row  =
+            ( / ) (arg127_idx) (arg124_b_cols)
         in
-        let var119_col  =
-            ( mod ) (arg117_idx) (arg114_b_cols)
+        let var129_col  =
+            ( mod ) (arg127_idx) (arg124_b_cols)
         in
-        let var120_a_start_offset  =
-            ( * ) (arg112_innerDim) (var118_row)
+        let var130_a_start_offset  =
+            ( * ) (arg122_innerDim) (var128_row)
         in
-        let var121_b_start_offset  =
-            var119_col
+        let var131_b_start_offset  =
+            var129_col
         in
-        fun122_dotprod (arg114_b_cols) (arg116_b) (arg115_a) (arg112_innerDim) (0) (0) (var120_a_start_offset) (var121_b_start_offset)
+        fun132_dotprod (arg124_b_cols) (arg126_b) (arg125_a) (arg122_innerDim) (0) (0) (var130_a_start_offset) (var131_b_start_offset)
     in
-    let rec fun142_dotprod arg149_outerDim arg148_a arg147_innerDim arg143_acc arg144_p arg145_aT_offset arg146_a_offset =
-            if ( = ) (arg144_p) (arg147_innerDim) then
-                arg143_acc
+    let rec fun152_dotprod arg159_outerDim arg158_a arg157_innerDim arg153_acc arg154_p arg155_aT_offset arg156_a_offset =
+            if ( = ) (arg154_p) (arg157_innerDim) then
+                arg153_acc
             else
-                fun142_dotprod (arg149_outerDim) (arg148_a) (arg147_innerDim) (( + ) (arg143_acc) (( * ) (Array.get (arg148_a) (arg145_aT_offset)) (Array.get (arg148_a) (arg146_a_offset)))) (( + ) (arg144_p) (1)) (( + ) (arg145_aT_offset) (arg149_outerDim)) (( + ) (arg146_a_offset) (arg149_outerDim))
+                fun152_dotprod (arg159_outerDim) (arg158_a) (arg157_innerDim) (( + ) (arg153_acc) (( * ) (Array.get (arg158_a) (arg155_aT_offset)) (Array.get (arg158_a) (arg156_a_offset)))) (( + ) (arg154_p) (1)) (( + ) (arg155_aT_offset) (arg159_outerDim)) (( + ) (arg156_a_offset) (arg159_outerDim))
     in
-    let fun150_matrixATAWorker arg132_rows arg133_cols arg134_a arg135_idx =
-        let var136_innerDim  =
-            arg132_rows
+    let fun160_matrixATAiWorker arg142_rows arg143_cols arg144_a arg145_idx =
+        let var146_innerDim  =
+            arg142_rows
         in
-        let var137_outerDim  =
-            arg133_cols
+        let var147_outerDim  =
+            arg143_cols
         in
-        let var138_row  =
-            ( / ) (arg135_idx) (arg133_cols)
+        let var148_row  =
+            ( / ) (arg145_idx) (arg143_cols)
         in
-        let var139_col  =
-            ( mod ) (arg135_idx) (arg133_cols)
+        let var149_col  =
+            ( mod ) (arg145_idx) (arg143_cols)
         in
-        let var140_aT_start_offset  =
-            var138_row
+        let var150_aT_start_offset  =
+            var148_row
         in
-        let var141_a_start_offset  =
-            var139_col
+        let var151_a_start_offset  =
+            var149_col
         in
-        fun142_dotprod (var137_outerDim) (arg134_a) (var136_innerDim) (0) (0) (var140_aT_start_offset) (var141_a_start_offset)
+        fun152_dotprod (var147_outerDim) (arg144_a) (var146_innerDim) (0) (0) (var150_aT_start_offset) (var151_a_start_offset)
     in
-    let fun157_maxi arg155_x arg156_y =
-        if ( < ) (arg155_x) (arg156_y) then
-            arg156_y
+    let fun167_maxi arg165_x arg166_y =
+        if ( < ) (arg165_x) (arg166_y) then
+            arg166_y
         else
-            arg155_x
+            arg165_x
     in
-    let rec fun168_vecmsum arg176_b_cols arg175_b arg174_a arg173_innerDim arg169_acc arg170_p arg171_a_offset arg172_b_offset =
-            if ( = ) (arg170_p) (arg173_innerDim) then
-                arg169_acc
+    let rec fun178_vecmsum arg186_b_cols arg185_b arg184_a arg183_innerDim arg179_acc arg180_p arg181_a_offset arg182_b_offset =
+            if ( = ) (arg180_p) (arg183_innerDim) then
+                arg179_acc
             else
-                fun168_vecmsum (arg176_b_cols) (arg175_b) (arg174_a) (arg173_innerDim) (( + ) (arg169_acc) (fun157_maxi (Array.get (arg174_a) (arg171_a_offset)) (Array.get (arg175_b) (arg172_b_offset)))) (( + ) (arg170_p) (1)) (( + ) (arg171_a_offset) (1)) (( + ) (arg172_b_offset) (arg176_b_cols))
+                fun178_vecmsum (arg186_b_cols) (arg185_b) (arg184_a) (arg183_innerDim) (( + ) (arg179_acc) (fun167_maxi (Array.get (arg184_a) (arg181_a_offset)) (Array.get (arg185_b) (arg182_b_offset)))) (( + ) (arg180_p) (1)) (( + ) (arg181_a_offset) (1)) (( + ) (arg182_b_offset) (arg186_b_cols))
     in
-    let fun177_matrixMaxSumiWorker arg158_innerDim arg159_a_rows arg160_b_cols arg161_a arg162_b arg163_idx =
-        let var164_row  =
-            ( / ) (arg163_idx) (arg160_b_cols)
+    let fun187_matrixMaxSumiWorker arg168_innerDim arg169_a_rows arg170_b_cols arg171_a arg172_b arg173_idx =
+        let var174_row  =
+            ( / ) (arg173_idx) (arg170_b_cols)
         in
-        let var165_col  =
-            ( mod ) (arg163_idx) (arg160_b_cols)
+        let var175_col  =
+            ( mod ) (arg173_idx) (arg170_b_cols)
         in
-        let var166_a_start_offset  =
-            ( * ) (arg158_innerDim) (var164_row)
+        let var176_a_start_offset  =
+            ( * ) (arg168_innerDim) (var174_row)
         in
-        let var167_b_start_offset  =
-            var165_col
+        let var177_b_start_offset  =
+            var175_col
         in
-        fun168_vecmsum (arg160_b_cols) (arg162_b) (arg161_a) (arg158_innerDim) (0) (0) (var166_a_start_offset) (var167_b_start_offset)
+        fun178_vecmsum (arg170_b_cols) (arg172_b) (arg171_a) (arg168_innerDim) (0) (0) (var176_a_start_offset) (var177_b_start_offset)
     in
-    let fun180_matAinitfun arg178_row arg179_col =
-        ( + ) (( * ) (arg178_row) (arg178_row)) (arg179_col)
+    let fun190_matAinitfun arg188_row arg189_col =
+        ( + ) (( * ) (arg188_row) (arg188_row)) (arg189_col)
     in
-    let fun183_matBinitfun arg181_row arg182_col =
-        ( mod ) (( / ) (( * ) (( + ) (arg181_row) (19)) (17)) (( + ) (arg182_col) (13))) (( + ) (arg181_row) (11))
+    let fun193_matBinitfun arg191_row arg192_col =
+        ( mod ) (( / ) (( * ) (( + ) (arg191_row) (19)) (17)) (( + ) (arg192_col) (13))) (( + ) (arg191_row) (11))
     in
-    let fun186_matAinitfun_v2 arg184_row arg185_col =
-        ( - ) (( mod ) (( + ) (( * ) (arg184_row) (arg184_row)) (arg185_col)) (3)) (1)
+    let fun196_matAinitfun_v2 arg194_row arg195_col =
+        ( - ) (( mod ) (( + ) (( * ) (arg194_row) (arg194_row)) (arg195_col)) (3)) (1)
     in
-    let fun189_matBinitfun_v2 arg187_row arg188_col =
-        ( mod ) (( / ) (( * ) (( + ) (arg187_row) (19)) (17)) (( + ) (arg188_col) (13))) (2)
+    let fun199_matBinitfun_v2 arg197_row arg198_col =
+        ( mod ) (( / ) (( * ) (( + ) (arg197_row) (19)) (17)) (( + ) (arg198_col) (13))) (2)
     in
-    let var151_matA_rows  =
+    let var161_matA_rows  =
         32
     in
-    let var152_matA_cols  =
+    let var162_matA_cols  =
         32
     in
-    let var153_matB_rows  =
+    let var163_matB_rows  =
         32
     in
-    let var154_matB_cols  =
+    let var164_matB_cols  =
         32
     in
-    let var190_matA  =
-        fun86_matrixIniti (var151_matA_rows) (var152_matA_cols) (fun186_matAinitfun_v2)
+    let var200_matA  =
+        fun96_matrixIniti (var161_matA_rows) (var162_matA_cols) (fun196_matAinitfun_v2)
     in
-    let var191_matB  =
-        fun86_matrixIniti (var153_matB_rows) (var154_matB_cols) (fun189_matBinitfun_v2)
+    let var201_matB  =
+        fun96_matrixIniti (var163_matB_rows) (var164_matB_cols) (fun199_matBinitfun_v2)
     in
-    let var192_innerDim  =
-        var152_matA_cols
-    in
-    let var193_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var194_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var195_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var196_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var197_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var198_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var199_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var200_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var201_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
-    in
-    let var202_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+    let var202_innerDim  =
+        var162_matA_cols
     in
     let var203_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var204_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var205_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var206_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var207_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var208_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var209_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var210_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var211_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     let var212_matAmB  =
-        gpuhost_fun177_matrixMaxSumiWorker [|1; var192_innerDim; var151_matA_rows; var154_matB_cols; ( * ) (var151_matA_rows) (var154_matB_cols)|] [||] (var190_matA) (var191_matB)
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var213_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var214_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var215_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var216_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var217_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var218_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var219_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var220_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var221_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
+    in
+    let var222_matAmB  =
+        gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB)
     in
     ()

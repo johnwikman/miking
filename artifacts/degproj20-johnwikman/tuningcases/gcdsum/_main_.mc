@@ -128,21 +128,21 @@ let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
 ------- Output Verification -------
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecX:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
---    app2f_ (var_ "printVec")
+--    app2f_ (var_ "printSeqi")
 --           (var_ "vecsize")
 --           (var_ "vecX")
 --  )) in
 --
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecY:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
---    app2f_ (var_ "printVec")
+--    app2f_ (var_ "printSeqi")
 --           (var_ "vecsize")
 --           (var_ "vecY")
 --  )) in
 --
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecS:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
---    app2f_ (var_ "printVec")
+--    app2f_ (var_ "printSeqi")
 --           (var_ "vecsize")
 --           (var_ "vecS")
 --  )) in

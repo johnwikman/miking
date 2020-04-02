@@ -1,7 +1,7 @@
 open Printf
 open Array
 
-external gpuhost_fun80_gcdsum: int array -> float array -> int array -> int array -> int array = "gpuhost_fun80_gcdsum"
+external gpuhost_fun90_gcdsum: int array -> float array -> int array -> int array -> int array = "gpuhost_fun90_gcdsum"
 
 let main =
     let fun1_head arg0_s =
@@ -133,190 +133,208 @@ let main =
                 in
                 fun59_printloop (arg62_vec) (arg61_size) (( + ) (arg60_i) (1))
     in
-    let fun66_printVec arg57_size arg58_vec =
+    let fun66_printSeqi arg57_size arg58_vec =
         let var65__  =
             fun59_printloop (arg58_vec) (arg57_size) (0)
         in
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
     in
-    let rec fun68_gcd arg69_a arg70_b =
-            if ( = ) (arg70_b) (0) then
-                arg69_a
+    let rec fun69_printloop arg72_vec arg71_size arg70_i =
+            if ( = ) (arg70_i) (arg71_size) then
+                ()
             else
-                fun68_gcd (arg70_b) (( mod ) (arg69_a) (arg70_b))
+                let var73__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (Array.get (arg72_vec) (arg70_i)))
+                in
+                let var74__  =
+                    (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '|])
+                in
+                fun69_printloop (arg72_vec) (arg71_size) (( + ) (arg70_i) (1))
     in
-    let rec fun74_recloop arg79_yvec arg78_x arg77_n arg75_acc arg76_i =
-            if ( = ) (arg76_i) (arg77_n) then
-                arg75_acc
+    let fun76_printSeqf arg67_size arg68_vec =
+        let var75__  =
+            fun69_printloop (arg68_vec) (arg67_size) (0)
+        in
+        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+    in
+    let rec fun78_gcd arg79_a arg80_b =
+            if ( = ) (arg80_b) (0) then
+                arg79_a
             else
-                fun74_recloop (arg79_yvec) (arg78_x) (arg77_n) (( + ) (arg75_acc) (fun68_gcd (arg78_x) (Array.get (arg79_yvec) (arg76_i)))) (( + ) (arg76_i) (1))
+                fun78_gcd (arg80_b) (( mod ) (arg79_a) (arg80_b))
     in
-    let fun80_gcdsum arg71_yvec arg72_n arg73_x =
-        fun74_recloop (arg71_yvec) (arg73_x) (arg72_n) (0) (0)
+    let rec fun84_recloop arg89_yvec arg88_x arg87_n arg85_acc arg86_i =
+            if ( = ) (arg86_i) (arg87_n) then
+                arg85_acc
+            else
+                fun84_recloop (arg89_yvec) (arg88_x) (arg87_n) (( + ) (arg85_acc) (fun78_gcd (arg88_x) (Array.get (arg89_yvec) (arg86_i)))) (( + ) (arg86_i) (1))
     in
-    let fun82_vecXinitfun arg81_i =
-        ( mod ) (( * ) (( - ) (51897342) (arg81_i)) (( + ) (1) (arg81_i))) (74)
+    let fun90_gcdsum arg81_yvec arg82_n arg83_x =
+        fun84_recloop (arg81_yvec) (arg83_x) (arg82_n) (0) (0)
     in
-    let fun84_vecYinitfun arg83_i =
-        ( mod ) (( * ) (( - ) (923487321) (arg83_i)) (( + ) (1) (arg83_i))) (53)
+    let fun92_vecXinitfun arg91_i =
+        ( mod ) (( * ) (( - ) (51897342) (arg91_i)) (( + ) (1) (arg91_i))) (74)
     in
-    let var67_vecsize  =
+    let fun94_vecYinitfun arg93_i =
+        ( mod ) (( * ) (( - ) (923487321) (arg93_i)) (( + ) (1) (arg93_i))) (53)
+    in
+    let var77_vecsize  =
         2048
     in
-    let var85_vecX  =
-        fun14_seqInit (var67_vecsize) (fun82_vecXinitfun)
+    let var95_vecX  =
+        fun14_seqInit (var77_vecsize) (fun92_vecXinitfun)
     in
-    let var86_vecY  =
-        fun14_seqInit (var67_vecsize) (fun84_vecYinitfun)
-    in
-    let var87_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var88_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var89_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var90_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var91_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var92_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var93_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var94_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var95_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
-    in
-    let var96_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+    let var96_vecY  =
+        fun14_seqInit (var77_vecsize) (fun94_vecYinitfun)
     in
     let var97_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var98_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var99_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var100_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var101_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var102_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var103_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var104_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var105_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var106_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var107_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var108_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var109_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var110_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var111_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var112_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var113_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var114_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var115_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var116_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var117_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var118_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var119_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var120_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var121_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var122_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var123_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var124_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var125_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var126_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var127_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var128_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var129_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var130_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var131_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var132_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var133_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var134_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var135_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     let var136_vecS  =
-        gpuhost_fun80_gcdsum [|1; var67_vecsize|] [||] (var86_vecY) (var85_vecX)
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var137_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var138_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var139_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var140_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var141_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var142_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var143_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var144_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var145_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
+    in
+    let var146_vecS  =
+        gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX)
     in
     ()

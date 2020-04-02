@@ -20,12 +20,12 @@ include "_size_.mc"
 include "_specific_.mc"
 
 let func_saxpy =
-  let_ "saxpy" (tyarrows_ [tyint_, tyseq_ tyint_, tyint_, tyint_, tyint_]) (
-    lam_ "a" (tyint_) (
-      lam_ "y" (tyseq_ tyint_) (
+  let_ "saxpy" (tyarrows_ [tyfloat_, tyseq_ tyfloat_, tyint_, tyfloat_, tyfloat_]) (
+    lam_ "a" (tyfloat_) (
+      lam_ "y" (tyseq_ tyfloat_) (
         lam_ "i" (tyint_) (
-          lam_ "xelem" (tyint_) (
-            addi_ (muli_ (var_ "a")
+          lam_ "xelem" (tyfloat_) (
+            addf_ (mulf_ (var_ "a")
                          (var_ "xelem"))
                   (nth_ (var_ "y")
                         (var_ "i"))
@@ -36,34 +36,36 @@ let func_saxpy =
   )
 
 let func_vecXinitfun =
-  let_ "vecXinitfun" (tyarrows_ [tyint_, tyint_]) (
+  let_ "vecXinitfun" (tyarrows_ [tyint_, tyfloat_]) (
     lam_ "i" (tyint_) (
-      modi_ (muli_ (var_ "i") (var_ "i"))
-            (int_ 7)
+      divf_ (int2float_ (modi_ (muli_ (var_ "i") (var_ "i"))
+                               (int_ 30269)))
+            (float_ 3.0)
     )
   )
 
 let func_vecYinitfun =
-  let_ "vecYinitfun" (tyarrows_ [tyint_, tyint_]) (
+  let_ "vecYinitfun" (tyarrows_ [tyint_, tyfloat_]) (
     lam_ "i" (tyint_) (
-      modi_ (muli_ (muli_ (var_ "i") (var_ "i"))
-                   (var_ "i"))
-            (int_ 19)
+      divf_ (int2float_ (modi_ (muli_ (muli_ (var_ "i") (var_ "i"))
+                                      (var_ "i"))
+                               (int_ 30271)))
+            (float_ 7.0)
     )
   )
 
 let var_scalarA =
-  let_ "scalarA" (tyint_) (int_ 239)
+  let_ "scalarA" (tyfloat_) (float_ 239.0)
 
 let var_vecX =
-  let_ "vecX" (tyarrows_ [tyseq_ tyint_]) (
+  let_ "vecX" (tyarrows_ [tyseq_ tyfloat_]) (
     (app2f_ (var_ "seqInit") -- should resolve to OCaml's Array.init
             (var_ "vecsize")
             (var_ "vecXinitfun"))
   )
 
 let var_vecY =
-  let_ "vecY" (tyarrows_ [tyseq_ tyint_]) (
+  let_ "vecY" (tyarrows_ [tyseq_ tyfloat_]) (
     (app2f_ (var_ "seqInit")
             (var_ "vecsize")
             (var_ "vecYinitfun"))
@@ -100,7 +102,7 @@ let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
 ------- Output Verification -------
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecS:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
---    app2f_ (var_ "printVec")
+--    app2f_ (var_ "printSeqf")
 --           (var_ "vecsize")
 --           (var_ "vecS")
 --  )) in

@@ -20,11 +20,11 @@ include "_size_.mc"
 include "_specific_.mc"
 
 let func_saxpy =
-  let_ "saxpy" (tyarrows_ [tyint_, tyint_, tyint_, tyint_]) (
-    lam_ "a" (tyint_) (
-      lam_ "y" (tyint_) (
-        lam_ "xelem" (tyint_) (
-          addi_ (muli_ (var_ "a")
+  let_ "saxpy" (tyarrows_ [tyfloat_, tyfloat_, tyfloat_, tyfloat_]) (
+    lam_ "a" (tyfloat_) (
+      lam_ "y" (tyfloat_) (
+        lam_ "xelem" (tyfloat_) (
+          addf_ (mulf_ (var_ "a")
                        (var_ "xelem"))
                 (var_ "y")
         )
@@ -33,26 +33,26 @@ let func_saxpy =
   )
 
 let func_vecXinitfun =
-  let_ "vecXinitfun" (tyarrows_ [tyint_, tyint_]) (
+  let_ "vecXinitfun" (tyarrows_ [tyint_, tyfloat_]) (
     lam_ "i" (tyint_) (
-      modi_ (muli_ (muli_ (var_ "i") (var_ "i"))
-                   (subi_ (int_ 500000000) (var_ "i")))
-            (int_ 5073)
+      int2float_ (modi_ (muli_ (muli_ (var_ "i") (var_ "i"))
+                               (subi_ (int_ 500000000) (var_ "i")))
+                        (int_ 5073))
     )
   )
 
 let var_scalarA =
-  let_ "scalarA" (tyint_) (int_ 239)
+  let_ "scalarA" (tyfloat_) (float_ 239.0)
 
 let var_vecX =
-  let_ "vecX" (tyarrows_ [tyseq_ tyint_]) (
+  let_ "vecX" (tyarrows_ [tyseq_ tyfloat_]) (
     (app2f_ (var_ "seqInit") -- should resolve to OCaml's Array.init
             (var_ "vecsize")
             (var_ "vecXinitfun"))
   )
 
 let var_scalarY =
-  let_ "scalarY" (tyint_) (int_ 19)
+  let_ "scalarY" (tyfloat_) (float_ 19.0)
 
 let defcommon_ = bindall_ [
   defsize_,
@@ -84,7 +84,7 @@ let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
 ------- Output Verification -------
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecS:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
---    app2f_ (var_ "printVec")
+--    app2f_ (var_ "printSeqf")
 --           (var_ "vecsize")
 --           (var_ "vecS")
 --  )) in

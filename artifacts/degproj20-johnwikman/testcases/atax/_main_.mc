@@ -19,8 +19,8 @@ let func_matAinitfun_v2 =
   let_ "matAinitfun_v2" (tyarrows_ [tyint_, tyint_, tyfloat_]) (
     lam_ "row" (tyint_) (
       lam_ "col" (tyint_) (
-        subf_ (divf_ (addf_ (mulf_ (var_ "row") (var_ "row"))
-                            (var_ "col"))
+        subf_ (divf_ (int2float_ (addi_ (muli_ (var_ "row") (var_ "row"))
+                                        (var_ "col")))
                      (float_ 3.0))
               (float_ 0.014)
       )
@@ -81,7 +81,7 @@ let targetdir = nth argv 3 in
 
 let prog = libstd_ in
 let prog = bind_ prog libio_ in
-let prog = bind_ prog libmatrix_ in
+let prog = bind_ prog libmatrixf_ in
 let prog = bind_ prog defcommon_ in
 
 ------- Perform A^T * A and multiply the result by vecX -------

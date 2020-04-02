@@ -282,7 +282,7 @@ let func_printMatrixf =
                              app2f_ (var_ "strJoin")
                                     (str_ "")
                                     (seq_ [app_ (var_ "float2string")
-                                                (app5f_ (var_ "matrixGeti")
+                                                (app5f_ (var_ "matrixGetf")
                                                         (var_ "row")
                                                         (var_ "col")
                                                         (var_ "m_rows")
@@ -530,12 +530,22 @@ let func_matrixATAfWorker =
     )
   )
 
-let libmatrix_ = bindall_ [
+let libmatrixi_ = bindall_ [
   func_matrixMki,
   func_matrixGeti,
   func_matrixIniti,
   func_matrix2stri,
   func_printMatrixi,
   func_matrixMuliWorker,
-  func_matrixATAWorker
+  func_matrixATAiWorker
+]
+
+let libmatrixf_ = bindall_ [
+  func_matrixMkf,
+  func_matrixGetf,
+  func_matrixInitf,
+  func_matrix2strf,
+  func_printMatrixf,
+  func_matrixMulfWorker,
+  func_matrixATAfWorker
 ]

@@ -12,20 +12,20 @@
 #endif
 
 extern "C" {
-	value gpuhost_fun69_plusone(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun79_plusone(value packedInts, value packedFloats, value arg0);
 }
 
-__device__ int gpudevice_fun69_plusone(int arg68_x);
+__device__ int gpudevice_fun79_plusone(int arg78_x);
 __device__ inline int gpu_addi(int x, int y);
 
-__device__ int gpudevice_fun69_plusone(int arg68_x)
+__device__ int gpudevice_fun79_plusone(int arg78_x)
 {
-	return gpu_addi(arg68_x, 1);
+	return gpu_addi(arg78_x, 1);
 }
 
 __device__ inline int gpu_addi(int x, int y) {return x + y;}
 
-__global__ void gpuglobal_fun69_plusone(value *cuda_arg0, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun79_plusone(value *cuda_arg0, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -36,11 +36,11 @@ __global__ void gpuglobal_fun69_plusone(value *cuda_arg0, value *outarr, int n, 
 	for (i = start; i < end; ++i) {
 		int v;
 		v = Int_val(cuda_arg0[i]);
-		outarr[i] = Val_int(gpudevice_fun69_plusone(v));
+		outarr[i] = Val_int(gpudevice_fun79_plusone(v));
 	}
 }
 
-value gpuhost_fun69_plusone(value packedInts, value packedFloats, value arg0)
+value gpuhost_fun79_plusone(value packedInts, value packedFloats, value arg0)
 {
 	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
@@ -60,7 +60,7 @@ value gpuhost_fun69_plusone(value packedInts, value packedFloats, value arg0)
 	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun69_plusone<<<blockCount,threadsPerBlock>>>(cuda_arg0, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun79_plusone<<<blockCount,threadsPerBlock>>>(cuda_arg0, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, 0);
 	cudaDeviceSynchronize();
 

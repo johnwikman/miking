@@ -164,7 +164,7 @@ let targetdir = nth argv 3 in
 
 let prog = libstd_ in
 let prog = bind_ prog libio_ in
-let prog = bind_ prog libmatrix_ in
+let prog = bind_ prog libmatrixi_ in
 let prog = bind_ prog defcommon_ in
 
 ------- Matrix Max Sum -------

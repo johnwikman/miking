@@ -311,6 +311,11 @@ lang ArithIntCGCUDA = MExprCGExt
     | CModi _ -> genconstfun "int" "gpu_modi" "(int x, int y)" "{return x % y;}"
 end
 
+lang FloatCGCUDA = MExprCGExt
+    sem codegenConstCUDA (state : CodegenState) =
+    | CFloat f -> {cgr_new with code = float2string f.val}
+end
+
 lang ArithFloatCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
     | CAddf _ -> genconstfun "double" "gpu_addf" "(double x, double y)" "{return x + y;}"
@@ -528,5 +533,5 @@ end
 
 lang MExprCGCUDA = VarCGCUDA + AppCGCUDA + FunCGCUDA + LetCGCUDA +
                    RecLetsCGCUDA + ConstCGCUDA + IntCGCUDA +
-                   ArithIntCGCUDA + ArithFloatCGCUDA + BoolCGCUDA +
-                   CmpCGCUDA + CUDACGCUDA
+                   ArithIntCGCUDA + FloatCGCUDA + ArithFloatCGCUDA +
+                   BoolCGCUDA + CmpCGCUDA + CUDACGCUDA
