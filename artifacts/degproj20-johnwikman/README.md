@@ -29,7 +29,7 @@ question iterated multiple times.
 
 ### Sleipner measurements
 Time measurements from running the tuning tests on Sleipner by using the `time`
-program. The presented time is the average across all iterations:
+feature in `bash`. The presented time is the average across all iterations:
 `t = (t_user + t_sys) / n_iterations`
 
 #### vecpo (n_iterations = 50)
@@ -54,23 +54,27 @@ program. The presented time is the average across all iterations:
 | t_ocaml / t_cuda |   0.143  |   0.429  |   3.000  |  21.125  | 175.333  | 262.838  |
 
 ### Sleipner tuning results
+Resulting costs after tuning, i.e. how much the heuristic predicted that the
+operation would cost. The cost is not measured in a specified unit, except that
+it should be proportional to execution time.
 
-vecpo-cudapredict-s50thousand-it50.txt: 0.024 seconds (adj: 0.000) (c_cuda: 30301274) (c_ocaml: 1450000) (c_ocaml / c_cuda: 0.048)
-vecpo-cudapredict-s500thousand-it50.txt: 0.167 seconds (adj: 0.003) (c_cuda: 33012714) (c_ocaml: 14500000) (c_ocaml / c_cuda: 0.439)
-vecpo-cudapredict-s1million-it50.txt: 0.340 seconds (adj: 0.007) (c_cuda: 36025402) (c_ocaml: 29000000) (c_ocaml / c_cuda: 0.805)
-vecpo-cudapredict-s10million-it50.txt: 1.800 seconds (adj: 0.036) (c_cuda: 90253916) (c_ocaml: 290000000) (c_ocaml / c_cuda: 3.213)
-vecpo-cudapredict-s25million-it50.txt: 4.329 seconds (adj: 0.087) (c_cuda: 180634790) (c_ocaml: 725000000) (c_ocaml / c_cuda: 4.014)
-gcdsum-cudapredict-s128-it50.txt: 0.051 seconds (adj: 0.001) (c_cuda: 30456592) (c_ocaml: 2954240) (c_ocaml / c_cuda: 0.097)
-gcdsum-cudapredict-s256-it50.txt: 0.137 seconds (adj: 0.003) (c_cuda: 30913168) (c_ocaml: 11806720) (c_ocaml / c_cuda: 0.382)
-gcdsum-cudapredict-s512-it50.txt: 0.149 seconds (adj: 0.003) (c_cuda: 31826320) (c_ocaml: 47206400) (c_ocaml / c_cuda: 1.483)
-gcdsum-cudapredict-s1024-it50.txt: 0.267 seconds (adj: 0.005) (c_cuda: 33652624) (c_ocaml: 188784640) (c_ocaml / c_cuda: 5.610)
-gcdsum-cudapredict-s2048-it50.txt: 0.299 seconds (adj: 0.006) (c_cuda: 44592032) (c_ocaml: 755056640) (c_ocaml / c_cuda: 16.933)
-gcdsum-cudapredict-s4096-it50.txt: 0.403 seconds (adj: 0.008) (c_cuda: 88331200) (c_ocaml: 3020062720) (c_ocaml / c_cuda: 34.190)
-gcdsum-cudapredict-s8192-it50.txt: 0.618 seconds (adj: 0.012) (c_cuda: 263250944) (c_ocaml: 12079923200) (c_ocaml / c_cuda: 45.887)
-matmaxsum-cudapredict-s32-it20.txt: 0.023 seconds (adj: 0.001) (c_cuda: 30053755) (c_ocaml: 2236416) (c_ocaml / c_cuda: 0.074)
-matmaxsum-cudapredict-s64-it20.txt: 0.076 seconds (adj: 0.004) (c_cuda: 30392428) (c_ocaml: 17596416) (c_ocaml / c_cuda: 0.579)
-matmaxsum-cudapredict-s128-it20.txt: 0.145 seconds (adj: 0.007) (c_cuda: 32988976) (c_ocaml: 139591680) (c_ocaml / c_cuda: 4.231)
-matmaxsum-cudapredict-s256-it20.txt: 0.140 seconds (adj: 0.007) (c_cuda: 53310016) (c_ocaml: 1112014848) (c_ocaml / c_cuda: 20.859)
-matmaxsum-cudapredict-s512-it20.txt: 0.224 seconds (adj: 0.011) (c_cuda: 214072960) (c_ocaml: 8877244416) (c_ocaml / c_cuda: 41.468)
-matmaxsum-cudapredict-s1024-it20.txt: 1.216 seconds (adj: 0.061) (c_cuda: 1492955008) (c_ocaml: 70942457856) (c_ocaml / c_cuda: 47.518)
+#### vecpo (n_iterations = 50)
+|                  | 50t          | 500t         | 1m           | 10m          | 25m          |
+|------------------|-------------:|-------------:|-------------:|-------------:|-------------:|
+| c_ocaml          |      2750000 |     27500000 |     55000000 |    550000000 |   1375000000 |
+| c_cuda           |     41000528 |     50005216 |     60010432 |    240104176 |    540260432 |
+| c_ocaml / c_cuda |        0.067 |        0.550 |        0.917 |        2.291 |        2.545 |
 
+#### gcdsum (n_iterations = 50)
+|                  | 128          | 256          | 512          | 1024         | 2048         | 4096         | 8192         |
+|------------------|-------------:|-------------:|-------------:|-------------:|-------------:|-------------:|-------------:|
+| c_ocaml          |      4481280 |     17908224 |     71599104 |    286328832 |   1145180160 |   4580450304 |  18321260544 |
+| c_cuda           |     40264720 |     40529424 |     41058832 |     42117648 |     48409120 |     65165872 |    140417632 |
+| c_ocaml / c_cuda |        0.111 |        0.442 |        1.744 |        6.798 |       23.656 |       70.289 |      130.477 |
+
+#### matmaxsum (n_iterations = 20)
+|                  | 32           | 64           | 128          | 256          | 512          | 1024         |
+|------------------|-------------:|-------------:|-------------:|-------------:|-------------:|-------------:|
+| c_ocaml          |      3377152 |     26615808 |    211320832 |   1684144128 |  13447462912 | 107476942848 |
+| c_cuda           |     40064379 |     40324273 |     41966345 |     53488489 |    139475689 |    803149033 |
+| c_ocaml / c_cuda |        0.084 |        0.660 |        5.035 |       31.486 |       96.414 |      133.819 |

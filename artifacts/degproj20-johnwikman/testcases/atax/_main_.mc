@@ -16,30 +16,30 @@ include "_size_.mc"
 include "_specific_.mc"
 
 let func_matAinitfun_v2 =
-  let_ "matAinitfun_v2" (tyarrows_ [tyint_, tyint_, tyint_]) (
+  let_ "matAinitfun_v2" (tyarrows_ [tyint_, tyint_, tyfloat_]) (
     lam_ "row" (tyint_) (
       lam_ "col" (tyint_) (
-        subi_ (modi_ (addi_ (muli_ (var_ "row") (var_ "row"))
+        subf_ (divf_ (addf_ (mulf_ (var_ "row") (var_ "row"))
                             (var_ "col"))
-                     (int_ 3))
-              (int_ 1)
+                     (float_ 3.0))
+              (float_ 0.014)
       )
     )
   )
 
 let func_vecXinitfun =
-  let_ "vecXinitfun" (tyarrows_ [tyint_, tyint_, tyint_]) (
+  let_ "vecXinitfun" (tyarrows_ [tyint_, tyint_, tyfloat_]) (
     lam_ "row" (tyint_) (
       lam_ "col" (tyint_) (
-        (modi_ (muli_ (var_ "row") (int_ 10657))
-               (int_ 41081))
+        int2float_ (modi_ (muli_ (var_ "row") (int_ 10657))
+                          (int_ 41081))
       )
     )
   )
 
 let var_matA =
-  let_ "matA" (tymatrixi_) (
-    app3f_ (var_ "matrixIniti")
+  let_ "matA" (tymatrixf_) (
+    app3f_ (var_ "matrixInitf")
            (var_ "matA_rows")
            (var_ "matA_cols")
            (var_ "matAinitfun_v2")
@@ -52,8 +52,8 @@ let var_vecX_cols =
 
 
 let var_vecX =
-  let_ "vecX" (tymatrixi_) (
-    app3f_ (var_ "matrixIniti")
+  let_ "vecX" (tymatrixf_) (
+    app3f_ (var_ "matrixInitf")
            (var_ "vecX_rows")
            (var_ "vecX_cols")
            (var_ "vecXinitfun")
@@ -94,7 +94,7 @@ let prog = bind_ prog defspecific_ in
 --
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nmatATA:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
---    app3f_ (var_ "printMatrixi")
+--    app3f_ (var_ "printMatrixf")
 --           (var_ "matATA_rows")
 --           (var_ "matATA_cols")
 --           (var_ "matATA")
@@ -105,7 +105,7 @@ let prog = bind_ prog defspecific_ in
 --
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecATAx:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
---    app3f_ (var_ "printMatrixi")
+--    app3f_ (var_ "printMatrixf")
 --           (var_ "vecATAx_rows")
 --           (var_ "vecATAx_cols")
 --           (var_ "vecATAx")
