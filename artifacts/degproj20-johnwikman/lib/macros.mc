@@ -38,12 +38,50 @@ let seq_ = use MExprCGOCaml in
   lam s.
   TmSeq {tms = s}
 
+let intseq_ = use MExprCGOCaml in
+  lam s : [Int].
+  seq_ (map int_ s)
+
+let floatseq_ = use MExprCGOCaml in
+  lam s : [Float].
+  seq_ (map float_ s)
+
 let cseq_ = use MExprCGOCaml in
   lam s.
   TmConst {val = CSeq {tms = s}}
 
 let str_ = use MExprCGOCaml in
   lam s. cseq_ (map char_ s)
+
+
+-- constant values of common intrinsics --
+let caddi_ = use MExprCGOCaml in
+  TmConst {val = CAddi ()}
+
+let csubi_ = use MExprCGOCaml in
+  TmConst {val = CSubi ()}
+
+let cmuli_ = use MExprCGOCaml in
+  TmConst {val = CMuli ()}
+
+let cdivi_ = use MExprCGOCaml in
+  TmConst {val = CDivi ()}
+
+let cmodi_ = use MExprCGOCaml in
+  TmConst {val = CModi ()}
+
+let caddf_ = use MExprCGOCaml in
+  TmConst {val = CAddf ()}
+
+let csubf_ = use MExprCGOCaml in
+  TmConst {val = CSubf ()}
+
+let cmulf_ = use MExprCGOCaml in
+  TmConst {val = CMulf ()}
+
+let cdivf_ = use MExprCGOCaml in
+  TmConst {val = CDivf ()}
+
 
 -- types --
 let tyarrow_ = use MExprCGOCaml in
@@ -173,8 +211,11 @@ let char2int_ = use MExprCGOCaml in
 let length_ = use MExprCGOCaml in
   app1f_ (TmConst {val = CLength ()})
 
-let negi_ = use MExprCGOCaml in
-  app1f_ (TmConst {val = CNegi ()})
+let or_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = COr ()})
+
+let and_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CAnd ()})
 
 let lti_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CLti ()})
@@ -194,6 +235,18 @@ let geqi_ = use MExprCGOCaml in
 let leqi_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CLeqi ()})
 
+let ltf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CLtf ()})
+
+let eqf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CEqf ()})
+
+let gtf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CGtf ()})
+
+let negi_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CNegi ()})
+
 let addi_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CAddi ()})
 
@@ -208,6 +261,9 @@ let divi_ = use MExprCGOCaml in
 
 let modi_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CModi ()})
+
+let negf_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CNegf ()})
 
 let addf_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CAddf ()})
@@ -230,6 +286,21 @@ let ceilfi_ = use MExprCGOCaml in
 let roundfi_ = use MExprCGOCaml in
   app1f_ (TmConst {val = CRoundfi ()})
 
+let expf_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CExpf ()})
+
+let logf_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CLogf ()})
+
+let randUniformf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CRandUniformf ()})
+
+let randNormalf_ = use MExprCGOCaml in
+  app2f_ (TmConst {val = CRandNormalf ()})
+
+let logpdfNormalf_ = use MExprCGOCaml in
+  app3f_ (TmConst {val = CLogpdfNormalf ()})
+
 let int2float_ = use MExprCGOCaml in
   app1f_ (TmConst {val = CInt2float ()})
 
@@ -250,6 +321,9 @@ let slice_ = use MExprCGOCaml in
 
 let makeseq_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CMakeseq ()})
+
+let traverse_ = use MExprCGOCaml in
+  app3f_ (TmConst {val = CTraverse ()})
 
 -- cuda macros --
 let cudamapxpept_ = use MExprCGOCaml in

@@ -139,16 +139,19 @@ end
 
 lang ArithFloatCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
+    | CNegf _ -> {cgr_new with code = "( ~-. )"}
     | CAddf _ -> {cgr_new with code = "( +. )"}
     | CSubf _ -> {cgr_new with code = "( -. )"}
     | CMulf _ -> {cgr_new with code = "( *. )"}
     | CDivf _ -> {cgr_new with code = "( /. )"}
-    | CFloorfi _ -> {{cgr_new with code = "(fun x -> int_of_float (Float.floor x))"}
-                              with opens = strset_add "Float" strset_new}
-    | CCeilfi _ -> {{cgr_new with code = "(fun x -> int_of_float (Float.ceil x))"}
-                             with opens = strset_add "Float" strset_new}
-    | CRoundfi _ -> {{cgr_new with code = "(fun x -> int_of_float (Float.round x))"}
-                              with opens = strset_add "Float" strset_new}
+    | CFloorfi _ -> {cgr_new with code = "(fun x -> int_of_float (Float.floor x))"}
+    | CCeilfi _ -> {cgr_new with code = "(fun x -> int_of_float (Float.ceil x))"}
+    | CRoundfi _ -> {cgr_new with code = "(fun x -> int_of_float (Float.round x))"}
+    | CExpf _ -> {cgr_new with code = "Float.exp"}
+    | CLogf _ -> {cgr_new with code = "Float.log"}
+    | CRandUniformf _ -> {cgr_new with code = "(fun x y -> x +. (Random.float (Float.abs (x -. y))))"}
+    | CRandNormalf _ -> {cgr_new with code = "(fun mu sigma -> mu +. (sigma *. (Float.sqrt (-2.0 *. Float.log (Random.float 1.0))) *. (Float.cos (2.0 *. 3.14159265359 *. (Random.float 1.0)))))"}
+    | CLogpdfNormalf _ -> {cgr_new with code = "(fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359))))"}
     | CInt2float _ -> {cgr_new with code = "float_of_int"}
     | CString2float _ -> {{cgr_new with code = "(fun s -> float_of_string (String.of_seq (Array.to_seq s)))"}
                                    with opens = strset_add "String" (strset_add "Array" strset_new)}
@@ -180,6 +183,9 @@ lang CmpCGOCaml = MExprCGExt
     | CGti _ -> {cgr_new with code = "( > )"}
     | CGeqi _ -> {cgr_new with code = "( >= )"}
     | CLeqi _ -> {cgr_new with code = "( <= )"}
+    | CEqf _ -> {cgr_new with code = "( = )"}
+    | CLtf _ -> {cgr_new with code = "( < )"}
+    | CGtf _ -> {cgr_new with code = "( > )"}
 end
 
 lang CharCGOCaml = MExprCGExt
@@ -197,20 +203,20 @@ end
 
 lang SeqCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
-    | CNth _ -> {{cgr_new with code = "Array.get"}
-                          with opens = strset_add "Array" strset_new}
-    | CLength _ -> {{cgr_new with code = "Array.length"}
-                             with opens = strset_add "Array" strset_new}
-    | CCons _ -> {{cgr_new with code = "(fun x xs -> Array.append [|x|] xs)"}
-                           with opens = strset_add "Array" strset_new}
-    | CConcat _ -> {{cgr_new with code = "Array.append"}
-                             with opens = strset_add "Array" strset_new}
-    | CSlice _ -> {{cgr_new with code = "(fun xs start len -> Array.sub xs (min ((Array.length xs) - 1) start) (min ((Array.length xs) - start) len))"}
-                            with opens = strset_add "Array" strset_new}
-    | CReverse _ -> {{cgr_new with code = "(fun xs -> Array.of_list (List.rev (Array.to_list xs)))"}
-                              with opens = strset_add "Array" (strset_add "List" strset_new)}
-    | CMakeseq _ -> {{cgr_new with code = "Array.make"}
-                              with opens = strset_add "Array" strset_new}
+    | CNth _ -> {cgr_new with code = "Array.get"}
+    | CLength _ -> {cgr_new with code = "Array.length"}
+    | CCons _ -> {cgr_new with code = "(fun x xs -> Array.append [|x|] xs)"}
+    | CConcat _ -> {cgr_new with code = "Array.append"}
+    | CSlice _ -> {cgr_new with code = "(fun xs start len -> Array.sub xs (min ((Array.length xs) - 1) start) (min ((Array.length xs) - start) len))"}
+    | CReverse _ -> {cgr_new with code = "(fun xs -> Array.of_list (List.rev (Array.to_list xs)))"}
+    | CMakeseq _ -> {cgr_new with code = "Array.make"}
+    | CTraverse _ -> {cgr_new with code = strJoin "" [
+                        "(fun f acc xs -> ",
+                         "let a = Array.copy xs in ",
+                         "let accref = ref acc in ",
+                         "Array.iteri (fun i e -> accref := f !accref e; a.(i) <- !accref) xs; ",
+                         "a)"
+                      ]}
     | CSeq t ->
       let cgrs = map (codegenOCaml state) t.tms in
       let newcode = strJoin "" ["[|", strJoin "; " (map (lam cgr. cgr.code) cgrs), "|]"] in

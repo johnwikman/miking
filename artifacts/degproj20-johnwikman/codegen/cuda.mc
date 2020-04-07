@@ -17,6 +17,8 @@ let hostname = lam s. concat "gpuhost_" s
 let gblname = lam s. concat "gpuglobal_" s
 let devname = lam s. concat "gpudevice_" s
 
+let rngargname = "randomState"
+
 -- acc: List of applied arguments
 -- e: Expression to extract
 recursive let extract_args: [Expr] -> Expr -> ([Expr], String) = use MExprCGExt in
@@ -179,6 +181,7 @@ lang AppCGCUDA = MExprCGExt
       let cgr = ret.0 in
       let func = head ret.1 in
       let args = tail ret.1 in
+      let args = if cgr.deviceNeedsRng then cons rngargname args else args in
       let funcall = strJoin "" [func, "(", strJoin ", " args, ")"] in
       {cgr with code = funcall}
 end
@@ -226,10 +229,11 @@ lang LetCGCUDA = MExprCGExt
       let rettype = head types in
       let rettypestr = type2cudastr rettype in
   
+      let cudaret = codegenCUDA {internalstate with cudaNestedLevel = addi internalstate.cudaNestedLevel 1} letexpr in
+
       let argtypes = reverse (tail types) in
       let argdecls = zipWith concat (map type2cudastr argtypes) args in
-
-      let cudaret = codegenCUDA {internalstate with cudaNestedLevel = addi internalstate.cudaNestedLevel 1} letexpr in
+      let argdecls = if cudaret.deviceNeedsRng then cons (concat "curandState_t *" rngargname) argdecls else argdecls in
 
       if null args then
         -- This let expression is a variable
@@ -297,6 +301,9 @@ let genconstfun = lam typeprefix. lam name. lam argdecls. lam body.
                with deviceprototypes = strset_add prototype strset_new}
                with devicefuncs = strset_add fullfunc strset_new}
 
+let genconstrandfun = lam typeprefix. lam name. lam argdecls. lam body.
+    {genconstfun typeprefix name argdecls body with deviceNeedsRng = true}
+
 lang IntCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
     | CInt i -> {cgr_new with code = int2string i.val}
@@ -318,11 +325,21 @@ end
 
 lang ArithFloatCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
+    | CNegf _ -> genconstfun "double" "gpu_negf" "(double x)" "{return -x;}"
     | CAddf _ -> genconstfun "double" "gpu_addf" "(double x, double y)" "{return x + y;}"
     | CSubf _ -> genconstfun "double" "gpu_subf" "(double x, double y)" "{return x - y;}"
     | CMulf _ -> genconstfun "double" "gpu_mulf" "(double x, double y)" "{return x * y;}"
     | CDivf _ -> genconstfun "double" "gpu_divf" "(double x, double y)" "{return x / y;}"
+    | CFloorfi _ -> genconstfun "int" "gpu_floorfi" "(double x)" "{return (int) floor(x);}" -- Floor, ceil,
+    | CCeilfi _ -> genconstfun "int" "gpu_ceilfi" "(double x)" "{return (int) ceil(x);}"    -- round are
+    | CRoundfi _ -> genconstfun "int" "gpu_roundfi" "(double x)" "{return (int) round(x);}" -- available by default.
     | CInt2float _ -> genconstfun "double" "gpu_int2float" "(int x)" "{return (double) x;}"
+    | CExpf _ -> genconstfun "double" "gpu_expf" "(double x)" "{return exp(x);}" -- These 2 are available
+    | CLogf _ -> genconstfun "double" "gpu_logf" "(double x)" "{return log(x);}" -- by default.
+    | CLogpdfNormalf _ -> genconstfun "double" "gpu_logpdfnormalf" "(double x, double mu, double sigma)"
+                                      "{double t = x - mu; return (-0.5 * t * t / (sigma * sigma)) - log(sigma * sqrt(2.0 * 3.14159265359));}"
+    | CRandUniformf _ -> genconstrandfun "double" "gpu_randUniformf" "(curandState_t *r, double low, double up)" "{return low + ((double) curand_uniform(r) * abs(up - low));}"
+    | CRandNormalf _ -> genconstrandfun "double" "gpu_randNormalf" "(curandState_t *r, double mu, double sigma)" "{return mu + ((double) curand_normal(r) * sigma);}"
 end
 
 lang BoolCGCUDA = MExprCGExt
@@ -345,6 +362,9 @@ lang CmpCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
     | CEqi _ -> genconstfun "bool" "gpu_eqi" "(int x, int y)" "{return x == y;}"
     | CLti _ -> genconstfun "bool" "gpu_lti" "(int x, int y)" "{return x < y;}"
+    | CEqf _ -> genconstfun "bool" "gpu_eqf" "(double x, double y)" "{return x == y;}"
+    | CLtf _ -> genconstfun "bool" "gpu_ltf" "(double x, double y)" "{return x < y;}"
+    | CGtf _ -> genconstfun "bool" "gpu_gtf" "(double x, double y)" "{return x > y;}"
 end
 
 lang CUDACGCUDA = MExprCGExt
@@ -432,24 +452,31 @@ lang CUDACGCUDA = MExprCGExt
       let genargs = if t.onlyIndexArg then cons "i" genargs else cons "v" genargs in
       let genargs = if t.includeIndexArg then cons "i" genargs else genargs in
 
+      let randargs = if cudaret.deviceNeedsRng then ["r"] else [] in
+
       -- Generate the global device body
       let globalbody = strJoin "" [
         "__global__ void ", globalfuncname, "(", strJoin ", " (concat cudaargstyped
                                                                       [concat "value *" outarr]),
-                                                 ", int n, int elemPerThread)\n",
+                                                 ", int n, int elemPerThread",
+                                                 if cudaret.deviceNeedsRng then ", unsigned long long seed" else "",
+                                                 ")\n",
         "{\n",
         "\tint i;\n",
         "\tint start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;\n",
         "\tint end = start + elemPerThread;\n",
         "\tif (end > n)\n",
         "\t\tend = n;\n\n",
+        if cudaret.deviceNeedsRng then
+        "\tcurandState_t r;\n\tcurand_init(seed + (unsigned long long) start, 0, 0, &r);\n"
+        else "",
         "\tfor (i = start; i < end; ++i) {\n",
         if t.onlyIndexArg then strJoin "" [
           "\t\t", assignIdxCUDA2OCaml outarr
                                       "i"
                                       (strJoin "" [devicefuncname,
                                                    "(",
-                                                   strJoin ", " (concat cudaargs genargs),
+                                                   strJoin ", " (concat randargs (concat cudaargs genargs)),
                                                    ")"])
                                       mappedrettype,
                   ";\n"
@@ -465,7 +492,7 @@ lang CUDACGCUDA = MExprCGExt
                                       "i"
                                       (strJoin "" [devicefuncname,
                                                    "(",
-                                                   strJoin ", " (concat (init cudaargs) genargs),
+                                                   strJoin ", " (concat randargs (concat (init cudaargs) genargs)),
                                                    ")"])
                                       mappedrettype,
                   ";\n"
@@ -514,7 +541,11 @@ lang CUDACGCUDA = MExprCGExt
                   inarrs
         ),
         "\n",
-        "\t", globalfuncname, "<<<blockCount,threadsPerBlock>>>(", strJoin ", " (concat argsconved [cuda_outarr, "n", "elemPerThread"]), ");\n",
+        "\t", globalfuncname, "<<<blockCount,threadsPerBlock>>>(",
+                              let extra_args = [cuda_outarr, "n", "elemPerThread"] in
+                              let extra_args = if cudaret.deviceNeedsRng then concat extra_args ["(unsigned long long) clock()"] else extra_args in
+                              strJoin ", " (concat argsconved extra_args),
+                              ");\n",
         "\t", outarr, " = caml_alloc(n, ", typeOCamlTag mappedrettype, ");\n",
         "\tcudaDeviceSynchronize();\n\n",
         "\tcudaMemcpy(Op_val(", outarr, "), ", cuda_outarr, ", n * sizeof(value), cudaMemcpyDeviceToHost);\n\n",
@@ -526,9 +557,10 @@ lang CUDACGCUDA = MExprCGExt
         "\tCAMLreturn(", outarr, ");\n",
         "}"
       ] in
-      {{{cudaret with globalfuncs = strset_add globalbody strset_new}
-                 with hostprototypes = strset_add prototype strset_new}
-                 with hostfuncs = strset_add hostbody strset_new}
+      {{{{cudaret with globalfuncs = strset_add globalbody strset_new}
+                  with hostprototypes = strset_add prototype strset_new}
+                  with hostfuncs = strset_add hostbody strset_new}
+                  with deviceNeedsRng = false}
 end
 
 lang MExprCGCUDA = VarCGCUDA + AppCGCUDA + FunCGCUDA + LetCGCUDA +

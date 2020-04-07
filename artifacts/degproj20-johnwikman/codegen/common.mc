@@ -29,7 +29,8 @@ type CodegenRet = {opens            : StringSet,
                    devicefuncs      : StringSet,
                    globalfuncs      : StringSet,
                    hostprototypes   : StringSet,
-                   hostfuncs        : StringSet}
+                   hostfuncs        : StringSet,
+                   deviceNeedsRng   : Bool}
 
 let cgr_new = {opens = strset_new,
                code = "",
@@ -38,16 +39,18 @@ let cgr_new = {opens = strset_new,
                devicefuncs = strset_new,
                globalfuncs = strset_new,
                hostprototypes = strset_new,
-               hostfuncs = strset_new}
+               hostfuncs = strset_new,
+               deviceNeedsRng = false}
 let cgr_merge = lam newcode. lam cgrs.
     let mergefun = lam acc. lam cgr.
-        {{{{{{{acc with opens = strset_union cgr.opens acc.opens}
-                   with externs = strset_union cgr.externs acc.externs}
-                   with deviceprototypes = strset_union cgr.deviceprototypes acc.deviceprototypes}
-                   with devicefuncs = strset_union cgr.devicefuncs acc.devicefuncs}
-                   with globalfuncs = strset_union cgr.globalfuncs acc.globalfuncs}
-                   with hostprototypes = strset_union cgr.hostprototypes acc.hostprototypes}
-                   with hostfuncs = strset_union cgr.hostfuncs acc.hostfuncs}
+        {{{{{{{{acc with opens = strset_union cgr.opens acc.opens}
+                    with externs = strset_union cgr.externs acc.externs}
+                    with deviceprototypes = strset_union cgr.deviceprototypes acc.deviceprototypes}
+                    with devicefuncs = strset_union cgr.devicefuncs acc.devicefuncs}
+                    with globalfuncs = strset_union cgr.globalfuncs acc.globalfuncs}
+                    with hostprototypes = strset_union cgr.hostprototypes acc.hostprototypes}
+                    with hostfuncs = strset_union cgr.hostfuncs acc.hostfuncs}
+                    with deviceNeedsRng = or cgr.deviceNeedsRng acc.deviceNeedsRng}
     in
     {foldl mergefun cgr_new cgrs with code = newcode}
 
@@ -105,6 +108,7 @@ end
 
 lang ArithFloatCGExt
     syn Const =
+    | CNegf {}
     | CAddf {}
     | CSubf {}
     | CMulf {}
@@ -112,19 +116,30 @@ lang ArithFloatCGExt
     | CFloorfi {}
     | CCeilfi {}
     | CRoundfi {}
+    | CExpf {}
+    | CLogf {}
+    | CRandUniformf {}
+    | CRandNormalf {}
+    | CLogpdfNormalf {}
     | CInt2float {}
     | CString2float {}
 
     sem getConstStringCode (indent : Int) =
+    | CNegf _ -> "negf"
     | CAddf _ -> "addf"
     | CSubf _ -> "subf"
     | CMulf _ -> "mulf"
     | CDivf _ -> "divf"
-    | CFloorfi -> "floorfi"
-    | CCeilfi -> "ceilfi"
-    | CRoundfi -> "roundfi"
-    | CInt2float -> "int2float"
-    | CString2float -> "string2float"
+    | CFloorfi _ -> "floorfi"
+    | CCeilfi _ -> "ceilfi"
+    | CRoundfi _ -> "roundfi"
+    | CExpf _ -> "expf"
+    | CLogf _ -> "logf"
+    | CRandUniformf _ -> "randUniformf"
+    | CRandNormalf _ -> "randNormalf"
+    | CLogpdfNormalf _ -> "logpdfNormalf"
+    | CInt2float _ -> "int2float"
+    | CString2float _ -> "string2float"
 end
 
 lang CmpCGExt = CmpAst
@@ -133,12 +148,18 @@ lang CmpCGExt = CmpAst
     | CGti {}
     | CGeqi {}
     | CLeqi {}
+    | CEqf {}
+    | CLtf {}
+    | CGtf {}
 
     sem getConstStringCode (indent : Int) =
-    | CNeqi -> "neqi"
-    | CGti -> "gti"
-    | CGeqi -> "geqi"
-    | CLeqi -> "leqi"
+    | CNeqi _ -> "neqi"
+    | CGti _ -> "gti"
+    | CGeqi _ -> "geqi"
+    | CLeqi _ -> "leqi"
+    | CEqf _ -> "eqf"
+    | CLtf _ -> "ltf"
+    | CGtf _ -> "gtf"
 end
 
 lang CharCGExt = CharAst
@@ -159,6 +180,7 @@ lang SeqCGExt = SeqAst
     | CSlice {}
     | CReverse {}
     | CMakeseq {}
+    | CTraverse {} -- (this is not a standard MCore intrinsic)
 
     sem getConstStringCode (indent : Int) =
     | CLength _ -> "length"
@@ -167,6 +189,7 @@ lang SeqCGExt = SeqAst
     | CSlice _ -> "slice"
     | CReverse _ -> "reverse"
     | CMakeseq _ -> "makeseq"
+    | CTraverse _ -> "traverse"
 end
 
 lang ArithTypeCGExt

@@ -78,3 +78,29 @@ it should be proportional to execution time.
 | c_ocaml          |      3377152 |     26615808 |    211320832 |   1684144128 |  13447462912 | 107476942848 |
 | c_cuda           |     40064379 |     40324273 |     41966345 |     53488489 |    139475689 |    803149033 |
 | c_ocaml / c_cuda |        0.084 |        0.660 |        5.035 |       31.486 |       96.414 |      133.819 |
+
+
+## Baseline Lift CGO2017 results from Sleipner
+| benchmark|time|version|size|
+|----------|---:|-------|----|
+| nbody_nvidia|4.2044|reference|small|
+| nbody_nvidia|166.168|reference|large|
+| nbody_amd|5.09949|reference|small|
+| nbody_amd|313.236|reference|large|
+| kmeans|1.116160|reference|small|
+| kmeans|4.01502|reference|large|
+| nn|0.81664|reference|small|
+| nn|3.23483|reference|large|
+| mriq|3.5704|reference|small|
+| mriq|12.587|reference|large|
+| md|0.272101|reference|small|
+| md|1.628875|reference|large|
+| mm|1.127200|reference|small|
+| mm|63.692768|reference|large|
+| convolution|4.02531|reference|small|
+| convolution|16.0546|reference|large|
+| gemv_N|1.087488|reference|small|
+| gemv_N|10.868288|reference|large|
+| gemv_T|0.527360|reference|small|
+| gemv_T|2.094880|reference|large|
+
