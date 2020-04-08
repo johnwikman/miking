@@ -92,6 +92,21 @@ let func_seqMaxf =
             )
           )
         ) (reclets_empty),
+        let_ "maxwrap" (tyarrows_ [tyseq_ tyfloat_, tyint_, tyint_, tyfloat_]) (
+          lam_ "s" (tyseq_ tyfloat_) (
+            lam_ "i" (tyint_) (
+              lam_ "end" (tyint_) (
+                if_ (eqi_ (var_ "i") (var_ "end"))
+                    (negf_ (float_ 1e300))
+                    (app4f_ (var_ "maxwork")
+                            (var_ "s")
+                            (addi_ (var_ "i") (int_ 1))
+                            (var_ "end")
+                            (nth_ (var_ "s") (int_ 0)))
+              )
+            )
+          )
+        ),
         let_ "initfun" (tyarrow_ tyint_ tyfloat_) (
           lam_ "i" (tyint_) (
             bindall_ [
@@ -100,22 +115,20 @@ let func_seqMaxf =
               let_ "end" (tyint_) (if_ (gti_ (var_ "tmp") (var_ "s_len"))
                                        (var_ "s_len")
                                        (var_ "tmp")),
-              app4f_ (var_ "maxwork")
+              app3f_ (var_ "maxwrap")
                      (var_ "s")
                      (var_ "start")
                      (var_ "end")
-                     (negf_ (float_ 1e50))
             ]
           )
         ),
         let_ "partial" (tyseq_ tyfloat_) (
           specificinit_ (var_ "s_initsize") (var_ "initfun")
         ),
-        app4f_ (var_ "maxwork")
+        app3f_ (var_ "maxwrap")
                (var_ "partial")
                (int_ 0)
                (var_ "s_initsize")
-               (negf_ (float_ 1e50))
       ]
     )
   )
@@ -193,7 +206,7 @@ let func_binsearch =
                 (var_ "low") -- bounds have come together (base case)
                 (bindall_ [
             let_ "mid" (tyint_) (
-              divi_ (addi_ (addi_ (var_ "low") (var_ "up"))
+              divi_ (subi_ (addi_ (var_ "low") (var_ "up"))
                            (int_ 1))
                     (int_ 2)
             ),
@@ -203,19 +216,63 @@ let func_binsearch =
                         (var_ "vec")
                         (var_ "p")
                         (var_ "low")
-                        (subi_ (var_ "mid") (int_ 1)))
+                        (var_ "mid"))
                 (app4f_ (var_ "binsearch") --else
                         (var_ "vec")
                         (var_ "p")
-                        (var_ "mid")
+                        (addi_ (var_ "mid") (int_ 1))
                         (var_ "up"))
-            ])
+            ]) 
           )
         )
       )
     )
   ) (reclets_empty)
 
+let func_pgf_print =
+  let_ "pgf_print" (tyarrows_ [tyint_, tyseq_ tyfloat_, tyseq_ tyfloat_, tyunit_]) (
+    lam_ "i" (tyint_) (
+      lam_ "x" (tyseq_ tyfloat_) (
+        lam_ "w" (tyseq_ tyfloat_) (
+          bindall_ [
+            let_ "pl" (tyarrows_ [tyint_, tyunit_]) (
+              lam_ "j2" (tyint_) (
+                bindall_ [
+                  let_ "_" (tyunit_) (print_ (app1f_ (var_ "int2string") (var_ "j2"))),
+                  let_ "_" (tyunit_) (print_ (str_ "\t")),
+                  let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string") (nth_ (var_ "x") (var_ "j2")))),
+                  let_ "_" (tyunit_) (print_ (str_ "\t80.0\t")),
+                  let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string") (nth_ (var_ "w") (var_ "j2")))),
+                  print_ (str_ "\n")
+                ]
+              )
+            ),
+            let_ "_" (tyunit_) (print_ (str_ "\nx[")),
+            let_ "_" (tyunit_) (print_ (app1f_ (var_ "int2string") (var_ "i"))),
+            let_ "_" (tyunit_) (print_ (str_ "]:\n")),
+            let_ "_" (tyunit_) (
+              if_ (eqi_ (length_ (var_ "x")) (int_ 0))
+                  (unit_)
+                  (app1f_ (var_ "pl") (int_ 0))
+            ),
+            reclets_add "printloop" (tyarrows_ [tyint_, tyunit_]) (
+              lam_ "j" (tyint_) (
+                if_ (geqi_ (var_ "j") (length_ (var_ "x")))
+                    (unit_)
+                    (bindall_ [
+                  let_ "_" (tyunit_) (app1f_ (var_ "pl") (var_ "j")),
+                  app1f_ (var_ "printloop")
+                         (addi_ (var_ "j") (int_ 1))
+                ])
+              )
+            ) (reclets_empty),
+            let_ "_" (tyunit_) (app1f_ (var_ "printloop") (int_ 1)),
+            print_ (str_ "\n")
+          ]
+        )
+      )
+    )
+  )
 
 let defcommon_ = bindall_ [
   defsize_,
@@ -234,7 +291,8 @@ let defcommon_ = bindall_ [
   func_seqMaxf,
   func_seqSumf,
   func_seqAccsumf,
-  func_binsearch
+  func_binsearch,
+  func_pgf_print
 ]
 
 mexpr
@@ -309,6 +367,16 @@ let prog = bindall_ [prog,
                 (
             -- else: continue
             bindall_ [
+              -- TEMP: Print X --
+              --let_ "_" (tyunit_) (
+              --  app3f_ (var_ "pgf_print")
+              --         (subi_ (var_ "i") (int_ 1))
+              --         (var_ "x")
+              --         (var_ "w")
+              --),
+              -------------------
+
+
               let_ "wacc" (tyseq_ tyfloat_) (
                 app1f_ (var_ "seqAccsumf") (var_ "w")
               ),
@@ -403,12 +471,12 @@ let prog = bindall_ [prog,
 ---------------------------
 
 ------- Output Verification -------
---let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecS:\n"))) in
---let prog = bind_ prog (let_ "_" (tyunit_) (
---    app2f_ (var_ "printSeqf")
---           (var_ "vecsize")
---           (var_ "vecS")
---  )) in
+let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nx_res:\n"))) in
+let prog = bind_ prog (let_ "_" (tyunit_) (
+    app2f_ (var_ "printSeqf")
+           (var_ "nPoints")
+           (var_ "x_res")
+  )) in
 -----------------------------------
 
 let res = codegen prog in
