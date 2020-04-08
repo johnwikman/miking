@@ -10,6 +10,14 @@ lang VarCGType = MExprCGExt
       in
       let getsome = lam opt. match opt with Some t then t else perror () in
       let v = cgs_envLookup x.ident state in
+      let _ =
+        if eqstr x.ident "arg211_sigma" then
+          let _ = print x.ident in
+          let _ = print ": " in
+          let _ = dprint v in
+          print "\n\n\n"
+        else ()
+      in
       match v with TmLet t then
         getsome t.tpe
       else match v with TmLam t then

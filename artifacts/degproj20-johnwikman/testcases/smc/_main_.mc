@@ -49,14 +49,10 @@ let func_g_map =
               if_ (or_ (lti_ (var_ "p") (int_ 0))
                        (gti_ (var_ "n") (subi_ (var_ "mapsize") (int_ 1))))
                   (float_ 100000.0)
-                  (bindall_ [
-                let_ "ap" (tyfloat_) (nth_ (var_ "hgtmap") (var_ "p")),
-                let_ "an" (tyfloat_) (nth_ (var_ "hgtmap") (var_ "n")),
-                subf_ (var_ "altitude")
-                      (addf_ (var_ "ap")
-                             (mulf_ (subf_ (var_ "an") (var_ "ap"))
-                                    (subf_ (var_ "x") (int2float_ (var_ "p")))))
-              ])
+                  (subf_ (var_ "altitude")
+                          (addf_ (nth_ (var_ "hgtmap") (var_ "p"))
+                                 (mulf_ (subf_ (nth_ (var_ "hgtmap") (var_ "n")) (nth_ (var_ "hgtmap") (var_ "p")))
+                                        (subf_ (var_ "x") (int2float_ (var_ "p"))))))
             ]
           )
         )
@@ -77,16 +73,13 @@ let func_seqMaxf =
                 lam_ "candidate" (tyfloat_) (
                   if_ (eqf_ (var_ "i") (var_ "end"))
                       (var_ "candidate")
-                      (bindall_ [
-                        let_ "v" (tyfloat_) (nth_ (var_ "s") (var_ "i")),
-                        app4f_ (var_ "maxwork")
+                      (app4f_ (var_ "maxwork")
                                (var_ "s")
                                (addi_ (var_ "i") (int_ 1))
                                (var_ "end")
-                               (if_ (gtf_ (var_ "v") (var_ "candidate"))
-                                    (var_ "v")
-                                    (var_ "candidate"))
-                      ])
+                               (if_ (gtf_ (nth_ (var_ "s") (var_ "i")) (var_ "candidate"))
+                                    (nth_ (var_ "s") (var_ "i"))
+                                    (var_ "candidate")))
                 )
               )
             )
@@ -202,27 +195,26 @@ let func_binsearch =
       lam_ "p" (tyfloat_) (
         lam_ "low" (tyint_) (
           lam_ "up" (tyint_) (
-            if_ (eqi_ (var_ "low") (var_ "up"))
-                (var_ "low") -- bounds have come together (base case)
-                (bindall_ [
-            let_ "mid" (tyint_) (
-              divi_ (subi_ (addi_ (var_ "low") (var_ "up"))
-                           (int_ 1))
-                    (int_ 2)
-            ),
-            let_ "v_mid" (tyfloat_) (nth_ (var_ "vec") (var_ "mid")),
-            if_ (ltf_ (var_ "p") (var_ "v_mid"))
-                (app4f_ (var_ "binsearch") --then
-                        (var_ "vec")
-                        (var_ "p")
-                        (var_ "low")
-                        (var_ "mid"))
-                (app4f_ (var_ "binsearch") --else
-                        (var_ "vec")
-                        (var_ "p")
-                        (addi_ (var_ "mid") (int_ 1))
-                        (var_ "up"))
-            ]) 
+            bindall_ [
+              let_ "mid" (tyint_) (
+                divi_ (subi_ (addi_ (var_ "low") (var_ "up"))
+                             (int_ 1))
+                      (int_ 2)
+              ),
+              if_ (eqi_ (var_ "low") (var_ "up"))
+                  (var_ "low") -- bounds have come together (base case)
+                  (if_ (ltf_ (var_ "p") (nth_ (var_ "vec") (var_ "mid")))
+                       (app4f_ (var_ "binsearch") --then
+                               (var_ "vec")
+                               (var_ "p")
+                               (var_ "low")
+                               (var_ "mid"))
+                       (app4f_ (var_ "binsearch") --else
+                               (var_ "vec")
+                               (var_ "p")
+                               (addi_ (var_ "mid") (int_ 1))
+                               (var_ "up")))
+            ]
           )
         )
       )
@@ -334,6 +326,14 @@ let prog = bindall_ [prog,
   let_ "w" (tyseq_ tyfloat_) (
     specificmap_ (var_ "wmapf") (var_ "x")
   ),
+  -- TEMP: Print X --
+  let_ "_" (tyunit_) (
+    app3f_ (var_ "pgf_print")
+           (int_ 888)
+           (var_ "x")
+           (var_ "w")
+  ),
+  -------------------
   -- NORMALIZE INITIAL W
   let_ "wmax" (tyfloat_) (app1f_ (var_ "seqMaxf") (var_ "w")),
 
@@ -346,6 +346,13 @@ let prog = bindall_ [prog,
     specificmap_ (var_ "wmapf") (var_ "w")
   ),
   let_ "wsum" (tyfloat_) (app1f_ (var_ "seqSumf") (var_ "w")),
+  -- TEMP: Print X --
+  let_ "_" (tyunit_) (
+    app3f_ (var_ "pgf_print")
+           (int_ 999)
+           (var_ "x")
+           (var_ "w")
+  ),
 
   let_ "wmapf" (tyarrow_ tyfloat_ tyfloat_) (
     lam_ "welem" (tyfloat_) (
@@ -368,13 +375,23 @@ let prog = bindall_ [prog,
             -- else: continue
             bindall_ [
               -- TEMP: Print X --
-              --let_ "_" (tyunit_) (
-              --  app3f_ (var_ "pgf_print")
-              --         (subi_ (var_ "i") (int_ 1))
-              --         (var_ "x")
-              --         (var_ "w")
-              --),
+              let_ "_" (tyunit_) (
+                app3f_ (var_ "pgf_print")
+                       (subi_ (var_ "i") (int_ 1))
+                       (var_ "x")
+                       (var_ "w")
+              ),
               -------------------
+
+              -- These "refreshers" are needed until a type checker is in place
+              -- since the lambda lifter does not carry over this type to the
+              -- lifted argument.
+              let_ "sigma" (tyfloat_) (var_ "sigma"),
+              let_ "velocity" (tyfloat_) (var_ "velocity"),
+              let_ "altitude" (tyfloat_) (var_ "altitude"),
+              let_ "nPoints" (tyint_) (var_ "nPoints"),
+              let_ "heightMapSize" (tyint_) (var_ "heightMapSize"),
+              let_ "heightMap" (tyseq_ tyfloat_) (var_ "heightMap"),
 
 
               let_ "wacc" (tyseq_ tyfloat_) (

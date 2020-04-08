@@ -46,7 +46,7 @@ let typeOCaml2CUDA = use MExprCGExt in
   match tpe with TyInt () then
     strJoin "" ["Int_val(", name, ")"]
   else match tpe with TyFloat () then
-    strJoin "" ["*((double *) ", name, ")"]
+    strJoin "" ["((double) ", name, ")"]
   else match tpe with TySeq t1 then
     name
   else perror ()
@@ -116,6 +116,19 @@ let accessIdxCUDA2OCaml = use MExprCGExt in
     strJoin "" ["Double_field(", name, ", ", idx, ")"]
   else perror ()
 
+let accessIdxCUDA = use MExprCGExt in
+  lam name. lam idx. lam tpe.
+  let perror = lam _.
+    let _ = dprint tpe in
+    let _ = print "\n" in
+    error "accessIdxCUDA: Above type is invalid."
+  in
+  match tpe with TyInt () then
+    strJoin "" ["Int_val(", name, "[", idx, "])"]
+  else match tpe with TyFloat () then
+    strJoin "" ["(((double *) ", name, ")[", idx, "])"]
+  else perror ()
+
 lang VarCGCUDA = MExprCGExt
     sem codegenCUDA (state : CodegenState) =
     | TmVar x ->
@@ -158,7 +171,7 @@ lang AppCGCUDA = MExprCGExt
                 let idxcgr = codegenCUDA state t.rhs in
                 let arrtype = codegenGetExprType state (TmVar t2) in
                 let elemtype = match arrtype with TySeq t3 then t3.tpe else perror () in
-                let code = typeOCaml2CUDA (strJoin "" ["(", t2.ident, "[", idxcgr.code, "])"]) elemtype in
+                let code = accessIdxCUDA t2.ident idxcgr.code elemtype in
                 Some ({idxcgr with code = code})
               else perror ()
             else None ()
@@ -362,6 +375,7 @@ lang CmpCGCUDA = MExprCGExt
     sem codegenConstCUDA (state : CodegenState) =
     | CEqi _ -> genconstfun "bool" "gpu_eqi" "(int x, int y)" "{return x == y;}"
     | CLti _ -> genconstfun "bool" "gpu_lti" "(int x, int y)" "{return x < y;}"
+    | CGti _ -> genconstfun "bool" "gpu_gti" "(int x, int y)" "{return x > y;}"
     | CEqf _ -> genconstfun "bool" "gpu_eqf" "(double x, double y)" "{return x == y;}"
     | CLtf _ -> genconstfun "bool" "gpu_ltf" "(double x, double y)" "{return x < y;}"
     | CGtf _ -> genconstfun "bool" "gpu_gtf" "(double x, double y)" "{return x > y;}"
@@ -452,7 +466,7 @@ lang CUDACGCUDA = MExprCGExt
       let genargs = if t.onlyIndexArg then cons "i" genargs else cons "v" genargs in
       let genargs = if t.includeIndexArg then cons "i" genargs else genargs in
 
-      let randargs = if cudaret.deviceNeedsRng then ["r"] else [] in
+      let randargs = if cudaret.deviceNeedsRng then ["&r"] else [] in
 
       -- Generate the global device body
       let globalbody = strJoin "" [

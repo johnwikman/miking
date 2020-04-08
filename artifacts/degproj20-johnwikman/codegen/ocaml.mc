@@ -90,7 +90,7 @@ lang RecLetsCGOCaml = MExprCGExt
           let letexpr = argres.1 in
           let internalstate = argres.2 in
           let prefix = if null genacc.code then "let rec " else "    and " in
-          let letret = codegenOCaml (cgsincri 4 (cgsincr instate)) letexpr in
+          let letret = codegenOCaml (cgsincri 4 (cgsincr internalstate)) letexpr in
           let updatedcode = strJoin "" [
             genacc.code, prefix, name, " ", strJoin " " args, " =",
             cgsnewline (cgsincri 4 (cgsincr instate)), letret.code, cgsnewline instate
@@ -483,7 +483,8 @@ let codegen =
     let ocaml = strJoin "\n\n" [opens, externs, res.code] in
     -- CUDA Code
     let includeheaders = ["caml/alloc.h", "caml/memory.h",
-                          "caml/mlvalues.h", "stdio.h", "stdlib.h"] in
+                          "caml/mlvalues.h", "stdio.h", "stdlib.h",
+                          "curand_kernel.h"] in
     let preprocessorchecks = [
       "#ifndef FLAT_FLOAT_ARRAY",
       "#error OCaml floats are not stored in flat array, cannot GPU optimize them.",
