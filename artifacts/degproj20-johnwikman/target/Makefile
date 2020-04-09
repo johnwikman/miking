@@ -3,6 +3,7 @@
 BINDIR=bin
 
 all:
+	rm -rf $(BINDIR)
 	@sh -c 'for dir in $$(ls -d */); do make $${dir%%/}.build; done'
 
 %.build:

@@ -1,4 +1,5 @@
 -- SMC using using: cudaMapExplicitEpt 1 (args...)
+-- SMC using using: cudaInitExplicitEpt 1 (size) (args...)
 
 include "../../lib/macros.mc"
 

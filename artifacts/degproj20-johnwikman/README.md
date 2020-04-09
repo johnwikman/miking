@@ -104,3 +104,53 @@ it should be proportional to execution time.
 | gemv_T|0.527360|reference|small|
 | gemv_T|2.094880|reference|large|
 
+
+## Initial results on SMC
+```sh
+wikman@sleipner:~/Code/gen/bin$ time ./smc-cudax1-s10000.out
+
+real	0m0,856s
+user	0m0,523s
+sys	0m0,281s
+wikman@sleipner:~/Code/gen/bin$ time ./smc-ocaml-s10000.out 
+
+real	0m5,325s
+user	0m5,325s
+sys	0m0,000s
+wikman@sleipner:~/Code/gen/bin$ time ./smc-cudax1-s10million.out 
+
+real	0m31,694s
+user	0m29,049s
+sys	0m2,618s
+wikman@sleipner:~/Code/gen/bin$ time ./smc-ocaml-s10million.out 
+
+real	16m9,302s
+user	16m9,157s
+sys	0m0,112s
+
+
+Reference:
+
+(200)
+wikman@sleipner:~/Downloads/smc$ time ./smc.py 
+
+real	0m0,274s
+user	0m0,262s
+sys	0m0,012s
+
+(10000)
+wikman@sleipner:~/Downloads/smc$ nano smc.py 
+wikman@sleipner:~/Downloads/smc$ time ./smc.py 
+
+real	0m1,279s
+user	0m1,255s
+sys	0m0,024s
+
+(10 million)
+wikman@sleipner:~/Downloads/smc$ nano smc.py 
+wikman@sleipner:~/Downloads/smc$ time ./smc.py 
+
+real	30m0,784s
+user	28m47,907s
+sys	1m12,804s
+```

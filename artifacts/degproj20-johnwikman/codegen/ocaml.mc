@@ -399,8 +399,8 @@ lang CUDACGOCaml = MExprCGExt + MExprCGCostEstimate
         let code =
           strJoin "" [
             -- TEMPORARY PRINTOUTS! --
-            "let _ = printf \"ocamlcost: %d\\n\" (", (codegenOCaml state ocamlcost).code, ") in ",
-            "let _ = printf \"cudacost: %d\\n\" (", (codegenOCaml state cudacost).code, ") in ",
+            --"let _ = printf \"ocamlcost: %d\\n\" (", (codegenOCaml state ocamlcost).code, ") in ",
+            --"let _ = printf \"cudacost: %d\\n\" (", (codegenOCaml state cudacost).code, ") in ",
             --------------------------
             "if (", condcgr.code, ") then (", ocamlappcgr.code, ") else (", cudaappcode, ")"
           ]

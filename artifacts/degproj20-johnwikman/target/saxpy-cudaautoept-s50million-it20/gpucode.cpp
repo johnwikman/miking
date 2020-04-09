@@ -3,6 +3,7 @@
 #include <caml/mlvalues.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <curand_kernel.h>
 
 #ifndef FLAT_FLOAT_ARRAY
 #error OCaml floats are not stored in flat array, cannot GPU optimize them.
@@ -25,7 +26,7 @@ __device__ inline double gpu_mulf(double x, double y) {return x * y;}
 
 __device__ double gpudevice_fun82_saxpy(double arg78_a, value *arg79_y, int arg80_i, double arg81_xelem)
 {
-	return gpu_addf(gpu_mulf(arg78_a, arg81_xelem), *((double *) (arg79_y[arg80_i])));
+	return gpu_addf(gpu_mulf(arg78_a, arg81_xelem), (((double *) arg79_y)[arg80_i]));
 }
 
 __global__ void gpuglobal_fun82_saxpy(double cuda_arg0, value *cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)

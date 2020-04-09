@@ -31,8 +31,22 @@ type CostProfile = {c_addi : Int,
                     c_mulf : Int,
                     c_subf : Int,
                     c_divf : Int,
+                    c_negf : Int,
+                    c_expf : Int,
+                    c_logf : Int,
+                    c_eqf : Int,
+                    c_ltf : Int,
+                    c_gtf : Int,
+                    c_randUniformf : Int,
+                    c_randNormalf : Int,
+                    c_logpdfNormalf : Int,
+                    c_floorfi : Int,
+                    c_ceilfi : Int,
+                    c_or : Int,
+                    c_and : Int,
                     c_eqi : Int,
                     c_lti : Int,
+                    c_gti : Int,
                     c_nth : Int,
                     c_int2float : Int,
                     c_if : Int,
@@ -46,8 +60,11 @@ type CostProfile = {c_addi : Int,
                     c_boolaccess : Int}
 
 let costprof_vanilla = {c_addi = 1, c_muli = 1, c_subi = 1, c_divi = 1, c_modi = 1,
-                        c_addf = 1, c_mulf = 1, c_subf = 1, c_divf = 1,
-                        c_eqi = 1, c_lti = 1, c_nth = 1, c_int2float = 1, c_if = 1,
+                        c_addf = 1, c_mulf = 1, c_subf = 1, c_divf = 1, c_negf = 1,
+                        c_expf = 1, c_logf = 1, c_eqf = 1, c_ltf = 1, c_gtf = 1,
+                        c_randUniformf = 1, c_randNormalf = 1, c_logpdfNormalf = 1,
+                        c_floorfi = 1, c_ceilfi = 1, c_or = 1, c_and = 1,
+                        c_eqi = 1, c_lti = 1, c_gti = 1, c_nth = 1, c_int2float = 1, c_if = 1,
                         c_argapply = 1, c_reccall = 1, c_varaccess = 1,
                         c_intaccess = 1, c_floataccess = 1, c_unitaccess = 0,
                         c_boolaccess = 1}
@@ -211,6 +228,9 @@ lang AppCGCostEstimate = MExprCGExt + WrapperCGCostEstimate
 
       codegenCostEstimate_COSTSCAN state cas_cost (TmApp t)
 
+    sem codegenCostEstimate_NEEDSFLOAT2INTCONV =
+    -- intentionally left blank
+
     -- Scan the recursive nature of functions
     sem codegenCostEstimate_RECSCAN (state : CodegenState) (cas : CostAnalysisState) =
     | TmApp t ->
@@ -222,10 +242,24 @@ lang AppCGCostEstimate = MExprCGExt + WrapperCGCostEstimate
       let args = map (lam t. t.0) scannedArgs in
       let argret = costarr_merge (map (lam t. t.1) scannedArgs) in
       let retexpr = foldl (lam acc. lam e. TmApp {lhs = acc, rhs = e}) funcexpr args in
-      match funcexpr with TmConst _ then
+      match funcexpr with TmConst t1 then
         -- If this TmApp is on a constant function, then we only care about
         -- what is contained inside the arguments.
-        (retexpr, argret)
+        match t1.val with CNth _ then
+          -- if we are performing an array access, then we most certainly do
+          -- not want the sequence to be listed as an integer.
+          let nthcond =
+            if gti (length argret.scopeCondExprs) 0 then
+              [TmConst {val = CInt {val = 1}}]
+            else
+              []
+          in
+          (TmConst {val = CInt {val = 1}}, {argret with scopeCondExprs = nthcond})
+        else if codegenCostEstimate_NEEDSFLOAT2INTCONV t1.val then
+          -- Returns a float, convert it to an integer
+          (TmApp {lhs = TmConst {val = CFloorfi ()}, rhs = retexpr}, argret)
+        else
+          (retexpr, argret)
       else -- continue
 
       -- EXPECTED: funcname now refers to a `let` or `recursive let`.
@@ -363,6 +397,23 @@ lang ConstCGCostEstimate = MExprCGExt
       else
         (TmConst c, costarr_new)
 
+    sem codegenCostEstimate_NEEDSFLOAT2INTCONV =
+    | CFloat _ -> true
+    | CNegf _ -> true
+    | CAddf _ -> true
+    | CSubf _ -> true
+    | CMulf _ -> true
+    | CDivf _ -> true
+    | CEqf _ -> true
+    | CLtf _ -> true
+    | CGtf _ -> true
+    | CRandUniformf _ -> true
+    | CRandNormalf _ -> true
+    | CExpf _ -> true
+    | CLogf _ -> true
+    | CLogpdfNormalf _ -> true
+    | _ -> false
+
     sem codegenCostEstimate_COSTSCAN (state : CodegenState) (cas : CostAnalysisState) =
     | TmConst c -> codegenCostEstimate_CONSTCOSTSCAN cas c.val
 
@@ -371,6 +422,8 @@ lang ConstCGCostEstimate = MExprCGExt
     | CFloat _ -> TmConst {val = CInt {val = cas.profile.c_floataccess}}
     | CBool _ -> TmConst {val = CInt {val = cas.profile.c_boolaccess}}
     | CUnit _ -> TmConst {val = CInt {val = cas.profile.c_unitaccess}}
+    | COr _ -> TmConst {val = CInt {val = cas.profile.c_or}}
+    | CAnd _ -> TmConst {val = CInt {val = cas.profile.c_and}}
     | CAddi _ -> TmConst {val = CInt {val = cas.profile.c_addi}}
     | CSubi _ -> TmConst {val = CInt {val = cas.profile.c_subi}}
     | CMuli _ -> TmConst {val = CInt {val = cas.profile.c_muli}}
@@ -378,12 +431,24 @@ lang ConstCGCostEstimate = MExprCGExt
     | CModi _ -> TmConst {val = CInt {val = cas.profile.c_modi}}
     | CEqi _ -> TmConst {val = CInt {val = cas.profile.c_eqi}}
     | CLti _ -> TmConst {val = CInt {val = cas.profile.c_lti}}
+    | CGti _ -> TmConst {val = CInt {val = cas.profile.c_gti}}
     | CNth _ -> TmConst {val = CInt {val = cas.profile.c_nth}}
     | CInt2float _ -> TmConst {val = CInt {val = cas.profile.c_int2float}}
+    | CNegf _ -> TmConst {val = CInt {val = cas.profile.c_negf}}
     | CAddf _ -> TmConst {val = CInt {val = cas.profile.c_addf}}
     | CSubf _ -> TmConst {val = CInt {val = cas.profile.c_subf}}
     | CMulf _ -> TmConst {val = CInt {val = cas.profile.c_mulf}}
     | CDivf _ -> TmConst {val = CInt {val = cas.profile.c_divf}}
+    | CEqf _ -> TmConst {val = CInt {val = cas.profile.c_eqf}}
+    | CLtf _ -> TmConst {val = CInt {val = cas.profile.c_ltf}}
+    | CGtf _ -> TmConst {val = CInt {val = cas.profile.c_gtf}}
+    | CRandUniformf _ -> TmConst {val = CInt {val = cas.profile.c_randUniformf}}
+    | CRandNormalf _ -> TmConst {val = CInt {val = cas.profile.c_randNormalf}}
+    | CFloorfi _ -> TmConst {val = CInt {val = cas.profile.c_floorfi}}
+    | CCeilfi _ -> TmConst {val = CInt {val = cas.profile.c_ceilfi}}
+    | CExpf _ -> TmConst {val = CInt {val = cas.profile.c_expf}}
+    | CLogf _ -> TmConst {val = CInt {val = cas.profile.c_logf}}
+    | CLogpdfNormalf _ -> TmConst {val = CInt {val = cas.profile.c_logpdfNormalf}}
 end
 
 lang BoolCGCostEstimate = MExprCGExt + WrapperCGCostEstimate
@@ -392,7 +457,10 @@ lang BoolCGCostEstimate = MExprCGExt + WrapperCGCostEstimate
       let condret = codegenCostEstimate_RECSCAN state {cas with inCondBranch = true} t.cond in
       let thnret = codegenCostEstimate_RECSCAN state cas t.thn in
       let elsret = codegenCostEstimate_RECSCAN state cas t.els in
-      (TmIf t, costarr_merge [condret.1, thnret.1, elsret.1])
+      (TmIf {{{t with cond = condret.0}
+                 with thn = thnret.0}
+                 with els = elsret.0},
+       costarr_merge [condret.1, thnret.1, elsret.1])
 
     sem codegenCostEstimate_COSTSCAN (state : CodegenState) (cas : CostAnalysisState) =
     | TmIf t ->

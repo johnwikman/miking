@@ -3,6 +3,7 @@
 #include <caml/mlvalues.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <curand_kernel.h>
 
 #ifndef FLAT_FLOAT_ARRAY
 #error OCaml floats are not stored in flat array, cannot GPU optimize them.

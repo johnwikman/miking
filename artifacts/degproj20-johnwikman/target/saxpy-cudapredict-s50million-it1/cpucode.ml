@@ -1,5 +1,4 @@
 open Printf
-open Array
 
 external gpuhost_fun82_saxpy: int array -> float array -> float array -> float array -> float array = "gpuhost_fun82_saxpy"
 
@@ -179,6 +178,6 @@ let main =
         fun14_seqInit (var77_vecsize) (fun86_vecYinitfun)
     in
     let var90_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var88_vecX)) (( + ) (50) (27))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var88_vecX)) (Array.length (var89_vecY))) (Array.length (var88_vecX))) (10)) (40000000)) (( * ) (360) (( / ) (( + ) (Array.length (var88_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var88_vecX)) (( + ) (50) (27))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var88_vecX)) (Array.length (var89_vecY))) (Array.length (var88_vecX))) (10)) (40000000)) (( * ) (360) (( / ) (( + ) (Array.length (var88_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.mapi (fun82_saxpy (var87_scalarA) (var89_vecY)) (var88_vecX)) else (gpuhost_fun82_saxpy [|1|] [|var87_scalarA|] (var89_vecY) (var88_vecX))
+        if (( < ) (( * ) (Array.length (var88_vecX)) (( + ) (50) (27))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var88_vecX)) (Array.length (var89_vecY))) (Array.length (var88_vecX))) (10)) (40000000)) (( * ) (360) (( / ) (( + ) (Array.length (var88_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.mapi (fun82_saxpy (var87_scalarA) (var89_vecY)) (var88_vecX)) else (gpuhost_fun82_saxpy [|1|] [|var87_scalarA|] (var89_vecY) (var88_vecX))
     in
     ()

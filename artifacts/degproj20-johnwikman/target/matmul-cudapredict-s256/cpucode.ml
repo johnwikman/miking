@@ -1,5 +1,4 @@
 open Printf
-open Array
 
 external gpuhost_fun141_matrixMulfWorker: int array -> float array -> float array -> float array -> float array = "gpuhost_fun141_matrixMulfWorker"
 
@@ -302,13 +301,7 @@ let main =
         var162_matA_cols
     in
     let var180_matAxB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (94) (if ( < ) (1) (var179_innerDim) then
-            var179_innerDim
-        else
-            1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var177_matA))) (Array.length (var178_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (995) (if ( < ) (1) (var179_innerDim) then
-            var179_innerDim
-        else
-            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (94) (if ( < ) (1) (var179_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (94) (if ( < ) (1) (var179_innerDim) then
             var179_innerDim
         else
             1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var177_matA))) (Array.length (var178_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (995) (if ( < ) (1) (var179_innerDim) then

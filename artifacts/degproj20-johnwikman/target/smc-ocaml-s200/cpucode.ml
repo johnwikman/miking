@@ -312,86 +312,83 @@ let main =
     let fun178_wmapf arg177_sigma arg176_heightMapSize arg175_heightMap arg174_altitude arg173_fstobs arg172_xelem =
         (fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359)))) (arg173_fstobs) (fun95_g_map (arg174_altitude) (arg175_heightMap) (arg176_heightMapSize) (arg172_xelem)) (arg177_sigma)
     in
-    let fun184_wmapf arg183_wmax arg182_welem =
-        Float.exp (( -. ) (arg182_welem) (arg183_wmax))
+    let fun183_wmapf arg182_wmax arg181_welem =
+        Float.exp (( -. ) (arg181_welem) (arg182_wmax))
     in
-    let fun190_wmapf arg189_wsum arg188_welem =
-        ( /. ) (arg188_welem) (arg189_wsum)
+    let fun188_wmapf arg187_wsum arg186_welem =
+        ( /. ) (arg186_welem) (arg187_wsum)
     in
-    let fun220_propagate_x arg219_sigma arg218_velocity arg216_x arg214_nPoints arg213_wacc arg211__ =
-        let var212_p  =
+    let fun217_propagate_x arg216_sigma arg215_velocity arg213_x arg211_nPoints arg210_wacc arg208__ =
+        let var209_p  =
             (fun x y -> x +. (Random.float (Float.abs (x -. y)))) (0.0) (1.0e-0)
         in
-        let var215_i  =
-            fun136_binsearch (arg213_wacc) (var212_p) (0) (( - ) (arg214_nPoints) (1))
+        let var212_i  =
+            fun136_binsearch (arg210_wacc) (var209_p) (0) (( - ) (arg211_nPoints) (1))
         in
-        let var217_x_new  =
-            Array.get (arg216_x) (var215_i)
+        let var214_x_new  =
+            Array.get (arg213_x) (var212_i)
         in
-        (fun mu sigma -> mu +. (sigma *. (Float.sqrt (-2.0 *. Float.log (Random.float 1.0))) *. (Float.cos (2.0 *. 3.14159265359 *. (Random.float 1.0))))) (( +. ) (var217_x_new) (arg218_velocity)) (arg219_sigma)
+        (fun mu sigma -> mu +. (sigma *. (Float.sqrt (-2.0 *. Float.log (Random.float 1.0))) *. (Float.cos (2.0 *. 3.14159265359 *. (Random.float 1.0))))) (( +. ) (var214_x_new) (arg215_velocity)) (arg216_sigma)
     in
-    let fun232_wmapf arg231_log_1onN arg230_sigma arg229_heightMapSize arg228_heightMap arg227_altitude arg226_ithobs arg225_xelem =
-        ( +. ) ((fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359)))) (arg226_ithobs) (fun95_g_map (arg227_altitude) (arg228_heightMap) (arg229_heightMapSize) (arg225_xelem)) (arg230_sigma)) (arg231_log_1onN)
+    let fun229_wmapf arg228_log_1onN arg227_sigma arg226_heightMapSize arg225_heightMap arg224_altitude arg223_ithobs arg222_xelem =
+        ( +. ) ((fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359)))) (arg223_ithobs) (fun95_g_map (arg224_altitude) (arg225_heightMap) (arg226_heightMapSize) (arg222_xelem)) (arg227_sigma)) (arg228_log_1onN)
     in
-    let fun237_wmapf arg236_wmax arg235_welem =
-        Float.exp (( -. ) (arg235_welem) (arg236_wmax))
+    let fun234_wmapf arg233_wmax arg232_welem =
+        Float.exp (( -. ) (arg232_welem) (arg233_wmax))
     in
-    let fun242_wmapf arg241_wsum arg240_welem =
-        ( /. ) (arg240_welem) (arg241_wsum)
+    let fun239_wmapf arg238_wsum arg237_welem =
+        ( /. ) (arg237_welem) (arg238_wsum)
     in
-    let rec fun192_iterate_smc arg223_obs arg208_heightMap arg206_heightMapSize arg204_nPoints arg202_altitude arg200_velocity arg198_sigma arg193_i arg194_steps arg195_x arg196_w =
-            if ( = ) (arg193_i) (arg194_steps) then
-                arg195_x
+    let rec fun190_iterate_smc arg220_obs arg205_heightMap arg203_heightMapSize arg201_nPoints arg199_altitude arg197_velocity arg195_sigma arg191_i arg192_steps arg193_x arg194_w =
+            if ( = ) (arg191_i) (arg192_steps) then
+                arg193_x
             else
-                let var197__  =
-                    fun165_pgf_print (( - ) (arg193_i) (1)) (arg195_x) (arg196_w)
+                let var196_sigma  =
+                    arg195_sigma
                 in
-                let var199_sigma  =
-                    arg198_sigma
+                let var198_velocity  =
+                    arg197_velocity
                 in
-                let var201_velocity  =
-                    arg200_velocity
+                let var200_altitude  =
+                    arg199_altitude
                 in
-                let var203_altitude  =
-                    arg202_altitude
+                let var202_nPoints  =
+                    arg201_nPoints
                 in
-                let var205_nPoints  =
-                    arg204_nPoints
+                let var204_heightMapSize  =
+                    arg203_heightMapSize
                 in
-                let var207_heightMapSize  =
-                    arg206_heightMapSize
+                let var206_heightMap  =
+                    arg205_heightMap
                 in
-                let var209_heightMap  =
-                    arg208_heightMap
+                let var207_wacc  =
+                    fun135_seqAccsumf (arg194_w)
                 in
-                let var210_wacc  =
-                    fun135_seqAccsumf (arg196_w)
+                let var218_x_propagated  =
+                    fun14_seqInit (var202_nPoints) (fun217_propagate_x (var196_sigma) (var198_velocity) (arg193_x) (var202_nPoints) (var207_wacc))
                 in
-                let var221_x_propagated  =
-                    fun14_seqInit (var205_nPoints) (fun220_propagate_x (var199_sigma) (var201_velocity) (arg195_x) (var205_nPoints) (var210_wacc))
+                let var219_log_1onN  =
+                    Float.log (( /. ) (1.0e-0) (float_of_int (var202_nPoints)))
                 in
-                let var222_log_1onN  =
-                    Float.log (( /. ) (1.0e-0) (float_of_int (var205_nPoints)))
+                let var221_ithobs  =
+                    Array.get (arg220_obs) (arg191_i)
                 in
-                let var224_ithobs  =
-                    Array.get (arg223_obs) (arg193_i)
+                let var230_w  =
+                    fun8_map (fun229_wmapf (var219_log_1onN) (var196_sigma) (var204_heightMapSize) (var206_heightMap) (var200_altitude) (var221_ithobs)) (var218_x_propagated)
                 in
-                let var233_w  =
-                    fun8_map (fun232_wmapf (var222_log_1onN) (var199_sigma) (var207_heightMapSize) (var209_heightMap) (var203_altitude) (var224_ithobs)) (var221_x_propagated)
+                let var231_wmax  =
+                    fun116_seqMaxf (var230_w)
                 in
-                let var234_wmax  =
-                    fun116_seqMaxf (var233_w)
+                let var235_w  =
+                    fun8_map (fun234_wmapf (var231_wmax)) (var230_w)
                 in
-                let var238_w  =
-                    fun8_map (fun237_wmapf (var234_wmax)) (var233_w)
+                let var236_wsum  =
+                    fun133_seqSumf (var235_w)
                 in
-                let var239_wsum  =
-                    fun133_seqSumf (var238_w)
+                let var240_w_updated  =
+                    fun8_map (fun239_wmapf (var236_wsum)) (var235_w)
                 in
-                let var243_w_updated  =
-                    fun8_map (fun242_wmapf (var239_wsum)) (var238_w)
-                in
-                fun192_iterate_smc (arg223_obs) (arg208_heightMap) (arg206_heightMapSize) (arg204_nPoints) (arg202_altitude) (arg200_velocity) (arg198_sigma) (( + ) (arg193_i) (1)) (arg194_steps) (var221_x_propagated) (var243_w_updated)
+                fun190_iterate_smc (arg220_obs) (arg205_heightMap) (arg203_heightMapSize) (arg201_nPoints) (arg199_altitude) (arg197_velocity) (arg195_sigma) (( + ) (arg191_i) (1)) (arg192_steps) (var218_x_propagated) (var240_w_updated)
     in
     let var77_precision  =
         200
@@ -438,31 +435,19 @@ let main =
     let var179_w  =
         fun8_map (fun178_wmapf (var79_sigma) (var86_heightMapSize) (var87_heightMap) (var85_altitude) (var171_fstobs)) (var170_x)
     in
-    let var180__  =
-        fun165_pgf_print (888) (var170_x) (var179_w)
-    in
-    let var181_wmax  =
+    let var180_wmax  =
         fun116_seqMaxf (var179_w)
     in
-    let var185_w  =
-        fun8_map (fun184_wmapf (var181_wmax)) (var179_w)
+    let var184_w  =
+        fun8_map (fun183_wmapf (var180_wmax)) (var179_w)
     in
-    let var186_wsum  =
-        fun133_seqSumf (var185_w)
+    let var185_wsum  =
+        fun133_seqSumf (var184_w)
     in
-    let var187__  =
-        fun165_pgf_print (999) (var170_x) (var185_w)
+    let var189_w  =
+        fun8_map (fun188_wmapf (var185_wsum)) (var184_w)
     in
-    let var191_w  =
-        fun8_map (fun190_wmapf (var186_wsum)) (var185_w)
-    in
-    let var244_x_res  =
-        fun192_iterate_smc (var88_obs) (var87_heightMap) (var86_heightMapSize) (var80_nPoints) (var85_altitude) (var84_velocity) (var79_sigma) (1) (var83_flight_range) (var170_x) (var191_w)
-    in
-    let var245__  =
-        (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; 'x'; '_'; 'r'; 'e'; 's'; ':'; '\n'|])
-    in
-    let var246__  =
-        fun76_printSeqf (var80_nPoints) (var244_x_res)
+    let var241_x_res  =
+        fun190_iterate_smc (var88_obs) (var87_heightMap) (var86_heightMapSize) (var80_nPoints) (var85_altitude) (var84_velocity) (var79_sigma) (1) (var83_flight_range) (var170_x) (var189_w)
     in
     ()

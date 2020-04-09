@@ -3,6 +3,7 @@
 #include <caml/mlvalues.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <curand_kernel.h>
 
 #ifndef FLAT_FLOAT_ARRAY
 #error OCaml floats are not stored in flat array, cannot GPU optimize them.
@@ -35,7 +36,7 @@ __device__ inline bool gpu_eqi(int x, int y) {return x == y;}
 
 __device__ double gpudevice_fun132_dotprod(int arg140_b_cols, value *arg139_b, value *arg138_a, int arg137_innerDim, double arg133_acc, int arg134_p, int arg135_a_offset, int arg136_b_offset)
 {
-	return (gpu_eqi(arg134_p, arg137_innerDim)) ? (arg133_acc) : (gpudevice_fun132_dotprod(arg140_b_cols, arg139_b, arg138_a, arg137_innerDim, gpu_addf(arg133_acc, gpu_mulf(*((double *) (arg138_a[arg135_a_offset])), *((double *) (arg139_b[arg136_b_offset])))), gpu_addi(arg134_p, 1), gpu_addi(arg135_a_offset, 1), gpu_addi(arg136_b_offset, arg140_b_cols)));
+	return (gpu_eqi(arg134_p, arg137_innerDim)) ? (arg133_acc) : (gpudevice_fun132_dotprod(arg140_b_cols, arg139_b, arg138_a, arg137_innerDim, gpu_addf(arg133_acc, gpu_mulf((((double *) arg138_a)[arg135_a_offset]), (((double *) arg139_b)[arg136_b_offset]))), gpu_addi(arg134_p, 1), gpu_addi(arg135_a_offset, 1), gpu_addi(arg136_b_offset, arg140_b_cols)));
 }
 
 __device__ inline int gpu_muli(int x, int y) {return x * y;}

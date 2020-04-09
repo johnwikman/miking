@@ -1,4 +1,3 @@
-open Array
 open Printf
 
 external gpuhost_fun81_saxpy: int array -> float array -> float array -> float array = "gpuhost_fun81_saxpy"

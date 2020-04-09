@@ -326,14 +326,6 @@ let prog = bindall_ [prog,
   let_ "w" (tyseq_ tyfloat_) (
     specificmap_ (var_ "wmapf") (var_ "x")
   ),
-  -- TEMP: Print X --
-  let_ "_" (tyunit_) (
-    app3f_ (var_ "pgf_print")
-           (int_ 888)
-           (var_ "x")
-           (var_ "w")
-  ),
-  -------------------
   -- NORMALIZE INITIAL W
   let_ "wmax" (tyfloat_) (app1f_ (var_ "seqMaxf") (var_ "w")),
 
@@ -346,13 +338,6 @@ let prog = bindall_ [prog,
     specificmap_ (var_ "wmapf") (var_ "w")
   ),
   let_ "wsum" (tyfloat_) (app1f_ (var_ "seqSumf") (var_ "w")),
-  -- TEMP: Print X --
-  let_ "_" (tyunit_) (
-    app3f_ (var_ "pgf_print")
-           (int_ 999)
-           (var_ "x")
-           (var_ "w")
-  ),
 
   let_ "wmapf" (tyarrow_ tyfloat_ tyfloat_) (
     lam_ "welem" (tyfloat_) (
@@ -375,12 +360,12 @@ let prog = bindall_ [prog,
             -- else: continue
             bindall_ [
               -- TEMP: Print X --
-              let_ "_" (tyunit_) (
-                app3f_ (var_ "pgf_print")
-                       (subi_ (var_ "i") (int_ 1))
-                       (var_ "x")
-                       (var_ "w")
-              ),
+              --let_ "_" (tyunit_) (
+              --  app3f_ (var_ "pgf_print")
+              --         (subi_ (var_ "i") (int_ 1))
+              --         (var_ "x")
+              --         (var_ "w")
+              --),
               -------------------
 
               -- These "refreshers" are needed until a type checker is in place
@@ -488,12 +473,12 @@ let prog = bindall_ [prog,
 ---------------------------
 
 ------- Output Verification -------
-let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nx_res:\n"))) in
-let prog = bind_ prog (let_ "_" (tyunit_) (
-    app2f_ (var_ "printSeqf")
-           (var_ "nPoints")
-           (var_ "x_res")
-  )) in
+--let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nx_res:\n"))) in
+--let prog = bind_ prog (let_ "_" (tyunit_) (
+--    app2f_ (var_ "printSeqf")
+--           (var_ "nPoints")
+--           (var_ "x_res")
+--  )) in
 -----------------------------------
 
 let res = codegen prog in

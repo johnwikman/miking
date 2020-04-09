@@ -1,5 +1,4 @@
 open Printf
-open Array
 
 external gpuhost_fun160_matrixATAfWorker: int array -> float array -> float array -> float array = "gpuhost_fun160_matrixATAfWorker"
 external gpuhost_fun141_matrixMulfWorker: int array -> float array -> float array -> float array -> float array = "gpuhost_fun141_matrixMulfWorker"
@@ -300,13 +299,7 @@ let main =
         fun96_matrixInitf (var172_vecX_rows) (var173_vecX_cols) (fun170_vecXinitfun)
     in
     let var175_matATA  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var162_matA_cols) (var162_matA_cols)) (( + ) (50) (( + ) (8) (( + ) (0) (( + ) (1) (( + ) (1) (( + ) (7) (( + ) (7) (( + ) (1) (( + ) (1) (( + ) (14) (( + ) (0) (( * ) (92) (if ( < ) (1) (var161_matA_rows) then
-            var161_matA_rows
-        else
-            1)))))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( * ) (var162_matA_cols) (var162_matA_cols)) (Array.length (var171_matA))) (10)) (40000000)) (( * ) (( + ) (8) (( + ) (0) (( + ) (1) (( + ) (1) (( + ) (64) (( + ) (64) (( + ) (1) (( + ) (1) (( + ) (14) (( + ) (0) (( * ) (993) (if ( < ) (1) (var161_matA_rows) then
-            var161_matA_rows
-        else
-            1)))))))))))) (( / ) (( + ) (( * ) (var162_matA_cols) (var162_matA_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var162_matA_cols) (var162_matA_cols)) (( + ) (50) (( + ) (8) (( + ) (0) (( + ) (1) (( + ) (1) (( + ) (7) (( + ) (7) (( + ) (1) (( + ) (1) (( + ) (14) (( + ) (0) (( * ) (92) (if ( < ) (1) (var161_matA_rows) then
+        if (( < ) (( * ) (( * ) (var162_matA_cols) (var162_matA_cols)) (( + ) (50) (( + ) (8) (( + ) (0) (( + ) (1) (( + ) (1) (( + ) (7) (( + ) (7) (( + ) (1) (( + ) (1) (( + ) (14) (( + ) (0) (( * ) (92) (if ( < ) (1) (var161_matA_rows) then
             var161_matA_rows
         else
             1)))))))))))))) (( + ) (( + ) (( * ) (( + ) (( * ) (var162_matA_cols) (var162_matA_cols)) (Array.length (var171_matA))) (10)) (40000000)) (( * ) (( + ) (8) (( + ) (0) (( + ) (1) (( + ) (1) (( + ) (64) (( + ) (64) (( + ) (1) (( + ) (1) (( + ) (14) (( + ) (0) (( * ) (993) (if ( < ) (1) (var161_matA_rows) then
@@ -315,13 +308,7 @@ let main =
             1)))))))))))) (( / ) (( + ) (( * ) (var162_matA_cols) (var162_matA_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var162_matA_cols) (var162_matA_cols)) (fun160_matrixATAfWorker (var161_matA_rows) (var162_matA_cols) (var171_matA))) else (gpuhost_fun160_matrixATAfWorker [|1; var161_matA_rows; var162_matA_cols; ( * ) (var162_matA_cols) (var162_matA_cols)|] [||] (var171_matA))
     in
     let var176_vecATAx  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var162_matA_cols) (var173_vecX_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (94) (if ( < ) (1) (var162_matA_cols) then
-            var162_matA_cols
-        else
-            1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var162_matA_cols) (var173_vecX_cols)) (Array.length (var175_matATA))) (Array.length (var174_vecX))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (995) (if ( < ) (1) (var162_matA_cols) then
-            var162_matA_cols
-        else
-            1)))))))))) (( / ) (( + ) (( * ) (var162_matA_cols) (var173_vecX_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var162_matA_cols) (var173_vecX_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (94) (if ( < ) (1) (var162_matA_cols) then
+        if (( < ) (( * ) (( * ) (var162_matA_cols) (var173_vecX_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (94) (if ( < ) (1) (var162_matA_cols) then
             var162_matA_cols
         else
             1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var162_matA_cols) (var173_vecX_cols)) (Array.length (var175_matATA))) (Array.length (var174_vecX))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (995) (if ( < ) (1) (var162_matA_cols) then

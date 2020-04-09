@@ -1,5 +1,4 @@
 open Printf
-open Array
 
 external gpuhost_fun160_matrixATAfWorker: int array -> float array -> float array -> float array = "gpuhost_fun160_matrixATAfWorker"
 external gpuhost_fun141_matrixMulfWorker: int array -> float array -> float array -> float array -> float array = "gpuhost_fun141_matrixMulfWorker"
