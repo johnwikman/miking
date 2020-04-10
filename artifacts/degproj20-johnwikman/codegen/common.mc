@@ -277,10 +277,12 @@ lang MainCGExt
     syn Const =
     | CPrint {}
     | CError {}
+    | CWallTimeSecondsf {}
 
     sem getConstStringCode (indent : Int) =
     | CPrint _ -> "print"
     | CError _ -> "error"
+    | CWallTimeSecondsf _ -> "wallTimeSecondsf"
 end
 
 lang MExprCGExt = MExprAst + RecLetsCGExt+ FloatCGExt + ArithIntCGExt +

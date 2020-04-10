@@ -16,18 +16,18 @@ extern "C" {
 	value gpuhost_fun81_saxpy(value packedInts, value packedFloats, value arg0);
 }
 
-__device__ double gpudevice_fun81_saxpy(double arg78_a, double arg79_y, double arg80_xelem);
-__device__ inline double gpu_mulf(double x, double y);
 __device__ inline double gpu_addf(double x, double y);
+__device__ inline double gpu_mulf(double x, double y);
+__device__ double gpudevice_fun81_saxpy(double arg78_a, double arg79_y, double arg80_xelem);
+
+__device__ inline double gpu_addf(double x, double y) {return x + y;}
+
+__device__ inline double gpu_mulf(double x, double y) {return x * y;}
 
 __device__ double gpudevice_fun81_saxpy(double arg78_a, double arg79_y, double arg80_xelem)
 {
 	return gpu_addf(gpu_mulf(arg78_a, arg80_xelem), arg79_y);
 }
-
-__device__ inline double gpu_mulf(double x, double y) {return x * y;}
-
-__device__ inline double gpu_addf(double x, double y) {return x + y;}
 
 __global__ void gpuglobal_fun81_saxpy(double cuda_arg0, double cuda_arg1, value *cuda_arg2, value *outarr, int n, int elemPerThread)
 {

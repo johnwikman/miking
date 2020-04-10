@@ -202,6 +202,9 @@ let print_ = use MExprCGOCaml in
 let error_ = use MExprCGOCaml in
   app1f_ (TmConst {val = CError ()})
 
+let wallTimeSecondsf_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CWallTimeSecondsf ()}) unit_
+
 let int2char_ = use MExprCGOCaml in
   app1f_ (TmConst {val = CInt2char ()})
 

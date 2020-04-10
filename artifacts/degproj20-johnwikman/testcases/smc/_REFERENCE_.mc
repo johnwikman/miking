@@ -68,12 +68,12 @@ recursive let iterate_smc = lam i. lam steps. lam x. lam w.
         low --found our position!
       else -- continue
 
-      let mid = divi (addi (addi low up) 1) 2 in
+      let mid = divi (subi (addi low up) 1) 2 in
       let w_mid = nth w mid in
       if ltf p w_mid then
-        binsearch low (subi mid 1)
+        binsearch low mid
       else
-        binsearch mid up
+        binsearch (addi mid 1) up
     in
     let i = binsearch 0 (subi n 1) in
 

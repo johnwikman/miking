@@ -11,10 +11,11 @@ all:
 	nvcc -x cu -arch=sm_50 -I`ocamlc -where` -dc $*/gpucode.cpp -o $*/gpuhost.o
 	nvcc -arch=sm_50 -dlink $*/gpuhost.o -o $*/gpudevice.o
 
-	ocamlopt $*/gpudevice.o $*/gpuhost.o $*/cpucode.ml \
-	         -cclib -lcudart                           \
-	         -cclib -lstdc++                           \
-	         -O3                                       \
+	ocamlopt $*/gpudevice.o $*/gpuhost.o \
+	         unix.cmxa $*/cpucode.ml     \
+	         -cclib -lcudart             \
+	         -cclib -lstdc++             \
+	         -O3                         \
 	         -o $(BINDIR)/$*.out
 
 clean:

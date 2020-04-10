@@ -4,6 +4,7 @@ include "../../codegen/ocaml.mc"
 include "../../lib/std.mc"
 include "../../lib/io.mc"
 include "../../lib/macros.mc"
+include "../../lib/benchmark-utils.mc"
 
 -- This determines how many times that saxpy should be applied.
 -- Unlike other options, this contains a direct number instead of an AST node.
@@ -78,7 +79,7 @@ let prog = bind_ prog libio_ in
 let prog = bind_ prog defcommon_ in
 
 ------- Perform Saxpy (repeated based on iteration setting) -------
-let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
+--let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
 -------------------------------------------------------------------
 
 ------- Output Verification -------
@@ -89,6 +90,14 @@ let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
 --           (var_ "vecS")
 --  )) in
 -----------------------------------
+
+------- Benchmark Saxpy -------
+let bm =
+  benchmark_ {bmparams_ with iters = defiterations_}
+             defspecific_
+in
+let prog = bind_ prog bm in
+-------------------------------
 
 let res = codegen prog in
 

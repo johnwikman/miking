@@ -425,6 +425,7 @@ lang MainGCOCaml = MExprCGExt
     | CPrint _ -> {{cgr_new with code = "(fun s -> printf \"%s\" (String.of_seq (Array.to_seq s)))"}
                             with opens = strset_add "Printf" strset_new}
     | CError _ -> {cgr_new with code = "(fun s -> printf \"ERROR: %s\n\" (String.of_seq (Array.to_seq s)); exit 1)"}
+    | CWallTimeSecondsf _ -> {cgr_new with code = "Unix.gettimeofday"}
 end
 
 lang MExprCGOCaml = VarCGOCaml + AppCGOCaml + FunCGOCaml + LetCGOCaml +
