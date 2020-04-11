@@ -295,6 +295,9 @@ let expf_ = use MExprCGOCaml in
 let logf_ = use MExprCGOCaml in
   app1f_ (TmConst {val = CLogf ()})
 
+let sqrtf_ = use MExprCGOCaml in
+  app1f_ (TmConst {val = CSqrtf ()})
+
 let randUniformf_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CRandUniformf ()})
 

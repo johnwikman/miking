@@ -149,6 +149,7 @@ lang ArithFloatCGOCaml = MExprCGExt
     | CRoundfi _ -> {cgr_new with code = "(fun x -> int_of_float (Float.round x))"}
     | CExpf _ -> {cgr_new with code = "Float.exp"}
     | CLogf _ -> {cgr_new with code = "Float.log"}
+    | CSqrtf _ -> {cgr_new with code = "Float.sqrt"}
     | CRandUniformf _ -> {cgr_new with code = "(fun x y -> x +. (Random.float (Float.abs (x -. y))))"}
     | CRandNormalf _ -> {cgr_new with code = "(fun mu sigma -> mu +. (sigma *. (Float.sqrt (-2.0 *. Float.log (Random.float 1.0))) *. (Float.cos (2.0 *. 3.14159265359 *. (Random.float 1.0)))))"}
     | CLogpdfNormalf _ -> {cgr_new with code = "(fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359))))"}

@@ -3,7 +3,7 @@
 
 -- Cost profile information for OCaml
 let costprof_ocaml_costperelem = 50
-let costprof_ocaml = {{{{{{{{{{{{{{{{{{{{{{{{{{costprof_vanilla
+let costprof_ocaml = {{{{{{{{{{{{{{{{{{{{{{{{{{{costprof_vanilla
                       with c_addi = 1}
                       with c_subi = 1}
                       with c_muli = 3}
@@ -15,6 +15,7 @@ let costprof_ocaml = {{{{{{{{{{{{{{{{{{{{{{{{{{costprof_vanilla
                       with c_divf = 5}
                       with c_expf = 20}
                       with c_logf = 20}
+                      with c_sqrtf = 20}
                       with c_eqf = 2}
                       with c_ltf = 2}
                       with c_gtf = 2}
@@ -36,7 +37,7 @@ let costprof_cuda_fixed_latency = 40000000
 let costprof_cuda_relative_latency = 10
 let costprof_cuda_capacity_per_thread = 2048
 let costprof_cuda_paralleldenominator = 1536
-let costprof_cuda = {{{{{{{{{{{{{{{{{{{{{{{{{{costprof_vanilla
+let costprof_cuda = {{{{{{{{{{{{{{{{{{{{{{{{{{{costprof_vanilla
                      with c_addi = 12}
                      with c_subi = 12}
                      with c_muli = 28}
@@ -48,6 +49,7 @@ let costprof_cuda = {{{{{{{{{{{{{{{{{{{{{{{{{{costprof_vanilla
                      with c_divf = 92}
                      with c_expf = 200}
                      with c_logf = 200}
+                     with c_sqrtf = 200}
                      with c_eqf = 22}
                      with c_ltf = 22}
                      with c_gtf = 22}

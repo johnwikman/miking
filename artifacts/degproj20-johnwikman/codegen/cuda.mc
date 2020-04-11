@@ -347,8 +347,9 @@ lang ArithFloatCGCUDA = MExprCGExt
     | CCeilfi _ -> genconstfun "int" "gpu_ceilfi" "(double x)" "{return (int) ceil(x);}"    -- round are
     | CRoundfi _ -> genconstfun "int" "gpu_roundfi" "(double x)" "{return (int) round(x);}" -- available by default.
     | CInt2float _ -> genconstfun "double" "gpu_int2float" "(int x)" "{return (double) x;}"
-    | CExpf _ -> genconstfun "double" "gpu_expf" "(double x)" "{return exp(x);}" -- These 2 are available
+    | CExpf _ -> genconstfun "double" "gpu_expf" "(double x)" "{return exp(x);}" -- These 3 are available
     | CLogf _ -> genconstfun "double" "gpu_logf" "(double x)" "{return log(x);}" -- by default.
+    | CSqrtf _ -> genconstfun "double" "gpu_sqrtf" "(double x)" "{return sqrt(x);}"
     | CLogpdfNormalf _ -> genconstfun "double" "gpu_logpdfnormalf" "(double x, double mu, double sigma)"
                                       "{double t = x - mu; return (-0.5 * t * t / (sigma * sigma)) - log(sigma * sqrt(2.0 * 3.14159265359));}"
     | CRandUniformf _ -> genconstrandfun "double" "gpu_randUniformf" "(curandState_t *r, double low, double up)" "{return low + ((double) curand_uniform(r) * abs(up - low));}"

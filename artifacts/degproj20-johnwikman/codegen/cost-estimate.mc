@@ -34,6 +34,7 @@ type CostProfile = {c_addi : Int,
                     c_negf : Int,
                     c_expf : Int,
                     c_logf : Int,
+                    c_sqrtf : Int,
                     c_eqf : Int,
                     c_ltf : Int,
                     c_gtf : Int,
@@ -61,7 +62,7 @@ type CostProfile = {c_addi : Int,
 
 let costprof_vanilla = {c_addi = 1, c_muli = 1, c_subi = 1, c_divi = 1, c_modi = 1,
                         c_addf = 1, c_mulf = 1, c_subf = 1, c_divf = 1, c_negf = 1,
-                        c_expf = 1, c_logf = 1, c_eqf = 1, c_ltf = 1, c_gtf = 1,
+                        c_expf = 1, c_logf = 1, c_sqrtf = 1, c_eqf = 1, c_ltf = 1, c_gtf = 1,
                         c_randUniformf = 1, c_randNormalf = 1, c_logpdfNormalf = 1,
                         c_floorfi = 1, c_ceilfi = 1, c_or = 1, c_and = 1,
                         c_eqi = 1, c_lti = 1, c_gti = 1, c_nth = 1, c_int2float = 1, c_if = 1,
@@ -448,6 +449,7 @@ lang ConstCGCostEstimate = MExprCGExt
     | CCeilfi _ -> TmConst {val = CInt {val = cas.profile.c_ceilfi}}
     | CExpf _ -> TmConst {val = CInt {val = cas.profile.c_expf}}
     | CLogf _ -> TmConst {val = CInt {val = cas.profile.c_logf}}
+    | CSqrtf _ -> TmConst {val = CInt {val = cas.profile.c_sqrtf}}
     | CLogpdfNormalf _ -> TmConst {val = CInt {val = cas.profile.c_logpdfNormalf}}
 end
 

@@ -1,4 +1,5 @@
 -- A^T * A * x
+-- (This corresponds to GEMV_T in the Lift artifact)
 
 include "../../codegen/ocaml.mc"
 include "../../lib/std.mc"

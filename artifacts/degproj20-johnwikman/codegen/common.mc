@@ -118,6 +118,7 @@ lang ArithFloatCGExt
     | CRoundfi {}
     | CExpf {}
     | CLogf {}
+    | CSqrtf {}
     | CRandUniformf {}
     | CRandNormalf {}
     | CLogpdfNormalf {}
@@ -135,6 +136,7 @@ lang ArithFloatCGExt
     | CRoundfi _ -> "roundfi"
     | CExpf _ -> "expf"
     | CLogf _ -> "logf"
+    | CSqrtf _ -> "sqrtf"
     | CRandUniformf _ -> "randUniformf"
     | CRandNormalf _ -> "randNormalf"
     | CLogpdfNormalf _ -> "logpdfNormalf"
