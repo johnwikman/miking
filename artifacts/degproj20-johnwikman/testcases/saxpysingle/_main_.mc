@@ -6,10 +6,6 @@ include "../../lib/io.mc"
 include "../../lib/macros.mc"
 include "../../lib/benchmark-utils.mc"
 
--- This determines how many times that saxpy should be applied.
--- Unlike other options, this contains a direct number instead of an AST node.
-include "_iter_.mc"
-
 -- This should define the vecsize variable
 -- Included by binding defsize_
 include "_size_.mc"
@@ -78,9 +74,9 @@ let prog = libstd_ in
 let prog = bind_ prog libio_ in
 let prog = bind_ prog defcommon_ in
 
-------- Perform Saxpy (repeated based on iteration setting) -------
---let prog = bindall_ (cons prog (makeseq defiterations_ defspecific_)) in
--------------------------------------------------------------------
+------- Perform Saxpy  -------
+--let prog = bind prog defspecific_ in
+------------------------------
 
 ------- Output Verification -------
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecS:\n"))) in
@@ -93,7 +89,7 @@ let prog = bind_ prog defcommon_ in
 
 ------- Benchmark Saxpy -------
 let bm =
-  benchmark_ {bmparams_ with iters = defiterations_}
+  benchmark_ {bmparams_ with iters = 15}
              defspecific_
 in
 let prog = bind_ prog bm in

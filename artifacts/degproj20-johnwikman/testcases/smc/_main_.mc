@@ -4,6 +4,7 @@ include "../../codegen/ocaml.mc"
 include "../../lib/std.mc"
 include "../../lib/io.mc"
 include "../../lib/macros.mc"
+include "../../lib/benchmark-utils.mc"
 
 -- This should define the size (precision) variable
 -- Included by binding defsize_
@@ -301,8 +302,20 @@ let prog = libstd_ in
 let prog = bind_ prog libio_ in
 let prog = bind_ prog defcommon_ in
 
-------- Perform SMC -------
-let prog = bindall_ [prog,
+------- One run of SMC -------
+let smcpart = bindall_ [
+  -- These "refreshers" are needed until a type checker is in place
+  -- since the lambda lifter does not carry over this type to the
+  -- lifted argument.
+  let_ "xLowerBound" (tyfloat_) (var_ "xLowerBound"),
+  let_ "xUpperBound" (tyfloat_) (var_ "xUpperBound"),
+  let_ "sigma" (tyfloat_) (var_ "sigma"),
+  let_ "velocity" (tyfloat_) (var_ "velocity"),
+  let_ "altitude" (tyfloat_) (var_ "altitude"),
+  let_ "nPoints" (tyint_) (var_ "nPoints"),
+  let_ "heightMapSize" (tyint_) (var_ "heightMapSize"),
+  let_ "heightMap" (tyseq_ tyfloat_) (var_ "heightMap"),
+
   -- GENERATE INITIAL X
   let_ "rndinitf" (tyarrow_ tyint_ tyfloat_) (
     lam_ "_" (tyint_) (randUniformf_ (var_ "xLowerBound") (var_ "xUpperBound"))
@@ -472,6 +485,10 @@ let prog = bindall_ [prog,
 ] in
 ---------------------------
 
+------ Perform SMC ------
+--let prog = bind prog smcpart in
+-------------------------
+
 ------- Output Verification -------
 --let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nx_res:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
@@ -480,6 +497,14 @@ let prog = bindall_ [prog,
 --           (var_ "x_res")
 --  )) in
 -----------------------------------
+
+------- Benchmark SMC -------
+let bm =
+  benchmark_ {bmparams_ with iters = 15}
+             smcpart
+in
+let prog = bind_ prog bm in
+-----------------------------
 
 let res = codegen prog in
 

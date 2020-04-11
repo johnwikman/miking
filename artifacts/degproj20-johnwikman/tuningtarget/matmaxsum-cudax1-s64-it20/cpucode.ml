@@ -1,5 +1,4 @@
 open Printf
-open Array
 
 external gpuhost_fun187_matrixMaxSumiWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_fun187_matrixMaxSumiWorker"
 

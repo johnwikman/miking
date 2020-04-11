@@ -1,5 +1,4 @@
 open Printf
-open Array
 
 external gpuhost_fun90_gcdsum: int array -> float array -> int array -> int array -> int array = "gpuhost_fun90_gcdsum"
 

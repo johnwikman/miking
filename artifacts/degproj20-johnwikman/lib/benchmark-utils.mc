@@ -262,6 +262,13 @@ let benchmark_ = lam params : BMParams. lam ast.
                                                          (var_ "avg")
                                                          (var_ "min")])),
 
+        let_ "median" (tyfloat_) (mulf_ (var_ "median") (float_ 1000.0)),
+        let_ "sum" (tyfloat_) (mulf_ (var_ "sum") (float_ 1000.0)),
+        let_ "avg" (tyfloat_) (mulf_ (var_ "avg") (float_ 1000.0)),
+        let_ "max" (tyfloat_) (mulf_ (var_ "max") (float_ 1000.0)),
+        let_ "min" (tyfloat_) (mulf_ (var_ "min") (float_ 1000.0)),
+        let_ "variance" (tyfloat_) (mulf_ (var_ "variance") (float_ 1000.0)),
+
         let_ "_" (tyunit_) (print_ (str_ "== ITERATION RESULTS ==\n")),
         let_ "_" (tyunit_) (print_ (str_ "No. of iterations: ")),
         let_ "_" (tyunit_) (print_ (str_ (int2string params.iters))),
@@ -270,27 +277,79 @@ let benchmark_ = lam params : BMParams. lam ast.
         let_ "_" (tyunit_) (print_ (str_ "Median: ")),
         let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
                                            (var_ "median"))),
-        let_ "_" (tyunit_) (print_ (str_ " seconds\n")),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
 
         let_ "_" (tyunit_) (print_ (str_ "Longest run: ")),
         let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
                                            (var_ "max"))),
-        let_ "_" (tyunit_) (print_ (str_ " seconds\n")),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
 
         let_ "_" (tyunit_) (print_ (str_ "Shortest run: ")),
         let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
                                            (var_ "min"))),
-        let_ "_" (tyunit_) (print_ (str_ " seconds\n")),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
 
         let_ "_" (tyunit_) (print_ (str_ "Average: ")),
         let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
                                            (var_ "avg"))),
-        let_ "_" (tyunit_) (print_ (str_ " seconds\n")),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
 
         let_ "_" (tyunit_) (print_ (str_ "Variance: +-")),
         let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
                                            (var_ "variance"))),
-        let_ "_" (tyunit_) (print_ (str_ " seconds\n"))
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
+
+
+        -- WARMUP INFO
+        let_ "median" (tyfloat_) (app1f_ (var_ "bm_median") (var_ "bmres_warmup")),
+        let_ "sum" (tyfloat_) (app1f_ (var_ "bm_sum") (var_ "bmres_warmup")),
+        let_ "avg" (tyfloat_) (divf_ (var_ "sum") (float_ (int2float params.warmups))),
+        let_ "max" (tyfloat_) (app1f_ (var_ "bm_max") (var_ "bmres_warmup")),
+        let_ "min" (tyfloat_) (app1f_ (var_ "bm_min") (var_ "bmres_warmup")),
+        let_ "variance" (tyfloat_) (app1f_ (var_ "bm_max")
+                                           (seq_ [app2f_ (var_ "bm_dist")
+                                                         (var_ "avg")
+                                                         (var_ "max"),
+                                                  app2f_ (var_ "bm_dist")
+                                                         (var_ "avg")
+                                                         (var_ "min")])),
+
+        let_ "median" (tyfloat_) (mulf_ (var_ "median") (float_ 1000.0)),
+        let_ "sum" (tyfloat_) (mulf_ (var_ "sum") (float_ 1000.0)),
+        let_ "avg" (tyfloat_) (mulf_ (var_ "avg") (float_ 1000.0)),
+        let_ "max" (tyfloat_) (mulf_ (var_ "max") (float_ 1000.0)),
+        let_ "min" (tyfloat_) (mulf_ (var_ "min") (float_ 1000.0)),
+        let_ "variance" (tyfloat_) (mulf_ (var_ "variance") (float_ 1000.0)),
+
+        let_ "_" (tyunit_) (print_ (str_ "\n\n== WARMUP STATISTICS ==\n")),
+        let_ "_" (tyunit_) (print_ (str_ "No. of warmup runs: ")),
+        let_ "_" (tyunit_) (print_ (str_ (int2string params.warmups))),
+        let_ "_" (tyunit_) (print_ (str_ "\n")),
+
+        let_ "_" (tyunit_) (print_ (str_ "Median: ")),
+        let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
+                                           (var_ "median"))),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
+
+        let_ "_" (tyunit_) (print_ (str_ "Longest run: ")),
+        let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
+                                           (var_ "max"))),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
+
+        let_ "_" (tyunit_) (print_ (str_ "Shortest run: ")),
+        let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
+                                           (var_ "min"))),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
+
+        let_ "_" (tyunit_) (print_ (str_ "Average: ")),
+        let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
+                                           (var_ "avg"))),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n")),
+
+        let_ "_" (tyunit_) (print_ (str_ "Variance: +-")),
+        let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
+                                           (var_ "variance"))),
+        let_ "_" (tyunit_) (print_ (str_ " ms\n"))
       ]
     )
   in

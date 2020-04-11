@@ -3,6 +3,7 @@
 #include <caml/mlvalues.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <curand_kernel.h>
 
 #ifndef FLAT_FLOAT_ARRAY
 #error OCaml floats are not stored in flat array, cannot GPU optimize them.
@@ -35,7 +36,7 @@ __device__ int gpudevice_fun78_gcd(int arg79_a, int arg80_b)
 
 __device__ int gpudevice_fun84_recloop(value *arg89_yvec, int arg88_x, int arg87_n, int arg85_acc, int arg86_i)
 {
-	return (gpu_eqi(arg86_i, arg87_n)) ? (arg85_acc) : (gpudevice_fun84_recloop(arg89_yvec, arg88_x, arg87_n, gpu_addi(arg85_acc, gpudevice_fun78_gcd(arg88_x, Int_val((arg89_yvec[arg86_i])))), gpu_addi(arg86_i, 1)));
+	return (gpu_eqi(arg86_i, arg87_n)) ? (arg85_acc) : (gpudevice_fun84_recloop(arg89_yvec, arg88_x, arg87_n, gpu_addi(arg85_acc, gpudevice_fun78_gcd(arg88_x, Int_val(arg89_yvec[arg86_i]))), gpu_addi(arg86_i, 1)));
 }
 
 __device__ int gpudevice_fun90_gcdsum(value *arg81_yvec, int arg82_n, int arg83_x)

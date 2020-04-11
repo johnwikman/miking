@@ -2,14 +2,14 @@ open Printf
 
 external gpuhost_fun114_initfun: int array -> float array -> float array -> float array = "gpuhost_fun114_initfun"
 external gpuhost_fun131_initfun: int array -> float array -> float array -> float array = "gpuhost_fun131_initfun"
-external gpuhost_fun239_wmapf: int array -> float array -> float array -> float array = "gpuhost_fun239_wmapf"
-external gpuhost_fun234_wmapf: int array -> float array -> float array -> float array = "gpuhost_fun234_wmapf"
-external gpuhost_fun229_wmapf: int array -> float array -> float array -> float array -> float array = "gpuhost_fun229_wmapf"
-external gpuhost_fun217_propagate_x: int array -> float array -> float array -> float array -> float array = "gpuhost_fun217_propagate_x"
-external gpuhost_fun169_rndinitf: int array -> float array -> float array = "gpuhost_fun169_rndinitf"
-external gpuhost_fun178_wmapf: int array -> float array -> float array -> float array -> float array = "gpuhost_fun178_wmapf"
-external gpuhost_fun183_wmapf: int array -> float array -> float array -> float array = "gpuhost_fun183_wmapf"
-external gpuhost_fun188_wmapf: int array -> float array -> float array -> float array = "gpuhost_fun188_wmapf"
+external gpuhost_fun258_wmapf: int array -> float array -> float array -> float array = "gpuhost_fun258_wmapf"
+external gpuhost_fun253_wmapf: int array -> float array -> float array -> float array = "gpuhost_fun253_wmapf"
+external gpuhost_fun248_wmapf: int array -> float array -> float array -> float array -> float array = "gpuhost_fun248_wmapf"
+external gpuhost_fun236_propagate_x: int array -> float array -> float array -> float array -> float array = "gpuhost_fun236_propagate_x"
+external gpuhost_fun207_wmapf: int array -> float array -> float array -> float array = "gpuhost_fun207_wmapf"
+external gpuhost_fun202_wmapf: int array -> float array -> float array -> float array = "gpuhost_fun202_wmapf"
+external gpuhost_fun197_wmapf: int array -> float array -> float array -> float array -> float array = "gpuhost_fun197_wmapf"
+external gpuhost_fun187_rndinitf: int array -> float array -> float array = "gpuhost_fun187_rndinitf"
 
 let main =
     let fun1_head arg0_s =
@@ -315,89 +315,265 @@ let main =
         in
         (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
     in
-    let fun169_rndinitf arg168_xUpperBound arg167_xLowerBound arg166__ =
-        (fun x y -> x +. (Random.float (Float.abs (x -. y)))) (arg167_xLowerBound) (arg168_xUpperBound)
+    let fun187_rndinitf arg186_xUpperBound arg185_xLowerBound arg184__ =
+        (fun x y -> x +. (Random.float (Float.abs (x -. y)))) (arg185_xLowerBound) (arg186_xUpperBound)
     in
-    let fun178_wmapf arg177_sigma arg176_heightMapSize arg175_heightMap arg174_altitude arg173_fstobs arg172_xelem =
-        (fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359)))) (arg173_fstobs) (fun95_g_map (arg174_altitude) (arg175_heightMap) (arg176_heightMapSize) (arg172_xelem)) (arg177_sigma)
+    let fun197_wmapf arg196_sigma arg195_heightMapSize arg194_heightMap arg193_altitude arg192_fstobs arg191_xelem =
+        (fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359)))) (arg192_fstobs) (fun95_g_map (arg193_altitude) (arg194_heightMap) (arg195_heightMapSize) (arg191_xelem)) (arg196_sigma)
     in
-    let fun183_wmapf arg182_wmax arg181_welem =
-        Float.exp (( -. ) (arg181_welem) (arg182_wmax))
+    let fun202_wmapf arg201_wmax arg200_welem =
+        Float.exp (( -. ) (arg200_welem) (arg201_wmax))
     in
-    let fun188_wmapf arg187_wsum arg186_welem =
-        ( /. ) (arg186_welem) (arg187_wsum)
+    let fun207_wmapf arg206_wsum arg205_welem =
+        ( /. ) (arg205_welem) (arg206_wsum)
     in
-    let fun217_propagate_x arg216_sigma arg215_velocity arg213_x arg211_nPoints arg210_wacc arg208__ =
-        let var209_p  =
+    let fun236_propagate_x arg235_sigma arg234_velocity arg232_x arg230_nPoints arg229_wacc arg227__ =
+        let var228_p  =
             (fun x y -> x +. (Random.float (Float.abs (x -. y)))) (0.0) (1.0e-0)
         in
-        let var212_i  =
-            fun136_binsearch (arg210_wacc) (var209_p) (0) (( - ) (arg211_nPoints) (1))
+        let var231_i  =
+            fun136_binsearch (arg229_wacc) (var228_p) (0) (( - ) (arg230_nPoints) (1))
         in
-        let var214_x_new  =
-            Array.get (arg213_x) (var212_i)
+        let var233_x_new  =
+            Array.get (arg232_x) (var231_i)
         in
-        (fun mu sigma -> mu +. (sigma *. (Float.sqrt (-2.0 *. Float.log (Random.float 1.0))) *. (Float.cos (2.0 *. 3.14159265359 *. (Random.float 1.0))))) (( +. ) (var214_x_new) (arg215_velocity)) (arg216_sigma)
+        (fun mu sigma -> mu +. (sigma *. (Float.sqrt (-2.0 *. Float.log (Random.float 1.0))) *. (Float.cos (2.0 *. 3.14159265359 *. (Random.float 1.0))))) (( +. ) (var233_x_new) (arg234_velocity)) (arg235_sigma)
     in
-    let fun229_wmapf arg228_log_1onN arg227_sigma arg226_heightMapSize arg225_heightMap arg224_altitude arg223_ithobs arg222_xelem =
-        ( +. ) ((fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359)))) (arg223_ithobs) (fun95_g_map (arg224_altitude) (arg225_heightMap) (arg226_heightMapSize) (arg222_xelem)) (arg227_sigma)) (arg228_log_1onN)
+    let fun248_wmapf arg247_log_1onN arg246_sigma arg245_heightMapSize arg244_heightMap arg243_altitude arg242_ithobs arg241_xelem =
+        ( +. ) ((fun x mu sigma -> -0.5 *. (x -. mu) *. (x -. mu) /. (sigma *. sigma) -. (Float.log (sigma *. Float.sqrt (2.0 *. 3.14159265359)))) (arg242_ithobs) (fun95_g_map (arg243_altitude) (arg244_heightMap) (arg245_heightMapSize) (arg241_xelem)) (arg246_sigma)) (arg247_log_1onN)
     in
-    let fun234_wmapf arg233_wmax arg232_welem =
-        Float.exp (( -. ) (arg232_welem) (arg233_wmax))
+    let fun253_wmapf arg252_wmax arg251_welem =
+        Float.exp (( -. ) (arg251_welem) (arg252_wmax))
     in
-    let fun239_wmapf arg238_wsum arg237_welem =
-        ( /. ) (arg237_welem) (arg238_wsum)
+    let fun258_wmapf arg257_wsum arg256_welem =
+        ( /. ) (arg256_welem) (arg257_wsum)
     in
-    let rec fun190_iterate_smc arg220_obs arg205_heightMap arg203_heightMapSize arg201_nPoints arg199_altitude arg197_velocity arg195_sigma arg191_i arg192_steps arg193_x arg194_w =
-            if ( = ) (arg191_i) (arg192_steps) then
-                arg193_x
+    let rec fun209_iterate_smc arg239_obs arg224_heightMap arg222_heightMapSize arg220_nPoints arg218_altitude arg216_velocity arg214_sigma arg210_i arg211_steps arg212_x arg213_w =
+            if ( = ) (arg210_i) (arg211_steps) then
+                arg212_x
             else
-                let var196_sigma  =
-                    arg195_sigma
+                let var215_sigma  =
+                    arg214_sigma
                 in
-                let var198_velocity  =
-                    arg197_velocity
+                let var217_velocity  =
+                    arg216_velocity
                 in
-                let var200_altitude  =
-                    arg199_altitude
+                let var219_altitude  =
+                    arg218_altitude
                 in
-                let var202_nPoints  =
-                    arg201_nPoints
+                let var221_nPoints  =
+                    arg220_nPoints
                 in
-                let var204_heightMapSize  =
-                    arg203_heightMapSize
+                let var223_heightMapSize  =
+                    arg222_heightMapSize
                 in
-                let var206_heightMap  =
-                    arg205_heightMap
+                let var225_heightMap  =
+                    arg224_heightMap
                 in
-                let var207_wacc  =
-                    fun135_seqAccsumf (arg194_w)
+                let var226_wacc  =
+                    fun135_seqAccsumf (arg213_w)
                 in
-                let var218_x_propagated  =
-                    gpuhost_fun217_propagate_x [|1; var202_nPoints; var202_nPoints|] [|var196_sigma; var198_velocity|] (arg193_x) (var207_wacc)
+                let var237_x_propagated  =
+                    gpuhost_fun236_propagate_x [|1; var221_nPoints; var221_nPoints|] [|var215_sigma; var217_velocity|] (arg212_x) (var226_wacc)
                 in
-                let var219_log_1onN  =
-                    Float.log (( /. ) (1.0e-0) (float_of_int (var202_nPoints)))
+                let var238_log_1onN  =
+                    Float.log (( /. ) (1.0e-0) (float_of_int (var221_nPoints)))
                 in
-                let var221_ithobs  =
-                    Array.get (arg220_obs) (arg191_i)
+                let var240_ithobs  =
+                    Array.get (arg239_obs) (arg210_i)
                 in
-                let var230_w  =
-                    gpuhost_fun229_wmapf [|1; var204_heightMapSize|] [|var219_log_1onN; var196_sigma; var200_altitude; var221_ithobs|] (var206_heightMap) (var218_x_propagated)
+                let var249_w  =
+                    gpuhost_fun248_wmapf [|1; var223_heightMapSize|] [|var238_log_1onN; var215_sigma; var219_altitude; var240_ithobs|] (var225_heightMap) (var237_x_propagated)
                 in
-                let var231_wmax  =
-                    fun116_seqMaxf (var230_w)
+                let var250_wmax  =
+                    fun116_seqMaxf (var249_w)
                 in
-                let var235_w  =
-                    gpuhost_fun234_wmapf [|1|] [|var231_wmax|] (var230_w)
+                let var254_w  =
+                    gpuhost_fun253_wmapf [|1|] [|var250_wmax|] (var249_w)
                 in
-                let var236_wsum  =
-                    fun133_seqSumf (var235_w)
+                let var255_wsum  =
+                    fun133_seqSumf (var254_w)
                 in
-                let var240_w_updated  =
-                    gpuhost_fun239_wmapf [|1|] [|var236_wsum|] (var235_w)
+                let var259_w_updated  =
+                    gpuhost_fun258_wmapf [|1|] [|var255_wsum|] (var254_w)
                 in
-                fun190_iterate_smc (arg220_obs) (arg205_heightMap) (arg203_heightMapSize) (arg201_nPoints) (arg199_altitude) (arg197_velocity) (arg195_sigma) (( + ) (arg191_i) (1)) (arg192_steps) (var218_x_propagated) (var240_w_updated)
+                fun209_iterate_smc (arg239_obs) (arg224_heightMap) (arg222_heightMapSize) (arg220_nPoints) (arg218_altitude) (arg216_velocity) (arg214_sigma) (( + ) (arg210_i) (1)) (arg211_steps) (var237_x_propagated) (var259_w_updated)
+    in
+    let fun263_bm_runonce arg260_flight_range arg189_obs arg182_heightMap arg180_heightMapSize arg178_nPoints arg176_altitude arg174_velocity arg172_sigma arg170_xUpperBound arg168_xLowerBound arg166__ =
+        let var167_bm_t_start  =
+            Unix.gettimeofday (())
+        in
+        let var169_xLowerBound  =
+            arg168_xLowerBound
+        in
+        let var171_xUpperBound  =
+            arg170_xUpperBound
+        in
+        let var173_sigma  =
+            arg172_sigma
+        in
+        let var175_velocity  =
+            arg174_velocity
+        in
+        let var177_altitude  =
+            arg176_altitude
+        in
+        let var179_nPoints  =
+            arg178_nPoints
+        in
+        let var181_heightMapSize  =
+            arg180_heightMapSize
+        in
+        let var183_heightMap  =
+            arg182_heightMap
+        in
+        let var188_x  =
+            gpuhost_fun187_rndinitf [|1; var179_nPoints|] [|var171_xUpperBound; var169_xLowerBound|] 
+        in
+        let var190_fstobs  =
+            Array.get (arg189_obs) (0)
+        in
+        let var198_w  =
+            gpuhost_fun197_wmapf [|1; var181_heightMapSize|] [|var173_sigma; var177_altitude; var190_fstobs|] (var183_heightMap) (var188_x)
+        in
+        let var199_wmax  =
+            fun116_seqMaxf (var198_w)
+        in
+        let var203_w  =
+            gpuhost_fun202_wmapf [|1|] [|var199_wmax|] (var198_w)
+        in
+        let var204_wsum  =
+            fun133_seqSumf (var203_w)
+        in
+        let var208_w  =
+            gpuhost_fun207_wmapf [|1|] [|var204_wsum|] (var203_w)
+        in
+        let var261_x_res  =
+            fun209_iterate_smc (arg189_obs) (var183_heightMap) (var181_heightMapSize) (var179_nPoints) (var177_altitude) (var175_velocity) (var173_sigma) (1) (arg260_flight_range) (var188_x) (var208_w)
+        in
+        let var262_bm_t_end  =
+            Unix.gettimeofday (())
+        in
+        ( -. ) (var262_bm_t_end) (var167_bm_t_start)
+    in
+    let rec fun265_bm_iter arg279_xLowerBound arg278_xUpperBound arg277_sigma arg276_velocity arg275_altitude arg274_nPoints arg273_heightMapSize arg272_heightMap arg271_obs arg270_flight_range arg268_n arg266_i arg267_acc =
+            if ( >= ) (arg266_i) (arg268_n) then
+                arg267_acc
+            else
+                let var269__  =
+                    ()
+                in
+                let var280_res  =
+                    fun263_bm_runonce (arg270_flight_range) (arg271_obs) (arg272_heightMap) (arg273_heightMapSize) (arg274_nPoints) (arg275_altitude) (arg276_velocity) (arg277_sigma) (arg278_xUpperBound) (arg279_xLowerBound) (())
+                in
+                let var281_newacc  =
+                    Array.append (arg267_acc) ([|var280_res|])
+                in
+                fun265_bm_iter (arg279_xLowerBound) (arg278_xUpperBound) (arg277_sigma) (arg276_velocity) (arg275_altitude) (arg274_nPoints) (arg273_heightMapSize) (arg272_heightMap) (arg271_obs) (arg270_flight_range) (arg268_n) (( + ) (arg266_i) (1)) (var281_newacc)
+    in
+    let fun292_bm_runmultiple arg291_flight_range arg290_obs arg289_heightMap arg288_heightMapSize arg287_nPoints arg286_altitude arg285_velocity arg284_sigma arg283_xUpperBound arg282_xLowerBound arg264_n =
+        fun265_bm_iter (arg282_xLowerBound) (arg283_xUpperBound) (arg284_sigma) (arg285_velocity) (arg286_altitude) (arg287_nPoints) (arg288_heightMapSize) (arg289_heightMap) (arg290_obs) (arg291_flight_range) (arg264_n) (0) ([||])
+    in
+    let rec fun295_quicksort_rec arg297_pivot arg298_lt_pivot arg299_geq_pivot arg300_remaining =
+            if ( = ) (Array.length (arg300_remaining)) (0) then
+                let var301_seq_lt  =
+                    fun296_quicksort (arg298_lt_pivot)
+                in
+                let var302_seq_pivot  =
+                    [|arg297_pivot|]
+                in
+                let var303_seq_geq  =
+                    fun296_quicksort (arg299_geq_pivot)
+                in
+                Array.append (Array.append (var301_seq_lt) (var302_seq_pivot)) (var303_seq_geq)
+            else
+                let var304_e  =
+                    fun1_head (arg300_remaining)
+                in
+                let var305_t  =
+                    fun3_tail (arg300_remaining)
+                in
+                if ( < ) (var304_e) (arg297_pivot) then
+                    fun295_quicksort_rec (arg297_pivot) ((fun x xs -> Array.append [|x|] xs) (var304_e) (arg298_lt_pivot)) (arg299_geq_pivot) (var305_t)
+                else
+                    fun295_quicksort_rec (arg297_pivot) (arg298_lt_pivot) ((fun x xs -> Array.append [|x|] xs) (var304_e) (arg299_geq_pivot)) (var305_t)
+        and fun296_quicksort arg306_arr =
+            if ( <= ) (Array.length (arg306_arr)) (1) then
+                arg306_arr
+            else
+                fun295_quicksort_rec (fun1_head (arg306_arr)) ([||]) ([||]) (fun3_tail (arg306_arr))
+    in
+    let fun307_bm_sort arg293_arr =
+        let var294_n  =
+            Array.length (arg293_arr)
+        in
+        fun296_quicksort (arg293_arr)
+    in
+    let fun311_bm_median arg308_arr =
+        let var309_n  =
+            Array.length (arg308_arr)
+        in
+        let var310_sorted  =
+            fun307_bm_sort (arg308_arr)
+        in
+        if ( = ) (( mod ) (var309_n) (2)) (0) then
+            ( /. ) (( +. ) (Array.get (arg308_arr) (( - ) (( / ) (var309_n) (2)) (1))) (Array.get (arg308_arr) (( / ) (var309_n) (2)))) (2.0e+0)
+        else
+            Array.get (arg308_arr) (( / ) (var309_n) (2))
+    in
+    let rec fun314_work arg318_arr arg317_n arg315_i arg316_acc =
+            if ( = ) (arg315_i) (arg317_n) then
+                arg316_acc
+            else
+                fun314_work (arg318_arr) (arg317_n) (( + ) (arg315_i) (1)) (( +. ) (arg316_acc) (Array.get (arg318_arr) (arg315_i)))
+    in
+    let fun319_bm_sum arg312_arr =
+        let var313_n  =
+            Array.length (arg312_arr)
+        in
+        fun314_work (arg312_arr) (var313_n) (0) (0.0)
+    in
+    let rec fun322_work arg326_arr arg325_n arg323_i arg324_acc =
+            if ( = ) (arg323_i) (arg325_n) then
+                arg324_acc
+            else
+                let var327_e  =
+                    Array.get (arg326_arr) (arg323_i)
+                in
+                fun322_work (arg326_arr) (arg325_n) (( + ) (arg323_i) (1)) (if ( > ) (var327_e) (arg324_acc) then
+                    var327_e
+                else
+                    arg324_acc)
+    in
+    let fun328_bm_max arg320_arr =
+        let var321_n  =
+            Array.length (arg320_arr)
+        in
+        fun322_work (arg320_arr) (var321_n) (1) (Array.get (arg320_arr) (0))
+    in
+    let rec fun331_work arg335_arr arg334_n arg332_i arg333_acc =
+            if ( = ) (arg332_i) (arg334_n) then
+                arg333_acc
+            else
+                let var336_e  =
+                    Array.get (arg335_arr) (arg332_i)
+                in
+                fun331_work (arg335_arr) (arg334_n) (( + ) (arg332_i) (1)) (if ( < ) (var336_e) (arg333_acc) then
+                    var336_e
+                else
+                    arg333_acc)
+    in
+    let fun337_bm_min arg329_arr =
+        let var330_n  =
+            Array.length (arg329_arr)
+        in
+        fun331_work (arg329_arr) (var330_n) (1) (Array.get (arg329_arr) (0))
+    in
+    let fun340_bm_dist arg338_a arg339_b =
+        if ( > ) (arg338_a) (arg339_b) then
+            ( -. ) (arg338_a) (arg339_b)
+        else
+            ( -. ) (arg339_b) (arg338_a)
     in
     let var77_precision  =
         1000000
@@ -435,28 +611,205 @@ let main =
     let var88_obs  =
         [|2.491494e+1; 3.007992e+1; 3.007669e+1; 2.856822e+1; 2.941189e+1; 2.847084e+1; 2.362855e+1; 2.156412e+1; 2.526145e+1; 3.108174e+1; 2.610672e+1; 2.578896e+1; 2.490464e+1; 2.608521e+1; 2.788000e+1; 2.903804e+1; 3.228490e+1; 3.141710e+1; 3.323042e+1; 3.220916e+1; 3.040136e+1; 3.251317e+1; 3.473375e+1; 3.666994e+1; 3.750227e+1; 3.837593e+1; 3.690707e+1; 3.757577e+1; 4.927440e+1; 4.841706e+1; 4.881114e+1; 4.940368e+1; 4.806372e+1; 5.052389e+1; 4.968911e+1; 5.039904e+1; 5.195591e+1; 4.934759e+1; 5.049374e+1; 4.796931e+1; 4.988945e+1; 4.930795e+1; 5.028634e+1; 4.895474e+1; 5.068981e+1; 4.937191e+1; 5.230391e+1; 4.986405e+1; 5.009772e+1; 4.960055e+1; 4.869347e+1; 4.988183e+1; 5.066638e+1; 4.866574e+1; 5.069377e+1; 4.986629e+1; 1.719267e+1; 1.758280e+1; 2.012084e+1; 2.163585e+1; 2.125611e+1; 2.156582e+1; 2.047736e+1; 2.086848e+1; 1.590726e+1; 2.107300e+1; 2.182243e+1; 1.855395e+1; 1.698153e+1; 1.725030e+1; 2.183143e+1; 2.228202e+1; 2.188060e+1; 2.058381e+1; 2.081707e+1; 1.935463e+1; 2.092678e+1; 1.795724e+1; 1.657347e+1; 1.850760e+1; 2.241098e+1; 2.242153e+1; 2.017367e+1; 2.062946e+1; 2.317760e+1; 2.541719e+1; 2.712343e+1; 2.977505e+1; 2.969107e+1; 2.796534e+1; 2.488382e+1; 2.485925e+1; 2.771013e+1; 2.672862e+1; 2.943546e+1; 2.693998e+1; 9.999964e+4; 9.999970e+4; 1.000008e+5; 1.000014e+5|]
     in
-    let var170_x  =
-        gpuhost_fun169_rndinitf [|1; var80_nPoints|] [|var82_xUpperBound; var81_xLowerBound|] 
+    let var341__  =
+        ()
     in
-    let var171_fstobs  =
-        Array.get (var88_obs) (0)
+    let var342_bmres_warmup  =
+        fun292_bm_runmultiple (var83_flight_range) (var88_obs) (var87_heightMap) (var86_heightMapSize) (var80_nPoints) (var85_altitude) (var84_velocity) (var79_sigma) (var82_xUpperBound) (var81_xLowerBound) (4)
     in
-    let var179_w  =
-        gpuhost_fun178_wmapf [|1; var86_heightMapSize|] [|var79_sigma; var85_altitude; var171_fstobs|] (var87_heightMap) (var170_x)
+    let var343__  =
+        ()
     in
-    let var180_wmax  =
-        fun116_seqMaxf (var179_w)
+    let var344_bmres_iters  =
+        fun292_bm_runmultiple (var83_flight_range) (var88_obs) (var87_heightMap) (var86_heightMapSize) (var80_nPoints) (var85_altitude) (var84_velocity) (var79_sigma) (var82_xUpperBound) (var81_xLowerBound) (15)
     in
-    let var184_w  =
-        gpuhost_fun183_wmapf [|1|] [|var180_wmax|] (var179_w)
-    in
-    let var185_wsum  =
-        fun133_seqSumf (var184_w)
-    in
-    let var189_w  =
-        gpuhost_fun188_wmapf [|1|] [|var185_wsum|] (var184_w)
-    in
-    let var241_x_res  =
-        fun190_iterate_smc (var88_obs) (var87_heightMap) (var86_heightMapSize) (var80_nPoints) (var85_altitude) (var84_velocity) (var79_sigma) (1) (var83_flight_range) (var170_x) (var189_w)
+    let var407__  =
+        let var345_median  =
+            fun311_bm_median (var344_bmres_iters)
+        in
+        let var346_sum  =
+            fun319_bm_sum (var344_bmres_iters)
+        in
+        let var347_avg  =
+            ( /. ) (var346_sum) (1.50e+1)
+        in
+        let var348_max  =
+            fun328_bm_max (var344_bmres_iters)
+        in
+        let var349_min  =
+            fun337_bm_min (var344_bmres_iters)
+        in
+        let var350_variance  =
+            fun328_bm_max ([|fun340_bm_dist (var347_avg) (var348_max); fun340_bm_dist (var347_avg) (var349_min)|])
+        in
+        let var351_median  =
+            ( *. ) (var345_median) (1.0e+3)
+        in
+        let var352_sum  =
+            ( *. ) (var346_sum) (1.0e+3)
+        in
+        let var353_avg  =
+            ( *. ) (var347_avg) (1.0e+3)
+        in
+        let var354_max  =
+            ( *. ) (var348_max) (1.0e+3)
+        in
+        let var355_min  =
+            ( *. ) (var349_min) (1.0e+3)
+        in
+        let var356_variance  =
+            ( *. ) (var350_variance) (1.0e+3)
+        in
+        let var357__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'='; '='; ' '; 'I'; 'T'; 'E'; 'R'; 'A'; 'T'; 'I'; 'O'; 'N'; ' '; 'R'; 'E'; 'S'; 'U'; 'L'; 'T'; 'S'; ' '; '='; '='; '\n'|])
+        in
+        let var358__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'N'; 'o'; '.'; ' '; 'o'; 'f'; ' '; 'i'; 't'; 'e'; 'r'; 'a'; 't'; 'i'; 'o'; 'n'; 's'; ':'; ' '|])
+        in
+        let var359__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'1'; '5'|])
+        in
+        let var360__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+        in
+        let var361__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'M'; 'e'; 'd'; 'i'; 'a'; 'n'; ':'; ' '|])
+        in
+        let var362__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var351_median))
+        in
+        let var363__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var364__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'L'; 'o'; 'n'; 'g'; 'e'; 's'; 't'; ' '; 'r'; 'u'; 'n'; ':'; ' '|])
+        in
+        let var365__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var354_max))
+        in
+        let var366__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var367__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'S'; 'h'; 'o'; 'r'; 't'; 'e'; 's'; 't'; ' '; 'r'; 'u'; 'n'; ':'; ' '|])
+        in
+        let var368__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var355_min))
+        in
+        let var369__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var370__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'A'; 'v'; 'e'; 'r'; 'a'; 'g'; 'e'; ':'; ' '|])
+        in
+        let var371__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var353_avg))
+        in
+        let var372__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var373__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'V'; 'a'; 'r'; 'i'; 'a'; 'n'; 'c'; 'e'; ':'; ' '; '+'; '-'|])
+        in
+        let var374__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var356_variance))
+        in
+        let var375__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var376_median  =
+            fun311_bm_median (var342_bmres_warmup)
+        in
+        let var377_sum  =
+            fun319_bm_sum (var342_bmres_warmup)
+        in
+        let var378_avg  =
+            ( /. ) (var377_sum) (4.0e+0)
+        in
+        let var379_max  =
+            fun328_bm_max (var342_bmres_warmup)
+        in
+        let var380_min  =
+            fun337_bm_min (var342_bmres_warmup)
+        in
+        let var381_variance  =
+            fun328_bm_max ([|fun340_bm_dist (var378_avg) (var379_max); fun340_bm_dist (var378_avg) (var380_min)|])
+        in
+        let var382_median  =
+            ( *. ) (var376_median) (1.0e+3)
+        in
+        let var383_sum  =
+            ( *. ) (var377_sum) (1.0e+3)
+        in
+        let var384_avg  =
+            ( *. ) (var378_avg) (1.0e+3)
+        in
+        let var385_max  =
+            ( *. ) (var379_max) (1.0e+3)
+        in
+        let var386_min  =
+            ( *. ) (var380_min) (1.0e+3)
+        in
+        let var387_variance  =
+            ( *. ) (var381_variance) (1.0e+3)
+        in
+        let var388__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; '\n'; '='; '='; ' '; 'W'; 'A'; 'R'; 'M'; 'U'; 'P'; ' '; 'S'; 'T'; 'A'; 'T'; 'I'; 'S'; 'T'; 'I'; 'C'; 'S'; ' '; '='; '='; '\n'|])
+        in
+        let var389__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'N'; 'o'; '.'; ' '; 'o'; 'f'; ' '; 'w'; 'a'; 'r'; 'm'; 'u'; 'p'; ' '; 'r'; 'u'; 'n'; 's'; ':'; ' '|])
+        in
+        let var390__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'4'|])
+        in
+        let var391__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+        in
+        let var392__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'M'; 'e'; 'd'; 'i'; 'a'; 'n'; ':'; ' '|])
+        in
+        let var393__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var382_median))
+        in
+        let var394__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var395__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'L'; 'o'; 'n'; 'g'; 'e'; 's'; 't'; ' '; 'r'; 'u'; 'n'; ':'; ' '|])
+        in
+        let var396__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var385_max))
+        in
+        let var397__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var398__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'S'; 'h'; 'o'; 'r'; 't'; 'e'; 's'; 't'; ' '; 'r'; 'u'; 'n'; ':'; ' '|])
+        in
+        let var399__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var386_min))
+        in
+        let var400__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var401__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'A'; 'v'; 'e'; 'r'; 'a'; 'g'; 'e'; ':'; ' '|])
+        in
+        let var402__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var384_avg))
+        in
+        let var403__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var404__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'V'; 'a'; 'r'; 'i'; 'a'; 'n'; 'c'; 'e'; ':'; ' '; '+'; '-'|])
+        in
+        let var405__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var387_variance))
+        in
+        let var406__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        ()
     in
     ()

@@ -5,6 +5,7 @@ include "../../lib/std.mc"
 include "../../lib/io.mc"
 include "../../lib/macros.mc"
 include "../../lib/matrix.mc"
+include "../../lib/benchmark-utils.mc"
 
 -- This should define the following variables: matA_rows, matA_cols
 -- Should be included by defsize_
@@ -85,7 +86,7 @@ let prog = bind_ prog libmatrixf_ in
 let prog = bind_ prog defcommon_ in
 
 ------- Perform A^T * A and multiply the result by vecX -------
-let prog = bind_ prog defspecific_ in
+--let prog = bind_ prog defspecific_ in
 ---------------------------------------------------------------
 
 ------- Output Verification -------
@@ -111,6 +112,14 @@ let prog = bind_ prog defspecific_ in
 --           (var_ "vecATAx")
 --  )) in
 -----------------------------------
+
+------- Benchmark ATAx -------
+let bm =
+  benchmark_ {bmparams_ with iters = 15}
+             defspecific_
+in
+let prog = bind_ prog bm in
+------------------------------
 
 let res = codegen prog in
 

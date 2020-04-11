@@ -1,1 +1,1 @@
-include ../t-psize-piter.mk
+include ../t-psize.mk

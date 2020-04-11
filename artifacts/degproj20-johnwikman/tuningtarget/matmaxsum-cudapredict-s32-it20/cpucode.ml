@@ -1,5 +1,4 @@
 open Printf
-open Array
 
 external gpuhost_fun187_matrixMaxSumiWorker: int array -> float array -> int array -> int array -> int array = "gpuhost_fun187_matrixMaxSumiWorker"
 
@@ -329,1743 +328,183 @@ let main =
         var162_matA_cols
     in
     let var203_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var204_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var205_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var206_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var207_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var208_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var209_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var210_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var211_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var212_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var213_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var214_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var215_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var216_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var217_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var218_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var219_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var220_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var221_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     let var222_matAmB  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
+            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (1) (var202_innerDim) then
             var202_innerDim
         else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (100) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var200_matA))) (Array.length (var201_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (1046) (if ( < ) (if ( < ) (if ( < ) (1) (var202_innerDim) then
-            var202_innerDim
-        else
-            1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-            Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-        else
-            if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))) then
-            Array.get (var201_matB) (( mod ) (1) (var164_matB_cols))
-        else
-            if ( < ) (if ( < ) (1) (var202_innerDim) then
-                var202_innerDim
-            else
-                1) (Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))) then
-                Array.get (var200_matA) (( * ) (var202_innerDim) (( / ) (1) (var164_matB_cols)))
-            else
-                if ( < ) (1) (var202_innerDim) then
-                    var202_innerDim
-                else
-                    1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
+            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun187_matrixMaxSumiWorker (var202_innerDim) (var161_matA_rows) (var164_matB_cols) (var200_matA) (var201_matB))) else (gpuhost_fun187_matrixMaxSumiWorker [|1; var202_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var200_matA) (var201_matB))
     in
     ()

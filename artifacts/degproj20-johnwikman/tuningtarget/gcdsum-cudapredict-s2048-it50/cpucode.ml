@@ -1,5 +1,4 @@
 open Printf
-open Array
 
 external gpuhost_fun90_gcdsum: int array -> float array -> int array -> int array -> int array = "gpuhost_fun90_gcdsum"
 
@@ -188,3753 +187,453 @@ let main =
         fun14_seqInit (var77_vecsize) (fun94_vecYinitfun)
     in
     let var97_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var98_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var99_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var100_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var101_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var102_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var103_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var104_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var105_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var106_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var107_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var108_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var109_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var110_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var111_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var112_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var113_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var114_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var115_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var116_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var117_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var118_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var119_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var120_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var121_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var122_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var123_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var124_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var125_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var126_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var127_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var128_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var129_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var130_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var131_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var132_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var133_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var134_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var135_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var136_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var137_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var138_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var139_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var140_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var141_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var142_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var143_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var144_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var145_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     let var146_vecS  =
-        let _ = printf "ocamlcost: %d\n" (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+        if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (120) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) in let _ = printf "cudacost: %d\n" (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
+            1)))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (979) (if ( < ) (1) (var77_vecsize) then
             var77_vecsize
         else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536)))) in if (( < ) (( * ) (Array.length (var95_vecX)) (( + ) (50) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (9) (if ( < ) (1) (( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (37) (( + ) (6) (( + ) (1) (( + ) (1) (( + ) (15) (( + ) (0) (( * ) (51) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (Array.length (var95_vecX)) (Array.length (var96_vecY))) (Array.length (var95_vecX))) (10)) (40000000)) (( * ) (( + ) (6) (( + ) (0) (( + ) (10) (( + ) (0) (( * ) (( * ) (1) (if ( < ) (if ( < ) (1) (var77_vecsize) then
-            var77_vecsize
-        else
-            1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            if ( < ) (1) (var77_vecsize) then
-                var77_vecsize
-            else
-                1)) (( + ) (86) (if ( < ) (1) (( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-            Array.get (var96_vecY) (0)
-        else
-            1)))))))) then
-            ( + ) (205) (( + ) (17) (( + ) (12) (( + ) (1) (( + ) (305) (( + ) (0) (( * ) (353) (if ( < ) (1) (Array.get (var96_vecY) (0)) then
-                Array.get (var96_vecY) (0)
-            else
-                1)))))))
-        else
-            1))))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
+            1)))))) (( / ) (( + ) (Array.length (var95_vecX)) (( - ) (1536) (1))) (1536))))) then (Array.map (fun90_gcdsum (var96_vecY) (var77_vecsize)) (var95_vecX)) else (gpuhost_fun90_gcdsum [|1; var77_vecsize|] [||] (var96_vecY) (var95_vecX))
     in
     ()

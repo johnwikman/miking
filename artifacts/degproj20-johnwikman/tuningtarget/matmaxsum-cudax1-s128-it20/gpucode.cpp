@@ -3,6 +3,7 @@
 #include <caml/mlvalues.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <curand_kernel.h>
 
 #ifndef FLAT_FLOAT_ARRAY
 #error OCaml floats are not stored in flat array, cannot GPU optimize them.
@@ -38,7 +39,7 @@ __device__ inline bool gpu_eqi(int x, int y) {return x == y;}
 
 __device__ int gpudevice_fun178_vecmsum(int arg186_b_cols, value *arg185_b, value *arg184_a, int arg183_innerDim, int arg179_acc, int arg180_p, int arg181_a_offset, int arg182_b_offset)
 {
-	return (gpu_eqi(arg180_p, arg183_innerDim)) ? (arg179_acc) : (gpudevice_fun178_vecmsum(arg186_b_cols, arg185_b, arg184_a, arg183_innerDim, gpu_addi(arg179_acc, gpudevice_fun167_maxi(Int_val((arg184_a[arg181_a_offset])), Int_val((arg185_b[arg182_b_offset])))), gpu_addi(arg180_p, 1), gpu_addi(arg181_a_offset, 1), gpu_addi(arg182_b_offset, arg186_b_cols)));
+	return (gpu_eqi(arg180_p, arg183_innerDim)) ? (arg179_acc) : (gpudevice_fun178_vecmsum(arg186_b_cols, arg185_b, arg184_a, arg183_innerDim, gpu_addi(arg179_acc, gpudevice_fun167_maxi(Int_val(arg184_a[arg181_a_offset]), Int_val(arg185_b[arg182_b_offset]))), gpu_addi(arg180_p, 1), gpu_addi(arg181_a_offset, 1), gpu_addi(arg182_b_offset, arg186_b_cols)));
 }
 
 __device__ inline int gpu_muli(int x, int y) {return x * y;}

@@ -279,6 +279,143 @@ let main =
     let fun176_matBinitfun_v2 arg174_row arg175_col =
         float_of_int (( mod ) (( / ) (( * ) (( + ) (arg174_row) (19)) (17)) (( + ) (arg175_col) (13))) (2))
     in
+    let fun191_bm_runonce arg188_matB arg187_matA arg186_matB_cols arg185_matA_rows arg184_innerDim arg183_matB_cols arg182_matA_rows arg180__ =
+        let var181_bm_t_start  =
+            Unix.gettimeofday (())
+        in
+        let var189_matAxB  =
+            if (( < ) (( * ) (( * ) (arg182_matA_rows) (arg183_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (94) (if ( < ) (1) (arg184_innerDim) then
+                arg184_innerDim
+            else
+                1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (arg182_matA_rows) (arg183_matB_cols)) (Array.length (arg187_matA))) (Array.length (arg188_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (995) (if ( < ) (1) (arg184_innerDim) then
+                arg184_innerDim
+            else
+                1)))))))))) (( / ) (( + ) (( * ) (arg182_matA_rows) (arg183_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (arg182_matA_rows) (arg183_matB_cols)) (fun141_matrixMulfWorker (arg184_innerDim) (arg185_matA_rows) (arg186_matB_cols) (arg187_matA) (arg188_matB))) else (gpuhost_fun141_matrixMulfWorker [|1; arg184_innerDim; arg185_matA_rows; arg186_matB_cols; ( * ) (arg182_matA_rows) (arg183_matB_cols)|] [||] (arg187_matA) (arg188_matB))
+        in
+        let var190_bm_t_end  =
+            Unix.gettimeofday (())
+        in
+        ( -. ) (var190_bm_t_end) (var181_bm_t_start)
+    in
+    let rec fun193_bm_iter arg204_matA_rows arg203_matB_cols arg202_innerDim arg201_matA_rows arg200_matB_cols arg199_matA arg198_matB arg196_n arg194_i arg195_acc =
+            if ( >= ) (arg194_i) (arg196_n) then
+                arg195_acc
+            else
+                let var197__  =
+                    ()
+                in
+                let var205_res  =
+                    fun191_bm_runonce (arg198_matB) (arg199_matA) (arg200_matB_cols) (arg201_matA_rows) (arg202_innerDim) (arg203_matB_cols) (arg204_matA_rows) (())
+                in
+                let var206_newacc  =
+                    Array.append (arg195_acc) ([|var205_res|])
+                in
+                fun193_bm_iter (arg204_matA_rows) (arg203_matB_cols) (arg202_innerDim) (arg201_matA_rows) (arg200_matB_cols) (arg199_matA) (arg198_matB) (arg196_n) (( + ) (arg194_i) (1)) (var206_newacc)
+    in
+    let fun214_bm_runmultiple arg213_matB arg212_matA arg211_matB_cols arg210_matA_rows arg209_innerDim arg208_matB_cols arg207_matA_rows arg192_n =
+        fun193_bm_iter (arg207_matA_rows) (arg208_matB_cols) (arg209_innerDim) (arg210_matA_rows) (arg211_matB_cols) (arg212_matA) (arg213_matB) (arg192_n) (0) ([||])
+    in
+    let rec fun217_quicksort_rec arg219_pivot arg220_lt_pivot arg221_geq_pivot arg222_remaining =
+            if ( = ) (Array.length (arg222_remaining)) (0) then
+                let var223_seq_lt  =
+                    fun218_quicksort (arg220_lt_pivot)
+                in
+                let var224_seq_pivot  =
+                    [|arg219_pivot|]
+                in
+                let var225_seq_geq  =
+                    fun218_quicksort (arg221_geq_pivot)
+                in
+                Array.append (Array.append (var223_seq_lt) (var224_seq_pivot)) (var225_seq_geq)
+            else
+                let var226_e  =
+                    fun1_head (arg222_remaining)
+                in
+                let var227_t  =
+                    fun3_tail (arg222_remaining)
+                in
+                if ( < ) (var226_e) (arg219_pivot) then
+                    fun217_quicksort_rec (arg219_pivot) ((fun x xs -> Array.append [|x|] xs) (var226_e) (arg220_lt_pivot)) (arg221_geq_pivot) (var227_t)
+                else
+                    fun217_quicksort_rec (arg219_pivot) (arg220_lt_pivot) ((fun x xs -> Array.append [|x|] xs) (var226_e) (arg221_geq_pivot)) (var227_t)
+        and fun218_quicksort arg228_arr =
+            if ( <= ) (Array.length (arg228_arr)) (1) then
+                arg228_arr
+            else
+                fun217_quicksort_rec (fun1_head (arg228_arr)) ([||]) ([||]) (fun3_tail (arg228_arr))
+    in
+    let fun229_bm_sort arg215_arr =
+        let var216_n  =
+            Array.length (arg215_arr)
+        in
+        fun218_quicksort (arg215_arr)
+    in
+    let fun233_bm_median arg230_arr =
+        let var231_n  =
+            Array.length (arg230_arr)
+        in
+        let var232_sorted  =
+            fun229_bm_sort (arg230_arr)
+        in
+        if ( = ) (( mod ) (var231_n) (2)) (0) then
+            ( /. ) (( +. ) (Array.get (arg230_arr) (( - ) (( / ) (var231_n) (2)) (1))) (Array.get (arg230_arr) (( / ) (var231_n) (2)))) (2.0e+0)
+        else
+            Array.get (arg230_arr) (( / ) (var231_n) (2))
+    in
+    let rec fun236_work arg240_arr arg239_n arg237_i arg238_acc =
+            if ( = ) (arg237_i) (arg239_n) then
+                arg238_acc
+            else
+                fun236_work (arg240_arr) (arg239_n) (( + ) (arg237_i) (1)) (( +. ) (arg238_acc) (Array.get (arg240_arr) (arg237_i)))
+    in
+    let fun241_bm_sum arg234_arr =
+        let var235_n  =
+            Array.length (arg234_arr)
+        in
+        fun236_work (arg234_arr) (var235_n) (0) (0.0)
+    in
+    let rec fun244_work arg248_arr arg247_n arg245_i arg246_acc =
+            if ( = ) (arg245_i) (arg247_n) then
+                arg246_acc
+            else
+                let var249_e  =
+                    Array.get (arg248_arr) (arg245_i)
+                in
+                fun244_work (arg248_arr) (arg247_n) (( + ) (arg245_i) (1)) (if ( > ) (var249_e) (arg246_acc) then
+                    var249_e
+                else
+                    arg246_acc)
+    in
+    let fun250_bm_max arg242_arr =
+        let var243_n  =
+            Array.length (arg242_arr)
+        in
+        fun244_work (arg242_arr) (var243_n) (1) (Array.get (arg242_arr) (0))
+    in
+    let rec fun253_work arg257_arr arg256_n arg254_i arg255_acc =
+            if ( = ) (arg254_i) (arg256_n) then
+                arg255_acc
+            else
+                let var258_e  =
+                    Array.get (arg257_arr) (arg254_i)
+                in
+                fun253_work (arg257_arr) (arg256_n) (( + ) (arg254_i) (1)) (if ( < ) (var258_e) (arg255_acc) then
+                    var258_e
+                else
+                    arg255_acc)
+    in
+    let fun259_bm_min arg251_arr =
+        let var252_n  =
+            Array.length (arg251_arr)
+        in
+        fun253_work (arg251_arr) (var252_n) (1) (Array.get (arg251_arr) (0))
+    in
+    let fun262_bm_dist arg260_a arg261_b =
+        if ( > ) (arg260_a) (arg261_b) then
+            ( -. ) (arg260_a) (arg261_b)
+        else
+            ( -. ) (arg261_b) (arg260_a)
+    in
     let var161_matA_rows  =
         512
     in
@@ -300,13 +437,205 @@ let main =
     let var179_innerDim  =
         var162_matA_cols
     in
-    let var180_matAxB  =
-        if (( < ) (( * ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( + ) (50) (( + ) (12) (( + ) (0) (( + ) (7) (( + ) (7) (( + ) (5) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (94) (if ( < ) (1) (var179_innerDim) then
-            var179_innerDim
-        else
-            1)))))))))))) (( + ) (( + ) (( * ) (( + ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (Array.length (var177_matA))) (Array.length (var178_matB))) (10)) (40000000)) (( * ) (( + ) (12) (( + ) (0) (( + ) (64) (( + ) (64) (( + ) (30) (( + ) (1) (( + ) (16) (( + ) (0) (( * ) (995) (if ( < ) (1) (var179_innerDim) then
-            var179_innerDim
-        else
-            1)))))))))) (( / ) (( + ) (( * ) (var161_matA_rows) (var164_matB_cols)) (( - ) (1536) (1))) (1536))))) then (Array.init (( * ) (var161_matA_rows) (var164_matB_cols)) (fun141_matrixMulfWorker (var179_innerDim) (var161_matA_rows) (var164_matB_cols) (var177_matA) (var178_matB))) else (gpuhost_fun141_matrixMulfWorker [|1; var179_innerDim; var161_matA_rows; var164_matB_cols; ( * ) (var161_matA_rows) (var164_matB_cols)|] [||] (var177_matA) (var178_matB))
+    let var263__  =
+        ()
+    in
+    let var264_bmres_warmup  =
+        fun214_bm_runmultiple (var178_matB) (var177_matA) (var164_matB_cols) (var161_matA_rows) (var179_innerDim) (var164_matB_cols) (var161_matA_rows) (4)
+    in
+    let var265__  =
+        ()
+    in
+    let var266_bmres_iters  =
+        fun214_bm_runmultiple (var178_matB) (var177_matA) (var164_matB_cols) (var161_matA_rows) (var179_innerDim) (var164_matB_cols) (var161_matA_rows) (15)
+    in
+    let var329__  =
+        let var267_median  =
+            fun233_bm_median (var266_bmres_iters)
+        in
+        let var268_sum  =
+            fun241_bm_sum (var266_bmres_iters)
+        in
+        let var269_avg  =
+            ( /. ) (var268_sum) (1.50e+1)
+        in
+        let var270_max  =
+            fun250_bm_max (var266_bmres_iters)
+        in
+        let var271_min  =
+            fun259_bm_min (var266_bmres_iters)
+        in
+        let var272_variance  =
+            fun250_bm_max ([|fun262_bm_dist (var269_avg) (var270_max); fun262_bm_dist (var269_avg) (var271_min)|])
+        in
+        let var273_median  =
+            ( *. ) (var267_median) (1.0e+3)
+        in
+        let var274_sum  =
+            ( *. ) (var268_sum) (1.0e+3)
+        in
+        let var275_avg  =
+            ( *. ) (var269_avg) (1.0e+3)
+        in
+        let var276_max  =
+            ( *. ) (var270_max) (1.0e+3)
+        in
+        let var277_min  =
+            ( *. ) (var271_min) (1.0e+3)
+        in
+        let var278_variance  =
+            ( *. ) (var272_variance) (1.0e+3)
+        in
+        let var279__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'='; '='; ' '; 'I'; 'T'; 'E'; 'R'; 'A'; 'T'; 'I'; 'O'; 'N'; ' '; 'R'; 'E'; 'S'; 'U'; 'L'; 'T'; 'S'; ' '; '='; '='; '\n'|])
+        in
+        let var280__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'N'; 'o'; '.'; ' '; 'o'; 'f'; ' '; 'i'; 't'; 'e'; 'r'; 'a'; 't'; 'i'; 'o'; 'n'; 's'; ':'; ' '|])
+        in
+        let var281__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'1'; '5'|])
+        in
+        let var282__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+        in
+        let var283__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'M'; 'e'; 'd'; 'i'; 'a'; 'n'; ':'; ' '|])
+        in
+        let var284__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var273_median))
+        in
+        let var285__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var286__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'L'; 'o'; 'n'; 'g'; 'e'; 's'; 't'; ' '; 'r'; 'u'; 'n'; ':'; ' '|])
+        in
+        let var287__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var276_max))
+        in
+        let var288__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var289__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'S'; 'h'; 'o'; 'r'; 't'; 'e'; 's'; 't'; ' '; 'r'; 'u'; 'n'; ':'; ' '|])
+        in
+        let var290__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var277_min))
+        in
+        let var291__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var292__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'A'; 'v'; 'e'; 'r'; 'a'; 'g'; 'e'; ':'; ' '|])
+        in
+        let var293__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var275_avg))
+        in
+        let var294__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var295__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'V'; 'a'; 'r'; 'i'; 'a'; 'n'; 'c'; 'e'; ':'; ' '; '+'; '-'|])
+        in
+        let var296__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var278_variance))
+        in
+        let var297__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var298_median  =
+            fun233_bm_median (var264_bmres_warmup)
+        in
+        let var299_sum  =
+            fun241_bm_sum (var264_bmres_warmup)
+        in
+        let var300_avg  =
+            ( /. ) (var299_sum) (4.0e+0)
+        in
+        let var301_max  =
+            fun250_bm_max (var264_bmres_warmup)
+        in
+        let var302_min  =
+            fun259_bm_min (var264_bmres_warmup)
+        in
+        let var303_variance  =
+            fun250_bm_max ([|fun262_bm_dist (var300_avg) (var301_max); fun262_bm_dist (var300_avg) (var302_min)|])
+        in
+        let var304_median  =
+            ( *. ) (var298_median) (1.0e+3)
+        in
+        let var305_sum  =
+            ( *. ) (var299_sum) (1.0e+3)
+        in
+        let var306_avg  =
+            ( *. ) (var300_avg) (1.0e+3)
+        in
+        let var307_max  =
+            ( *. ) (var301_max) (1.0e+3)
+        in
+        let var308_min  =
+            ( *. ) (var302_min) (1.0e+3)
+        in
+        let var309_variance  =
+            ( *. ) (var303_variance) (1.0e+3)
+        in
+        let var310__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'; '\n'; '='; '='; ' '; 'W'; 'A'; 'R'; 'M'; 'U'; 'P'; ' '; 'S'; 'T'; 'A'; 'T'; 'I'; 'S'; 'T'; 'I'; 'C'; 'S'; ' '; '='; '='; '\n'|])
+        in
+        let var311__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'N'; 'o'; '.'; ' '; 'o'; 'f'; ' '; 'w'; 'a'; 'r'; 'm'; 'u'; 'p'; ' '; 'r'; 'u'; 'n'; 's'; ':'; ' '|])
+        in
+        let var312__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'4'|])
+        in
+        let var313__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'\n'|])
+        in
+        let var314__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'M'; 'e'; 'd'; 'i'; 'a'; 'n'; ':'; ' '|])
+        in
+        let var315__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var304_median))
+        in
+        let var316__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var317__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'L'; 'o'; 'n'; 'g'; 'e'; 's'; 't'; ' '; 'r'; 'u'; 'n'; ':'; ' '|])
+        in
+        let var318__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var307_max))
+        in
+        let var319__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var320__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'S'; 'h'; 'o'; 'r'; 't'; 'e'; 's'; 't'; ' '; 'r'; 'u'; 'n'; ':'; ' '|])
+        in
+        let var321__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var308_min))
+        in
+        let var322__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var323__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'A'; 'v'; 'e'; 'r'; 'a'; 'g'; 'e'; ':'; ' '|])
+        in
+        let var324__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var306_avg))
+        in
+        let var325__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        let var326__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|'V'; 'a'; 'r'; 'i'; 'a'; 'n'; 'c'; 'e'; ':'; ' '; '+'; '-'|])
+        in
+        let var327__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) (fun21_float2string (var309_variance))
+        in
+        let var328__  =
+            (fun s -> printf "%s" (String.of_seq (Array.to_seq s))) ([|' '; 'm'; 's'; '\n'|])
+        in
+        ()
     in
     ()

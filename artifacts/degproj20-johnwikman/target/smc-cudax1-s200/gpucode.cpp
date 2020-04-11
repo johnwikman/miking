@@ -15,14 +15,14 @@
 extern "C" {
 	value gpuhost_fun114_initfun(value packedInts, value packedFloats, value arg0);
 	value gpuhost_fun131_initfun(value packedInts, value packedFloats, value arg0);
-	value gpuhost_fun239_wmapf(value packedInts, value packedFloats, value arg0);
-	value gpuhost_fun234_wmapf(value packedInts, value packedFloats, value arg0);
-	value gpuhost_fun229_wmapf(value packedInts, value packedFloats, value arg0, value arg1);
-	value gpuhost_fun217_propagate_x(value packedInts, value packedFloats, value arg0, value arg1);
-	value gpuhost_fun169_rndinitf(value packedInts, value packedFloats);
-	value gpuhost_fun178_wmapf(value packedInts, value packedFloats, value arg0, value arg1);
-	value gpuhost_fun183_wmapf(value packedInts, value packedFloats, value arg0);
-	value gpuhost_fun188_wmapf(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun258_wmapf(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun253_wmapf(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun248_wmapf(value packedInts, value packedFloats, value arg0, value arg1);
+	value gpuhost_fun236_propagate_x(value packedInts, value packedFloats, value arg0, value arg1);
+	value gpuhost_fun207_wmapf(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun202_wmapf(value packedInts, value packedFloats, value arg0);
+	value gpuhost_fun197_wmapf(value packedInts, value packedFloats, value arg0, value arg1);
+	value gpuhost_fun187_rndinitf(value packedInts, value packedFloats);
 }
 
 __device__ inline bool gpu_gtf(double x, double y);
@@ -34,35 +34,35 @@ __device__ inline bool gpu_eqf(double x, double y);
 __device__ double gpudevice_fun120_sumwork(value *arg121_s, int arg122_i, int arg123_end, double arg124_acc);
 __device__ inline int gpu_muli(int x, int y);
 __device__ double gpudevice_fun131_initfun(value *arg130_s, int arg128_s_len, int arg125_i);
-__device__ double gpudevice_fun239_wmapf(double arg238_wsum, double arg237_welem);
-__device__ double gpudevice_fun234_wmapf(double arg233_wmax, double arg232_welem);
-__device__ double gpudevice_fun229_wmapf(double arg228_log_1onN, double arg227_sigma, int arg226_heightMapSize, value *arg225_heightMap, double arg224_altitude, double arg223_ithobs, double arg222_xelem);
-__device__ double gpudevice_fun217_propagate_x(curandState_t *randomState, double arg216_sigma, double arg215_velocity, value *arg213_x, int arg211_nPoints, value *arg210_wacc, int arg208__);
+__device__ double gpudevice_fun258_wmapf(double arg257_wsum, double arg256_welem);
+__device__ double gpudevice_fun253_wmapf(double arg252_wmax, double arg251_welem);
+__device__ double gpudevice_fun248_wmapf(double arg247_log_1onN, double arg246_sigma, int arg245_heightMapSize, value *arg244_heightMap, double arg243_altitude, double arg242_ithobs, double arg241_xelem);
+__device__ double gpudevice_fun236_propagate_x(curandState_t *randomState, double arg235_sigma, double arg234_velocity, value *arg232_x, int arg230_nPoints, value *arg229_wacc, int arg227__);
 __device__ inline int gpu_addi(int x, int y);
 __device__ inline bool gpu_ltf(double x, double y);
 __device__ inline bool gpu_eqi(int x, int y);
 __device__ inline int gpu_divi(int x, int y);
 __device__ int gpudevice_fun136_binsearch(value *arg137_vec, double arg138_p, int arg139_low, int arg140_up);
 __device__ inline double gpu_randNormalf(curandState_t *r, double mu, double sigma);
-__device__ inline double gpu_randUniformf(curandState_t *r, double low, double up);
-__device__ double gpudevice_fun169_rndinitf(curandState_t *randomState, double arg168_xUpperBound, double arg167_xLowerBound, int arg166__);
-__device__ inline double gpu_logpdfnormalf(double x, double mu, double sigma);
-__device__ inline double gpu_addf(double x, double y);
-__device__ inline double gpu_mulf(double x, double y);
-__device__ inline double gpu_int2float(int x);
-__device__ inline bool gpu_or(bool a, bool b);
-__device__ inline bool gpu_gti(int x, int y);
-__device__ inline int gpu_subi(int x, int y);
-__device__ inline bool gpu_lti(int x, int y);
-__device__ inline int gpu_ceilfi(double x);
-__device__ inline int gpu_floorfi(double x);
-__device__ double gpudevice_fun95_g_map(double arg89_altitude, value *arg90_hgtmap, int arg91_mapsize, double arg92_x);
-__device__ double gpudevice_fun178_wmapf(double arg177_sigma, int arg176_heightMapSize, value *arg175_heightMap, double arg174_altitude, double arg173_fstobs, double arg172_xelem);
-__device__ double gpudevice_fun183_wmapf(double arg182_wmax, double arg181_welem);
-__device__ inline double gpu_subf(double x, double y);
-__device__ inline double gpu_expf(double x);
-__device__ double gpudevice_fun188_wmapf(double arg187_wsum, double arg186_welem);
 __device__ inline double gpu_divf(double x, double y);
+__device__ double gpudevice_fun207_wmapf(double arg206_wsum, double arg205_welem);
+__device__ inline double gpu_expf(double x);
+__device__ inline double gpu_subf(double x, double y);
+__device__ double gpudevice_fun202_wmapf(double arg201_wmax, double arg200_welem);
+__device__ double gpudevice_fun197_wmapf(double arg196_sigma, int arg195_heightMapSize, value *arg194_heightMap, double arg193_altitude, double arg192_fstobs, double arg191_xelem);
+__device__ double gpudevice_fun95_g_map(double arg89_altitude, value *arg90_hgtmap, int arg91_mapsize, double arg92_x);
+__device__ inline int gpu_floorfi(double x);
+__device__ inline int gpu_ceilfi(double x);
+__device__ inline bool gpu_lti(int x, int y);
+__device__ inline int gpu_subi(int x, int y);
+__device__ inline bool gpu_gti(int x, int y);
+__device__ inline bool gpu_or(bool a, bool b);
+__device__ inline double gpu_int2float(int x);
+__device__ inline double gpu_mulf(double x, double y);
+__device__ inline double gpu_addf(double x, double y);
+__device__ inline double gpu_logpdfnormalf(double x, double mu, double sigma);
+__device__ double gpudevice_fun187_rndinitf(curandState_t *randomState, double arg186_xUpperBound, double arg185_xLowerBound, int arg184__);
+__device__ inline double gpu_randUniformf(curandState_t *r, double low, double up);
 
 __device__ inline bool gpu_gtf(double x, double y) {return x > y;}
 
@@ -103,27 +103,27 @@ __device__ double gpudevice_fun131_initfun(value *arg130_s, int arg128_s_len, in
 	return gpudevice_fun120_sumwork(arg130_s, var126_start, var129_end, 0.0);
 }
 
-__device__ double gpudevice_fun239_wmapf(double arg238_wsum, double arg237_welem)
+__device__ double gpudevice_fun258_wmapf(double arg257_wsum, double arg256_welem)
 {
-	return gpu_divf(arg237_welem, arg238_wsum);
+	return gpu_divf(arg256_welem, arg257_wsum);
 }
 
-__device__ double gpudevice_fun234_wmapf(double arg233_wmax, double arg232_welem)
+__device__ double gpudevice_fun253_wmapf(double arg252_wmax, double arg251_welem)
 {
-	return gpu_expf(gpu_subf(arg232_welem, arg233_wmax));
+	return gpu_expf(gpu_subf(arg251_welem, arg252_wmax));
 }
 
-__device__ double gpudevice_fun229_wmapf(double arg228_log_1onN, double arg227_sigma, int arg226_heightMapSize, value *arg225_heightMap, double arg224_altitude, double arg223_ithobs, double arg222_xelem)
+__device__ double gpudevice_fun248_wmapf(double arg247_log_1onN, double arg246_sigma, int arg245_heightMapSize, value *arg244_heightMap, double arg243_altitude, double arg242_ithobs, double arg241_xelem)
 {
-	return gpu_addf(gpu_logpdfnormalf(arg223_ithobs, gpudevice_fun95_g_map(arg224_altitude, arg225_heightMap, arg226_heightMapSize, arg222_xelem), arg227_sigma), arg228_log_1onN);
+	return gpu_addf(gpu_logpdfnormalf(arg242_ithobs, gpudevice_fun95_g_map(arg243_altitude, arg244_heightMap, arg245_heightMapSize, arg241_xelem), arg246_sigma), arg247_log_1onN);
 }
 
-__device__ double gpudevice_fun217_propagate_x(curandState_t *randomState, double arg216_sigma, double arg215_velocity, value *arg213_x, int arg211_nPoints, value *arg210_wacc, int arg208__)
+__device__ double gpudevice_fun236_propagate_x(curandState_t *randomState, double arg235_sigma, double arg234_velocity, value *arg232_x, int arg230_nPoints, value *arg229_wacc, int arg227__)
 {
-	double var209_p = gpu_randUniformf(randomState, 0.0, 1.0e-0);
-	int var212_i = gpudevice_fun136_binsearch(arg210_wacc, var209_p, 0, gpu_subi(arg211_nPoints, 1));
-	double var214_x_new = (((double *) arg213_x)[var212_i]);
-	return gpu_randNormalf(randomState, gpu_addf(var214_x_new, arg215_velocity), arg216_sigma);
+	double var228_p = gpu_randUniformf(randomState, 0.0, 1.0e-0);
+	int var231_i = gpudevice_fun136_binsearch(arg229_wacc, var228_p, 0, gpu_subi(arg230_nPoints, 1));
+	double var233_x_new = (((double *) arg232_x)[var231_i]);
+	return gpu_randNormalf(randomState, gpu_addf(var233_x_new, arg234_velocity), arg235_sigma);
 }
 
 __device__ inline int gpu_addi(int x, int y) {return x + y;}
@@ -142,32 +142,26 @@ __device__ int gpudevice_fun136_binsearch(value *arg137_vec, double arg138_p, in
 
 __device__ inline double gpu_randNormalf(curandState_t *r, double mu, double sigma) {return mu + ((double) curand_normal(r) * sigma);}
 
-__device__ inline double gpu_randUniformf(curandState_t *r, double low, double up) {return low + ((double) curand_uniform(r) * abs(up - low));}
+__device__ inline double gpu_divf(double x, double y) {return x / y;}
 
-__device__ double gpudevice_fun169_rndinitf(curandState_t *randomState, double arg168_xUpperBound, double arg167_xLowerBound, int arg166__)
+__device__ double gpudevice_fun207_wmapf(double arg206_wsum, double arg205_welem)
 {
-	return gpu_randUniformf(randomState, arg167_xLowerBound, arg168_xUpperBound);
+	return gpu_divf(arg205_welem, arg206_wsum);
 }
 
-__device__ inline double gpu_logpdfnormalf(double x, double mu, double sigma) {double t = x - mu; return (-0.5 * t * t / (sigma * sigma)) - log(sigma * sqrt(2.0 * 3.14159265359));}
+__device__ inline double gpu_expf(double x) {return exp(x);}
 
-__device__ inline double gpu_addf(double x, double y) {return x + y;}
+__device__ inline double gpu_subf(double x, double y) {return x - y;}
 
-__device__ inline double gpu_mulf(double x, double y) {return x * y;}
+__device__ double gpudevice_fun202_wmapf(double arg201_wmax, double arg200_welem)
+{
+	return gpu_expf(gpu_subf(arg200_welem, arg201_wmax));
+}
 
-__device__ inline double gpu_int2float(int x) {return (double) x;}
-
-__device__ inline bool gpu_or(bool a, bool b) {return a || b;}
-
-__device__ inline bool gpu_gti(int x, int y) {return x > y;}
-
-__device__ inline int gpu_subi(int x, int y) {return x - y;}
-
-__device__ inline bool gpu_lti(int x, int y) {return x < y;}
-
-__device__ inline int gpu_ceilfi(double x) {return (int) ceil(x);}
-
-__device__ inline int gpu_floorfi(double x) {return (int) floor(x);}
+__device__ double gpudevice_fun197_wmapf(double arg196_sigma, int arg195_heightMapSize, value *arg194_heightMap, double arg193_altitude, double arg192_fstobs, double arg191_xelem)
+{
+	return gpu_logpdfnormalf(arg192_fstobs, gpudevice_fun95_g_map(arg193_altitude, arg194_heightMap, arg195_heightMapSize, arg191_xelem), arg196_sigma);
+}
 
 __device__ double gpudevice_fun95_g_map(double arg89_altitude, value *arg90_hgtmap, int arg91_mapsize, double arg92_x)
 {
@@ -176,26 +170,32 @@ __device__ double gpudevice_fun95_g_map(double arg89_altitude, value *arg90_hgtm
 	return (gpu_or(gpu_lti(var93_p, 0), gpu_gti(var94_n, gpu_subi(arg91_mapsize, 1)))) ? (1.0e+5) : (gpu_subf(arg89_altitude, gpu_addf((((double *) arg90_hgtmap)[var93_p]), gpu_mulf(gpu_subf((((double *) arg90_hgtmap)[var94_n]), (((double *) arg90_hgtmap)[var93_p])), gpu_subf(arg92_x, gpu_int2float(var93_p))))));
 }
 
-__device__ double gpudevice_fun178_wmapf(double arg177_sigma, int arg176_heightMapSize, value *arg175_heightMap, double arg174_altitude, double arg173_fstobs, double arg172_xelem)
+__device__ inline int gpu_floorfi(double x) {return (int) floor(x);}
+
+__device__ inline int gpu_ceilfi(double x) {return (int) ceil(x);}
+
+__device__ inline bool gpu_lti(int x, int y) {return x < y;}
+
+__device__ inline int gpu_subi(int x, int y) {return x - y;}
+
+__device__ inline bool gpu_gti(int x, int y) {return x > y;}
+
+__device__ inline bool gpu_or(bool a, bool b) {return a || b;}
+
+__device__ inline double gpu_int2float(int x) {return (double) x;}
+
+__device__ inline double gpu_mulf(double x, double y) {return x * y;}
+
+__device__ inline double gpu_addf(double x, double y) {return x + y;}
+
+__device__ inline double gpu_logpdfnormalf(double x, double mu, double sigma) {double t = x - mu; return (-0.5 * t * t / (sigma * sigma)) - log(sigma * sqrt(2.0 * 3.14159265359));}
+
+__device__ double gpudevice_fun187_rndinitf(curandState_t *randomState, double arg186_xUpperBound, double arg185_xLowerBound, int arg184__)
 {
-	return gpu_logpdfnormalf(arg173_fstobs, gpudevice_fun95_g_map(arg174_altitude, arg175_heightMap, arg176_heightMapSize, arg172_xelem), arg177_sigma);
+	return gpu_randUniformf(randomState, arg185_xLowerBound, arg186_xUpperBound);
 }
 
-__device__ double gpudevice_fun183_wmapf(double arg182_wmax, double arg181_welem)
-{
-	return gpu_expf(gpu_subf(arg181_welem, arg182_wmax));
-}
-
-__device__ inline double gpu_subf(double x, double y) {return x - y;}
-
-__device__ inline double gpu_expf(double x) {return exp(x);}
-
-__device__ double gpudevice_fun188_wmapf(double arg187_wsum, double arg186_welem)
-{
-	return gpu_divf(arg186_welem, arg187_wsum);
-}
-
-__device__ inline double gpu_divf(double x, double y) {return x / y;}
+__device__ inline double gpu_randUniformf(curandState_t *r, double low, double up) {return low + ((double) curand_uniform(r) * abs(up - low));}
 
 __global__ void gpuglobal_fun114_initfun(value *cuda_arg0, int cuda_arg1, value *outarr, int n, int elemPerThread)
 {
@@ -223,7 +223,7 @@ __global__ void gpuglobal_fun131_initfun(value *cuda_arg0, int cuda_arg1, value 
 	}
 }
 
-__global__ void gpuglobal_fun239_wmapf(double cuda_arg0, value *cuda_arg1, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun258_wmapf(double cuda_arg0, value *cuda_arg1, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -234,11 +234,11 @@ __global__ void gpuglobal_fun239_wmapf(double cuda_arg0, value *cuda_arg1, value
 	for (i = start; i < end; ++i) {
 		double v;
 		v = ((double *) cuda_arg1)[i];
-		((double *) outarr)[i] = gpudevice_fun239_wmapf(cuda_arg0, v);
+		((double *) outarr)[i] = gpudevice_fun258_wmapf(cuda_arg0, v);
 	}
 }
 
-__global__ void gpuglobal_fun234_wmapf(double cuda_arg0, value *cuda_arg1, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun253_wmapf(double cuda_arg0, value *cuda_arg1, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -249,11 +249,11 @@ __global__ void gpuglobal_fun234_wmapf(double cuda_arg0, value *cuda_arg1, value
 	for (i = start; i < end; ++i) {
 		double v;
 		v = ((double *) cuda_arg1)[i];
-		((double *) outarr)[i] = gpudevice_fun234_wmapf(cuda_arg0, v);
+		((double *) outarr)[i] = gpudevice_fun253_wmapf(cuda_arg0, v);
 	}
 }
 
-__global__ void gpuglobal_fun229_wmapf(double cuda_arg0, double cuda_arg1, int cuda_arg2, value *cuda_arg3, double cuda_arg4, double cuda_arg5, value *cuda_arg6, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun248_wmapf(double cuda_arg0, double cuda_arg1, int cuda_arg2, value *cuda_arg3, double cuda_arg4, double cuda_arg5, value *cuda_arg6, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -264,11 +264,11 @@ __global__ void gpuglobal_fun229_wmapf(double cuda_arg0, double cuda_arg1, int c
 	for (i = start; i < end; ++i) {
 		double v;
 		v = ((double *) cuda_arg6)[i];
-		((double *) outarr)[i] = gpudevice_fun229_wmapf(cuda_arg0, cuda_arg1, cuda_arg2, cuda_arg3, cuda_arg4, cuda_arg5, v);
+		((double *) outarr)[i] = gpudevice_fun248_wmapf(cuda_arg0, cuda_arg1, cuda_arg2, cuda_arg3, cuda_arg4, cuda_arg5, v);
 	}
 }
 
-__global__ void gpuglobal_fun217_propagate_x(double cuda_arg0, double cuda_arg1, value *cuda_arg2, int cuda_arg3, value *cuda_arg4, value *outarr, int n, int elemPerThread, unsigned long long seed)
+__global__ void gpuglobal_fun236_propagate_x(double cuda_arg0, double cuda_arg1, value *cuda_arg2, int cuda_arg3, value *cuda_arg4, value *outarr, int n, int elemPerThread, unsigned long long seed)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -279,11 +279,11 @@ __global__ void gpuglobal_fun217_propagate_x(double cuda_arg0, double cuda_arg1,
 	curandState_t r;
 	curand_init(seed + (unsigned long long) start, 0, 0, &r);
 	for (i = start; i < end; ++i) {
-		((double *) outarr)[i] = gpudevice_fun217_propagate_x(&r, cuda_arg0, cuda_arg1, cuda_arg2, cuda_arg3, cuda_arg4, i);
+		((double *) outarr)[i] = gpudevice_fun236_propagate_x(&r, cuda_arg0, cuda_arg1, cuda_arg2, cuda_arg3, cuda_arg4, i);
 	}
 }
 
-__global__ void gpuglobal_fun169_rndinitf(double cuda_arg0, double cuda_arg1, value *outarr, int n, int elemPerThread, unsigned long long seed)
+__global__ void gpuglobal_fun207_wmapf(double cuda_arg0, value *cuda_arg1, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -291,14 +291,29 @@ __global__ void gpuglobal_fun169_rndinitf(double cuda_arg0, double cuda_arg1, va
 	if (end > n)
 		end = n;
 
-	curandState_t r;
-	curand_init(seed + (unsigned long long) start, 0, 0, &r);
 	for (i = start; i < end; ++i) {
-		((double *) outarr)[i] = gpudevice_fun169_rndinitf(&r, cuda_arg0, cuda_arg1, i);
+		double v;
+		v = ((double *) cuda_arg1)[i];
+		((double *) outarr)[i] = gpudevice_fun207_wmapf(cuda_arg0, v);
 	}
 }
 
-__global__ void gpuglobal_fun178_wmapf(double cuda_arg0, int cuda_arg1, value *cuda_arg2, double cuda_arg3, double cuda_arg4, value *cuda_arg5, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun202_wmapf(double cuda_arg0, value *cuda_arg1, value *outarr, int n, int elemPerThread)
+{
+	int i;
+	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
+	int end = start + elemPerThread;
+	if (end > n)
+		end = n;
+
+	for (i = start; i < end; ++i) {
+		double v;
+		v = ((double *) cuda_arg1)[i];
+		((double *) outarr)[i] = gpudevice_fun202_wmapf(cuda_arg0, v);
+	}
+}
+
+__global__ void gpuglobal_fun197_wmapf(double cuda_arg0, int cuda_arg1, value *cuda_arg2, double cuda_arg3, double cuda_arg4, value *cuda_arg5, value *outarr, int n, int elemPerThread)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -309,11 +324,11 @@ __global__ void gpuglobal_fun178_wmapf(double cuda_arg0, int cuda_arg1, value *c
 	for (i = start; i < end; ++i) {
 		double v;
 		v = ((double *) cuda_arg5)[i];
-		((double *) outarr)[i] = gpudevice_fun178_wmapf(cuda_arg0, cuda_arg1, cuda_arg2, cuda_arg3, cuda_arg4, v);
+		((double *) outarr)[i] = gpudevice_fun197_wmapf(cuda_arg0, cuda_arg1, cuda_arg2, cuda_arg3, cuda_arg4, v);
 	}
 }
 
-__global__ void gpuglobal_fun183_wmapf(double cuda_arg0, value *cuda_arg1, value *outarr, int n, int elemPerThread)
+__global__ void gpuglobal_fun187_rndinitf(double cuda_arg0, double cuda_arg1, value *outarr, int n, int elemPerThread, unsigned long long seed)
 {
 	int i;
 	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
@@ -321,25 +336,10 @@ __global__ void gpuglobal_fun183_wmapf(double cuda_arg0, value *cuda_arg1, value
 	if (end > n)
 		end = n;
 
+	curandState_t r;
+	curand_init(seed + (unsigned long long) start, 0, 0, &r);
 	for (i = start; i < end; ++i) {
-		double v;
-		v = ((double *) cuda_arg1)[i];
-		((double *) outarr)[i] = gpudevice_fun183_wmapf(cuda_arg0, v);
-	}
-}
-
-__global__ void gpuglobal_fun188_wmapf(double cuda_arg0, value *cuda_arg1, value *outarr, int n, int elemPerThread)
-{
-	int i;
-	int start = ((blockIdx.x * blockDim.x) + threadIdx.x) * elemPerThread;
-	int end = start + elemPerThread;
-	if (end > n)
-		end = n;
-
-	for (i = start; i < end; ++i) {
-		double v;
-		v = ((double *) cuda_arg1)[i];
-		((double *) outarr)[i] = gpudevice_fun188_wmapf(cuda_arg0, v);
+		((double *) outarr)[i] = gpudevice_fun187_rndinitf(&r, cuda_arg0, cuda_arg1, i);
 	}
 }
 
@@ -407,7 +407,7 @@ value gpuhost_fun131_initfun(value packedInts, value packedFloats, value arg0)
 	CAMLreturn(outarr);
 }
 
-value gpuhost_fun239_wmapf(value packedInts, value packedFloats, value arg0)
+value gpuhost_fun258_wmapf(value packedInts, value packedFloats, value arg0)
 {
 	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
@@ -427,7 +427,7 @@ value gpuhost_fun239_wmapf(value packedInts, value packedFloats, value arg0)
 	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun239_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), cuda_arg0, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun258_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), cuda_arg0, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -439,7 +439,7 @@ value gpuhost_fun239_wmapf(value packedInts, value packedFloats, value arg0)
 	CAMLreturn(outarr);
 }
 
-value gpuhost_fun234_wmapf(value packedInts, value packedFloats, value arg0)
+value gpuhost_fun253_wmapf(value packedInts, value packedFloats, value arg0)
 {
 	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
@@ -459,7 +459,7 @@ value gpuhost_fun234_wmapf(value packedInts, value packedFloats, value arg0)
 	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun234_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), cuda_arg0, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun253_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), cuda_arg0, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -471,7 +471,7 @@ value gpuhost_fun234_wmapf(value packedInts, value packedFloats, value arg0)
 	CAMLreturn(outarr);
 }
 
-value gpuhost_fun229_wmapf(value packedInts, value packedFloats, value arg0, value arg1)
+value gpuhost_fun248_wmapf(value packedInts, value packedFloats, value arg0, value arg1)
 {
 	CAMLparam4(packedInts, packedFloats, arg0, arg1);
 	CAMLlocal1(outarr);
@@ -494,7 +494,7 @@ value gpuhost_fun229_wmapf(value packedInts, value packedFloats, value arg0, val
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun229_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Double_field(packedFloats, 1), Int_val(Field(packedInts, 1)), cuda_arg0, Double_field(packedFloats, 2), Double_field(packedFloats, 3), cuda_arg1, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun248_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Double_field(packedFloats, 1), Int_val(Field(packedInts, 1)), cuda_arg0, Double_field(packedFloats, 2), Double_field(packedFloats, 3), cuda_arg1, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -507,7 +507,7 @@ value gpuhost_fun229_wmapf(value packedInts, value packedFloats, value arg0, val
 	CAMLreturn(outarr);
 }
 
-value gpuhost_fun217_propagate_x(value packedInts, value packedFloats, value arg0, value arg1)
+value gpuhost_fun236_propagate_x(value packedInts, value packedFloats, value arg0, value arg1)
 {
 	CAMLparam4(packedInts, packedFloats, arg0, arg1);
 	CAMLlocal1(outarr);
@@ -530,7 +530,7 @@ value gpuhost_fun217_propagate_x(value packedInts, value packedFloats, value arg
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun217_propagate_x<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Double_field(packedFloats, 1), cuda_arg0, Int_val(Field(packedInts, 1)), cuda_arg1, cuda_outarr, n, elemPerThread, (unsigned long long) clock());
+	gpuglobal_fun236_propagate_x<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Double_field(packedFloats, 1), cuda_arg0, Int_val(Field(packedInts, 1)), cuda_arg1, cuda_outarr, n, elemPerThread, (unsigned long long) clock());
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -543,13 +543,13 @@ value gpuhost_fun217_propagate_x(value packedInts, value packedFloats, value arg
 	CAMLreturn(outarr);
 }
 
-value gpuhost_fun169_rndinitf(value packedInts, value packedFloats)
+value gpuhost_fun207_wmapf(value packedInts, value packedFloats, value arg0)
 {
-	CAMLparam2(packedInts, packedFloats);
+	CAMLparam3(packedInts, packedFloats, arg0);
 	CAMLlocal1(outarr);
 
 	int elemPerThread = Int_val(Field(packedInts, 0));
-	int n = Int_val(Field(packedInts, 1));
+	int n = Wosize_val(arg0);
 
 	int threadsPerBlock;
 	int elemPerBlock;
@@ -558,20 +558,56 @@ value gpuhost_fun169_rndinitf(value packedInts, value packedFloats)
 	elemPerBlock = threadsPerBlock * elemPerThread;
 	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
+	value *cuda_arg0;
 	cudaMalloc(&cuda_outarr, n * sizeof(value));
+	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
+	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun169_rndinitf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Double_field(packedFloats, 1), cuda_outarr, n, elemPerThread, (unsigned long long) clock());
+	gpuglobal_fun207_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), cuda_arg0, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
 	cudaMemcpy(Op_val(outarr), cuda_outarr, n * sizeof(value), cudaMemcpyDeviceToHost);
 
 	cudaFree(cuda_outarr);
+	cudaFree(cuda_arg0);
 
 	CAMLreturn(outarr);
 }
 
-value gpuhost_fun178_wmapf(value packedInts, value packedFloats, value arg0, value arg1)
+value gpuhost_fun202_wmapf(value packedInts, value packedFloats, value arg0)
+{
+	CAMLparam3(packedInts, packedFloats, arg0);
+	CAMLlocal1(outarr);
+
+	int elemPerThread = Int_val(Field(packedInts, 0));
+	int n = Wosize_val(arg0);
+
+	int threadsPerBlock;
+	int elemPerBlock;
+	int blockCount;
+	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
+	elemPerBlock = threadsPerBlock * elemPerThread;
+	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
+	value *cuda_outarr;
+	value *cuda_arg0;
+	cudaMalloc(&cuda_outarr, n * sizeof(value));
+	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
+	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
+
+	gpuglobal_fun202_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), cuda_arg0, cuda_outarr, n, elemPerThread);
+	outarr = caml_alloc(n, Double_array_tag);
+	cudaDeviceSynchronize();
+
+	cudaMemcpy(Op_val(outarr), cuda_outarr, n * sizeof(value), cudaMemcpyDeviceToHost);
+
+	cudaFree(cuda_outarr);
+	cudaFree(cuda_arg0);
+
+	CAMLreturn(outarr);
+}
+
+value gpuhost_fun197_wmapf(value packedInts, value packedFloats, value arg0, value arg1)
 {
 	CAMLparam4(packedInts, packedFloats, arg0, arg1);
 	CAMLlocal1(outarr);
@@ -594,7 +630,7 @@ value gpuhost_fun178_wmapf(value packedInts, value packedFloats, value arg0, val
 	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 	cudaMemcpy(cuda_arg1, Op_val(arg1), Wosize_val(arg1) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun178_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Int_val(Field(packedInts, 1)), cuda_arg0, Double_field(packedFloats, 1), Double_field(packedFloats, 2), cuda_arg1, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun197_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Int_val(Field(packedInts, 1)), cuda_arg0, Double_field(packedFloats, 1), Double_field(packedFloats, 2), cuda_arg1, cuda_outarr, n, elemPerThread);
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
@@ -607,13 +643,13 @@ value gpuhost_fun178_wmapf(value packedInts, value packedFloats, value arg0, val
 	CAMLreturn(outarr);
 }
 
-value gpuhost_fun183_wmapf(value packedInts, value packedFloats, value arg0)
+value gpuhost_fun187_rndinitf(value packedInts, value packedFloats)
 {
-	CAMLparam3(packedInts, packedFloats, arg0);
+	CAMLparam2(packedInts, packedFloats);
 	CAMLlocal1(outarr);
 
 	int elemPerThread = Int_val(Field(packedInts, 0));
-	int n = Wosize_val(arg0);
+	int n = Int_val(Field(packedInts, 1));
 
 	int threadsPerBlock;
 	int elemPerBlock;
@@ -622,51 +658,15 @@ value gpuhost_fun183_wmapf(value packedInts, value packedFloats, value arg0)
 	elemPerBlock = threadsPerBlock * elemPerThread;
 	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
 	value *cuda_outarr;
-	value *cuda_arg0;
 	cudaMalloc(&cuda_outarr, n * sizeof(value));
-	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
-	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
 
-	gpuglobal_fun183_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), cuda_arg0, cuda_outarr, n, elemPerThread);
+	gpuglobal_fun187_rndinitf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), Double_field(packedFloats, 1), cuda_outarr, n, elemPerThread, (unsigned long long) clock());
 	outarr = caml_alloc(n, Double_array_tag);
 	cudaDeviceSynchronize();
 
 	cudaMemcpy(Op_val(outarr), cuda_outarr, n * sizeof(value), cudaMemcpyDeviceToHost);
 
 	cudaFree(cuda_outarr);
-	cudaFree(cuda_arg0);
-
-	CAMLreturn(outarr);
-}
-
-value gpuhost_fun188_wmapf(value packedInts, value packedFloats, value arg0)
-{
-	CAMLparam3(packedInts, packedFloats, arg0);
-	CAMLlocal1(outarr);
-
-	int elemPerThread = Int_val(Field(packedInts, 0));
-	int n = Wosize_val(arg0);
-
-	int threadsPerBlock;
-	int elemPerBlock;
-	int blockCount;
-	cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0);
-	elemPerBlock = threadsPerBlock * elemPerThread;
-	blockCount = (n + elemPerBlock - 1) / elemPerBlock;
-	value *cuda_outarr;
-	value *cuda_arg0;
-	cudaMalloc(&cuda_outarr, n * sizeof(value));
-	cudaMalloc(&cuda_arg0, Wosize_val(arg0) * sizeof(value));
-	cudaMemcpy(cuda_arg0, Op_val(arg0), Wosize_val(arg0) * sizeof(value), cudaMemcpyHostToDevice);
-
-	gpuglobal_fun188_wmapf<<<blockCount,threadsPerBlock>>>(Double_field(packedFloats, 0), cuda_arg0, cuda_outarr, n, elemPerThread);
-	outarr = caml_alloc(n, Double_array_tag);
-	cudaDeviceSynchronize();
-
-	cudaMemcpy(Op_val(outarr), cuda_outarr, n * sizeof(value), cudaMemcpyDeviceToHost);
-
-	cudaFree(cuda_outarr);
-	cudaFree(cuda_arg0);
 
 	CAMLreturn(outarr);
 }

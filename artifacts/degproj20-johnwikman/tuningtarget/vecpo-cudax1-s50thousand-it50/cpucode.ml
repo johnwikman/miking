@@ -1,4 +1,3 @@
-open Array
 open Printf
 
 external gpuhost_fun79_plusone: int array -> float array -> int array -> int array = "gpuhost_fun79_plusone"
