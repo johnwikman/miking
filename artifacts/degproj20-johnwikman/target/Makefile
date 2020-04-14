@@ -6,6 +6,9 @@ all:
 	rm -rf $(BINDIR)
 	@sh -c 'for dir in $$(ls -d */); do make $${dir%%/}.build; done'
 
+%.buildall:
+	@sh -c 'for dir in $$(ls -d $**/); do make $${dir%%/}.build; done'
+
 %.build:
 	mkdir -p $(BINDIR)
 	nvcc -x cu -arch=sm_50 -I`ocamlc -where` -dc $*/gpucode.cpp -o $*/gpuhost.o
