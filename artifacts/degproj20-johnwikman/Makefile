@@ -1,4 +1,4 @@
-.PHONY: tests tuning tuning-upload upload clean
+.PHONY: tests tuning tuning-upload upload-reference upload clean
 
 tests:
 	$(eval TESTCASES := $(shell ls -d testcases/*/))
@@ -15,6 +15,10 @@ FORCE:
 upload:
 	ssh sleipner rm -rf /home/wikman/Code/gen
 	scp -r target/ sleipner:/home/wikman/Code/gen/
+
+upload-reference:
+	ssh sleipner rm -rf /home/wikman/Code/ref
+	scp -r referencecases/ sleipner:/home/wikman/Code/ref/
 
 upload-tuning:
 	ssh sleipner rm -rf /home/wikman/Code/gen

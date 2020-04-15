@@ -18,19 +18,19 @@
 #define _ITERS_ (15)
 #endif
 
-#define BENCHMARK_RUNONCE(target, fn_prep, fn_run)         \
-        do {                                               \
-            fn_prep();                                     \
-            auto start = std::chrono::system_clock::now(); \
-            fn_run();                                      \
-            auto end = std::chrono::system_clock::now();   \
-            std::chrono::duration<double> d = end - start; \
-            target = d.count();                            \
+#define BENCHMARK_RUNONCE(target, fn_prep, fn_run, fn_post) \
+        do {                                                \
+            fn_prep();                                      \
+            auto start = std::chrono::system_clock::now();  \
+            fn_run();                                       \
+            auto end = std::chrono::system_clock::now();    \
+            std::chrono::duration<double> d = end - start;  \
+            target = d.count();                             \
+            fn_post();                                      \
         } while (0)
 
 #define BENCHMARK_PRINTRESULTS(name, a)                                                \
         do {                                                                           \
-        	int j;                                                                     \
             std::cout << "== " << name << " Results ==" << std::endl;                  \
             std::sort(std::begin(a), std::end(a));                                     \
             double median = a[a.size() / 2];                                           \
@@ -44,22 +44,22 @@
             std::cout << "Variance: +-" << (variance * 1000.0) << " ms" << std::endl;  \
         } while (0)
 
-#define BENCHMARK(fn_prep, fn_run)                                     \
-        do {                                                           \
-            int i;                                                     \
-            std::valarray<double> warmup_results{1.0};                 \
-            std::valarray<double> iter_results{1.0};                   \
-            warmup_results.resize(_WARMUPS_);                          \
-            iter_results.resize(_ITERS_);                              \
-            for (i = 0; i < _WARMUPS_; ++i) {                          \
-                BENCHMARK_RUNONCE(warmup_results[i], fn_prep, fn_run); \
-            }                                                          \
-            for (i = 0; i < _ITERS_; ++i) {                            \
-                BENCHMARK_RUNONCE(iter_results[i], fn_prep, fn_run);   \
-            }                                                          \
-            BENCHMARK_PRINTRESULTS("Iteration", iter_results);         \
-            std::cout << std::endl;                                     \
-            BENCHMARK_PRINTRESULTS("Warmup", warmup_results);          \
+#define BENCHMARK(fn_prep, fn_run, fn_post)                                     \
+        do {                                                                    \
+            int i;                                                              \
+            std::valarray<double> warmup_results{1.0};                          \
+            std::valarray<double> iter_results{1.0};                            \
+            warmup_results.resize(_WARMUPS_);                                   \
+            iter_results.resize(_ITERS_);                                       \
+            for (i = 0; i < _WARMUPS_; ++i) {                                   \
+                BENCHMARK_RUNONCE(warmup_results[i], fn_prep, fn_run, fn_post); \
+            }                                                                   \
+            for (i = 0; i < _ITERS_; ++i) {                                     \
+                BENCHMARK_RUNONCE(iter_results[i], fn_prep, fn_run, fn_post);   \
+            }                                                                   \
+            BENCHMARK_PRINTRESULTS("Iteration", iter_results);                  \
+            std::cout << std::endl;                                             \
+            BENCHMARK_PRINTRESULTS("Warmup", warmup_results);                   \
         } while (0)
 
 #endif /* BENCHMARK_SUITE_HPP */
