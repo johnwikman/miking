@@ -1,6 +1,7 @@
 .PHONY: all clean runall \
         saxpy_custom saxpy_example saxpy \
         saxpysingle_custom saxpysingle \
+        vecadd_custom vecadd \
         vecscalar_custom vecscalar \
         ger matadd
 
@@ -14,11 +15,13 @@ GERSIZES=4096 8192
 
 MATADDSIZES=32 4096 8192
 
+VECADDSIZES=2000 500000 1000000 10000000 50000000
 
 VECSCALARSIZES=2000 500000 1000000 10000000 50000000
 
 all: saxpy_custom saxpy_example saxpy \
      saxpysingle_custom saxpysingle \
+     vecadd_custom vecadd \
      vecscalar_custom vecscalar \
      ger matadd
 
@@ -70,6 +73,17 @@ matadd:
 	make $(foreach size,$(MATADDSIZES),$(size).$@)
 %.matadd:
 	$(NVCC) $(NVCCFLAGS) -D_SIZE_=$* -o matadd-s$*.out matadd/matadd.cu
+
+
+vecadd:
+	make $(foreach size,$(VECADDSIZES),$(size).$@)
+%.vecadd:
+	$(NVCC) $(NVCCFLAGS) -D_SIZE_=$* -o vecadd-s$*.out vecadd/vecadd.cu
+
+vecadd_custom:
+	make $(foreach size,$(VECADDSIZES),$(size).$@)
+%.vecadd_custom:
+	$(NVCC) $(NVCCFLAGS) -D_SIZE_=$* -o vecadd_custom-s$*.out vecadd/vecadd.cu -DUSE_CUSTOM
 
 
 vecscalar:
