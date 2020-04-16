@@ -61,13 +61,11 @@ static double *x_arr = NULL;
 
 int main(void)
 {
-	std::cout << "[<<<< BENCHMARKING CUBLAS IMPLEMENTATION >>>>]" << std::endl;
-	BENCHMARK(pre_saxpysingle, run_saxpysinglecublas, post_saxpysingle);
-	std::cout << "[<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>]" << std::endl;
-	std::cout << std::endl << std::endl;
-	std::cout << "[<<<< BENCHMARKING MY OWN IMPLEMENTATION >>>>]" << std::endl;
+#ifdef USE_CUSTOM
 	BENCHMARK(pre_saxpysingle, run_mysaxpysingle, post_saxpysingle);
-	std::cout << "[<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>]" << std::endl;
+#else
+	BENCHMARK(pre_saxpysingle, run_saxpysinglecublas, post_saxpysingle);
+#endif
 	return 0;
 }
 

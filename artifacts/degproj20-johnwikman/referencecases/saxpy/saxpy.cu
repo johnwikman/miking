@@ -66,17 +66,13 @@ static double *y_arr = NULL;
 
 int main(void)
 {
-	std::cout << "[<<<< BENCHMARKING CUBLAS IMPLEMENTATION >>>>]" << std::endl;
-	BENCHMARK(pre_saxpy, run_saxpycublas, post_saxpy);
-	std::cout << "[<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>]" << std::endl;
-	std::cout << std::endl << std::endl;
-	std::cout << "[<<<< BENCHMARKING ONLINE EXAMPLE IMPLEMENTATION >>>>]" << std::endl;
-	BENCHMARK(pre_saxpy, run_saxpyexample, post_saxpy);
-	std::cout << "[<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>]" << std::endl;
-	std::cout << std::endl << std::endl;
-	std::cout << "[<<<< BENCHMARKING MY OWN IMPLEMENTATION >>>>]" << std::endl;
+#ifdef USE_CUSTOM
 	BENCHMARK(pre_saxpy, run_mysaxpy, post_saxpy);
-	std::cout << "[<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>]" << std::endl;
+#elif defined(USE_EXAMPLE)
+	BENCHMARK(pre_saxpy, run_saxpyexample, post_saxpy);
+#else
+	BENCHMARK(pre_saxpy, run_saxpycublas, post_saxpy);
+#endif
 	return 0;
 }
 

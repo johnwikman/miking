@@ -31,17 +31,17 @@
 
 #define BENCHMARK_PRINTRESULTS(name, a)                                                \
         do {                                                                           \
-            std::cout << "== " << name << " Results ==" << std::endl;                  \
+            std::cout << "[" << name << "_results]" << std::endl;                  \
             std::sort(std::begin(a), std::end(a));                                     \
             double median = a[a.size() / 2];                                           \
             double avg = a.sum() / ((double) a.size());                                \
             double variance = std::max(a.max() - avg, avg - a.min());                  \
-            std::cout << "No. of iterations: " << a.size() << std::endl;               \
-            std::cout << "Median: " << (median * 1000.0) << " ms" << std::endl;        \
-            std::cout << "Longest run: " << (a.max() * 1000.0) << " ms" << std::endl;  \
-            std::cout << "Shortest run: " << (a.min() * 1000.0) << " ms" << std::endl; \
-            std::cout << "Average: " << (avg * 1000.0) << " ms" << std::endl;          \
-            std::cout << "Variance: +-" << (variance * 1000.0) << " ms" << std::endl;  \
+            std::cout << "no_of_iterations = " << a.size() << std::endl;               \
+            std::cout << "median_ms = " << (median * 1000.0) << std::endl;        \
+            std::cout << "longest_run_ms = " << (a.max() * 1000.0) << std::endl;  \
+            std::cout << "shortest_run_ms = " << (a.min() * 1000.0) << std::endl; \
+            std::cout << "average_ms = " << (avg * 1000.0) << std::endl;          \
+            std::cout << "variance_ms = " << (variance * 1000.0) << std::endl;  \
         } while (0)
 
 #define BENCHMARK(fn_prep, fn_run, fn_post)                                     \
@@ -57,9 +57,9 @@
             for (i = 0; i < _ITERS_; ++i) {                                     \
                 BENCHMARK_RUNONCE(iter_results[i], fn_prep, fn_run, fn_post);   \
             }                                                                   \
-            BENCHMARK_PRINTRESULTS("Iteration", iter_results);                  \
+            BENCHMARK_PRINTRESULTS("iteration", iter_results);                  \
             std::cout << std::endl;                                             \
-            BENCHMARK_PRINTRESULTS("Warmup", warmup_results);                   \
+            BENCHMARK_PRINTRESULTS("warmup", warmup_results);                   \
         } while (0)
 
 #endif /* BENCHMARK_SUITE_HPP */
