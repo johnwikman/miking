@@ -1,8 +1,10 @@
-.PHONY: all saxpy saxpysingle ger clean
+.PHONY: all saxpy saxpysingle ger matadd clean
 
 SAXPYSIZES=2000 500000 1000000 10000000 50000000
 
 GERSIZES=4096 8192
+
+MATADDSIZES=32 4096 8192
 
 saxpy:
 	make $(foreach size,$(SAXPYSIZES),$(size).saxpy)
@@ -23,6 +25,13 @@ ger:
 
 %.ger:
 	nvcc -arch=sm_50 -D_SIZE_=$* -lcublas -o ger-s$*.out ger/ger.cu -O3
+
+
+matadd:
+	make $(foreach size,$(MATADDSIZES),$(size).matadd)
+
+%.matadd:
+	nvcc -arch=sm_50 -D_SIZE_=$* -lcublas -o matadd-s$*.out matadd/matadd.cu -O3
 
 
 clean:
