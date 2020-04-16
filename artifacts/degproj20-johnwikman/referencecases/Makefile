@@ -1,6 +1,7 @@
 .PHONY: all clean runall \
         saxpy_custom saxpy_example saxpy \
         saxpysingle_custom saxpysingle \
+        vecscalar_custom vecscalar \
         ger matadd
 
 NVCC=nvcc
@@ -14,7 +15,12 @@ GERSIZES=4096 8192
 MATADDSIZES=32 4096 8192
 
 
-all: saxpy_custom saxpy_example saxpy saxpysingle saxpysingle_custom ger matadd
+VECSCALARSIZES=2000 500000 1000000 10000000 50000000
+
+all: saxpy_custom saxpy_example saxpy \
+     saxpysingle_custom saxpysingle \
+     vecscalar_custom vecscalar \
+     ger matadd
 
 clean:
 	rm -f *.out
@@ -25,6 +31,7 @@ runall:
 	make $(foreach prog,$(shell ls *.out),$(shell basename $(prog) .out).run)
 %.run:
 	nvprof ./$*.out > results/$*.toml 2> results/$*.nvprof
+
 
 saxpy_custom:
 	make $(foreach size,$(SAXPYSIZES),$(size).$@)
@@ -55,13 +62,22 @@ saxpysingle_custom:
 
 ger:
 	make $(foreach size,$(GERSIZES),$(size).$@)
-
 %.ger:
 	$(NVCC) $(NVCCFLAGS) -D_SIZE_=$* -o ger-s$*.out ger/ger.cu
 
 
 matadd:
 	make $(foreach size,$(MATADDSIZES),$(size).$@)
-
 %.matadd:
 	$(NVCC) $(NVCCFLAGS) -D_SIZE_=$* -o matadd-s$*.out matadd/matadd.cu
+
+
+vecscalar:
+	make $(foreach size,$(VECSCALARSIZES),$(size).$@)
+%.vecscalar:
+	$(NVCC) $(NVCCFLAGS) -D_SIZE_=$* -o vecscalar-s$*.out vecscalar/vecscalar.cu
+
+vecscalar_custom:
+	make $(foreach size,$(VECSCALARSIZES),$(size).$@)
+%.vecscalar_custom:
+	$(NVCC) $(NVCCFLAGS) -D_SIZE_=$* -o vecscalar_custom-s$*.out vecscalar/vecscalar.cu -DUSE_CUSTOM
