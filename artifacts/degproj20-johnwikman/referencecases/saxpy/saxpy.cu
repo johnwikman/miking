@@ -2,6 +2,10 @@
  * @file saxpy.cu
  *
  * CUDA implementation of S = a*X + Y
+ *
+ * Note to self: For some reason the cudaMemcpys are twice as slow as when
+ * running to MCore version, the kernel time is about the same. Include this in
+ * the discussion and run nvprof to look at the kernel times.
  */
 
 #include <cstdlib>
@@ -18,8 +22,13 @@
 #endif
 
 void pre_saxpy(void);
-void run_saxpy(void);
+void run_saxpycublas(void);
+void run_saxpyexample(void);
+void run_mysaxpy(void);
 void post_saxpy(void);
+
+#define PERR(a) p_cudaerr(#a, a)
+#define PSTAT(a) p_cublasstat(#a, a)
 
 static void p_cudaerr(const char *msg, cudaError_t err)
 {
@@ -57,7 +66,17 @@ static double *y_arr = NULL;
 
 int main(void)
 {
-	BENCHMARK(pre_saxpy, run_saxpy, post_saxpy);
+	std::cout << "[<<<< BENCHMARKING CUBLAS IMPLEMENTATION >>>>]" << std::endl;
+	BENCHMARK(pre_saxpy, run_saxpycublas, post_saxpy);
+	std::cout << "[<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>]" << std::endl;
+	std::cout << std::endl << std::endl;
+	std::cout << "[<<<< BENCHMARKING ONLINE EXAMPLE IMPLEMENTATION >>>>]" << std::endl;
+	BENCHMARK(pre_saxpy, run_saxpyexample, post_saxpy);
+	std::cout << "[<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>]" << std::endl;
+	std::cout << std::endl << std::endl;
+	std::cout << "[<<<< BENCHMARKING MY OWN IMPLEMENTATION >>>>]" << std::endl;
+	BENCHMARK(pre_saxpy, run_mysaxpy, post_saxpy);
+	std::cout << "[<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>]" << std::endl;
 	return 0;
 }
 
@@ -80,10 +99,8 @@ void post_saxpy(void)
 	delete[] y_arr;
 }
 
-void run_saxpy(void)
+void run_saxpycublas(void)
 {
-#define PERR(a) p_cudaerr(#a, a)
-#define PSTAT(a) p_cublasstat(#a, a)
 	double a;
 	double *d_x;
 	double *d_y;
@@ -102,4 +119,77 @@ void run_saxpy(void)
 	cublasDestroy(handle);
 	cudaFree(d_x);
 	cudaFree(d_y);
+}
+
+// Example from: https://devblogs.nvidia.com/six-ways-saxpy/
+__global__
+void ex_saxpy(int n, double a, double * __restrict x, double * __restrict y)
+{
+	int i = blockIdx.x*blockDim.x + threadIdx.x;
+	if (i < n) y[i] = a*x[i] + y[i];
+}
+
+void run_saxpyexample(void)
+{
+	double a;
+	double *d_x;
+	double *d_y;
+	int threadsPerBlock;
+	int numBlocks;
+
+	PERR(cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0));
+	numBlocks = ((_SIZE_) + threadsPerBlock - 1) / threadsPerBlock;
+
+	PERR(cudaMalloc(&d_x, (_SIZE_) * sizeof(double)));
+	PERR(cudaMalloc(&d_y, (_SIZE_) * sizeof(double)));
+	PERR(cudaMemcpy(d_x, x_arr, (_SIZE_) * sizeof(double), cudaMemcpyHostToDevice));
+	PERR(cudaMemcpy(d_y, y_arr, (_SIZE_) * sizeof(double), cudaMemcpyHostToDevice));
+	a = a_scalar;
+
+	ex_saxpy<<<numBlocks,threadsPerBlock>>>(_SIZE_, a, d_x, d_y);
+	PERR(cudaDeviceSynchronize());
+
+	PERR(cudaMemcpy(s_arr, d_y, (_SIZE_) * sizeof(double), cudaMemcpyDeviceToHost));
+	cudaFree(d_x);
+	cudaFree(d_y);
+}
+
+
+
+// My own implementation
+__global__
+void my_saxpy(int n, double a, const double *x, const double *y, double *s)
+{
+	int i = (blockIdx.x * blockDim.x) + threadIdx.x;
+
+	if (i < n)
+		s[i] = (a * x[i]) + y[i];
+}
+
+void run_mysaxpy(void)
+{
+	double a;
+	double *d_x;
+	double *d_y;
+	double *d_s;
+	int threadsPerBlock;
+	int numBlocks;
+
+	PERR(cudaDeviceGetAttribute(&threadsPerBlock, cudaDevAttrMaxThreadsPerBlock, 0));
+	numBlocks = ((_SIZE_) + threadsPerBlock - 1) / threadsPerBlock;
+
+	PERR(cudaMalloc(&d_x, (_SIZE_) * sizeof(double)));
+	PERR(cudaMalloc(&d_y, (_SIZE_) * sizeof(double)));
+	PERR(cudaMalloc(&d_s, (_SIZE_) * sizeof(double)));
+	PERR(cudaMemcpy(d_x, x_arr, (_SIZE_) * sizeof(double), cudaMemcpyHostToDevice));
+	PERR(cudaMemcpy(d_y, y_arr, (_SIZE_) * sizeof(double), cudaMemcpyHostToDevice));
+	a = a_scalar;
+
+	my_saxpy<<<numBlocks,threadsPerBlock>>>(_SIZE_, a, d_x, d_y, d_s);
+	PERR(cudaDeviceSynchronize());
+
+	PERR(cudaMemcpy(s_arr, d_s, (_SIZE_) * sizeof(double), cudaMemcpyDeviceToHost));
+	cudaFree(d_x);
+	cudaFree(d_y);
+	cudaFree(d_s);
 }
