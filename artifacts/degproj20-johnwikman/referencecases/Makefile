@@ -1,4 +1,4 @@
-.PHONY: all clean runall \
+.PHONY: all clean benchmark \
         saxpy_custom saxpy_example saxpy \
         saxpysingle_custom saxpysingle \
         vecadd_custom vecadd \
@@ -29,10 +29,10 @@ clean:
 	rm -f *.out
 	rm -f *.o
 
-runall:
+benchmark:
 	mkdir -p results
-	make $(foreach prog,$(shell ls *.out),$(shell basename $(prog) .out).run)
-%.run:
+	make $(foreach prog,$(shell ls *.out),$(shell basename $(prog) .out).benchmark)
+%.benchmark:
 	nvprof ./$*.out > results/$*.toml 2> results/$*.nvprof
 
 
