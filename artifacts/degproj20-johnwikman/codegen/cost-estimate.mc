@@ -246,7 +246,7 @@ lang AppCGCostEstimate = MExprCGExt + WrapperCGCostEstimate
       match funcexpr with TmConst t1 then
         -- If this TmApp is on a constant function, then we only care about
         -- what is contained inside the arguments.
-        match t1.val with CNth _ then
+        match t1.val with CGet _ then
           -- if we are performing an array access, then we most certainly do
           -- not want the sequence to be listed as an integer.
           let nthcond =
@@ -433,7 +433,7 @@ lang ConstCGCostEstimate = MExprCGExt
     | CEqi _ -> TmConst {val = CInt {val = cas.profile.c_eqi}}
     | CLti _ -> TmConst {val = CInt {val = cas.profile.c_lti}}
     | CGti _ -> TmConst {val = CInt {val = cas.profile.c_gti}}
-    | CNth _ -> TmConst {val = CInt {val = cas.profile.c_nth}}
+    | CGet _ -> TmConst {val = CInt {val = cas.profile.c_nth}}
     | CInt2float _ -> TmConst {val = CInt {val = cas.profile.c_int2float}}
     | CNegf _ -> TmConst {val = CInt {val = cas.profile.c_negf}}
     | CAddf _ -> TmConst {val = CInt {val = cas.profile.c_addf}}

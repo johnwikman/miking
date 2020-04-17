@@ -71,7 +71,7 @@ let cgs_envLookup = lam key. lam state.
       let errstr = strJoin "" ["Could not find a binding for \"", key, "\""] in
       error errstr
 
-let cgsspacing = lam state. makeseq state.indent ' '
+let cgsspacing = lam state. makeSeq state.indent ' '
 let cgsnewline = lam state. concat "\n" (cgsspacing state)
 
 let cgsincri = lam i. lam state. {state with indent = addi state.indent i}
@@ -190,7 +190,7 @@ lang SeqCGExt = SeqAst
     | CConcat _ -> "concat"
     | CSlice _ -> "slice"
     | CReverse _ -> "reverse"
-    | CMakeseq _ -> "makeseq"
+    | CMakeseq _ -> "makeSeq"
     | CTraverse _ -> "traverse"
 end
 

@@ -88,7 +88,7 @@ if neqi (length argv) 4 then
   error "Must specify a target directory."
 else
   -- carry on
-let targetdir = nth argv 3 in
+let targetdir = get argv 3 in
 
 let prog = libstd_ in
 let prog = bind_ prog libio_ in

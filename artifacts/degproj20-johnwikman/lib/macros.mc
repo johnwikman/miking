@@ -317,7 +317,7 @@ let cons_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CCons ()})
 
 let nth_ = use MExprCGOCaml in
-  app2f_ (TmConst {val = CNth ()})
+  app2f_ (TmConst {val = CGet ()})
 
 let concat_ = use MExprCGOCaml in
   app2f_ (TmConst {val = CConcat ()})

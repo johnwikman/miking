@@ -10,7 +10,7 @@ let mapi = lam f. lam seq.
   in
   work 0 f seq
 
-let last = lam seq. nth seq (subi (length seq) 1)
+let last = lam seq. get seq (subi (length seq) 1)
 let init = lam seq. slice seq 0 (subi (length seq) 1)
 
 let hostname = lam s. concat "gpuhost_" s
@@ -165,7 +165,7 @@ lang AppCGCUDA = MExprCGExt
         in
         match t.lhs with TmApp t1 then
           match t1.lhs with TmConst c then
-            match c.val with CNth _ then
+            match c.val with CGet _ then
               -- We are performing an array access!
               match t1.rhs with TmVar t2 then
                 let idxcgr = codegenCUDA state t.rhs in
@@ -401,15 +401,15 @@ lang CUDACGCUDA = MExprCGExt
 
         if hasCurPos pInt then
           let ipos = int2string (subi (length t.packedInts) (length pInt)) in
-          let accname = accessIdxCUDA2OCaml (nth inargs pIntIdx) ipos (TyInt ()) in
+          let accname = accessIdxCUDA2OCaml (get inargs pIntIdx) ipos (TyInt ()) in
           packedArgs (concat acc [(accname, TyInt ())]) (tail pInt) pFloat notPacked
         else if hasCurPos pFloat then
           let fpos = int2string (subi (length t.packedFloats) (length pFloat)) in
-          let accname = accessIdxCUDA2OCaml (nth inargs pFloatIdx) fpos (TyFloat ()) in
+          let accname = accessIdxCUDA2OCaml (get inargs pFloatIdx) fpos (TyFloat ()) in
           packedArgs (concat acc [(accname, TyFloat ())]) pInt (tail pFloat) notPacked
         else if not (null notPacked) then
           let argpos = subi (length t.nonPackedArgs) (length notPacked) in
-          let argstr = nth inargs (addi offset argpos) in
+          let argstr = get inargs (addi offset argpos) in
           let argtpe = codegenGetExprType state (head notPacked) in
           packedArgs (concat acc [(argstr, argtpe)]) pInt pFloat (tail notPacked)
         else

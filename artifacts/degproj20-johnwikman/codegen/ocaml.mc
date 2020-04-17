@@ -204,7 +204,7 @@ end
 
 lang SeqCGOCaml = MExprCGExt
     sem ocamlconstgen (state : CodegenState) =
-    | CNth _ -> {cgr_new with code = "Array.get"}
+    | CGet _ -> {cgr_new with code = "Array.get"}
     | CLength _ -> {cgr_new with code = "Array.length"}
     | CCons _ -> {cgr_new with code = "(fun x xs -> Array.append [|x|] xs)"}
     | CConcat _ -> {cgr_new with code = "Array.append"}
