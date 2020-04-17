@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all benchmark clean
 
 BINDIR=bin
 
@@ -20,6 +20,12 @@ all:
 	         -cclib -lstdc++             \
 	         -O3                         \
 	         -o $(BINDIR)/$*.out
+
+benchmark:
+	mkdir -p results
+	make $(foreach p, $(shell ls bin/*.out), $(shell basename $(p) .out).benchmark)
+%.benchmark:
+	nvprof ./bin/$*.out > results/$*.toml 2> results/$*.nvprof
 
 clean:
 	rm -rf $(BINDIR)
