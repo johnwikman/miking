@@ -1,8 +1,15 @@
 include "option.mc"
 
-let head = lam s. nth s 0
-let tail = lam s. slice s 1 (length s)
 let null = lam seq. eqi 0 (length seq)
+let head = lam seq. get (splitAt seq 1).0 0
+let tail = lam seq. (splitAt seq 1).1
+let last = lam seq. get (splitAt seq (subi (length seq) 1)).1 0
+let init = lam seq. (splitAt seq (subi (length seq) 1)).0
+
+let slice = lam seq. lam off. lam cnt.
+  let seq = (splitAt seq off).1 in
+  let cnt = if gti cnt (length seq) then length seq else cnt in
+  (splitAt seq cnt).0
 
 -- Maps and (un)folds
 let mapi = lam f. lam seq.
@@ -28,14 +35,15 @@ recursive
     else f (head seq) (foldr f acc (tail seq))
 end
 
-let foldr1 = lam f. lam seq. foldl1 (lam acc. lam x. f x acc) (reverse seq)
+let foldr1 = lam f. lam seq. foldr f (last seq) (init seq)
 
-recursive
-  let zipWith = lam f. lam seq1. lam seq2.
-    if null seq1 then []
-    else if null seq2 then []
-    else cons (f (head seq1) (head seq2)) (zipWith f (tail seq1) (tail seq2))
-end
+let zipWith = lam f. lam seq1. lam seq2.
+  recursive let work = lam a. lam s1. lam s2.
+    if or (null s1) (null s2) then a
+    else
+      work (snoc a (f (head s1) (head s2))) (tail s1) (tail s2)
+  in
+  work [] seq1 seq2
 
 recursive
 let unfoldr = lam f. lam b.
@@ -84,7 +92,17 @@ let partition = (lam p. lam seq.
 let findAssoc = lam p. lam seq.
   match find (lam tup. p tup.0) seq with Some res
   then Some res.1
-  else None
+  else None ()
+
+-- Removes duplicates with preserved ordering. Keeps first occurrence of an element.
+let distinct = lam eq. lam seq.
+  recursive let work = lam seq1. lam seq2.
+    match seq1 with [h] ++ t
+      then match find (eq h) seq2 with Some _
+           then work t seq2
+           else cons h (work t (cons h seq2))
+    else []
+  in work seq []
 
 -- Sorting
 recursive
@@ -111,10 +129,42 @@ let min = lam cmp. lam seq.
 
 let max = lam cmp. min (lam l. lam r. cmp r l)
 
+-- First index in seq that satifies pred
+let index = lam pred. lam seq.
+  recursive let index_rechelper = lam i. lam pred. lam seq.
+    if null seq then
+      None ()
+    else if pred (head seq) then
+      Some i
+    else
+      index_rechelper (addi i 1) pred (tail seq)
+  in
+  index_rechelper 0 pred seq
+
+-- Last index in seq that satifies pred
+let lastIndex = lam pred. lam seq.
+  recursive let lastIndex_rechelper = lam i. lam acc. lam pred. lam seq.
+    if null seq then
+      acc
+    else if pred (head seq) then
+      lastIndex_rechelper (addi i 1) (Some i) pred (tail seq)
+    else
+      lastIndex_rechelper (addi i 1) acc pred (tail seq)
+  in
+  lastIndex_rechelper 0 (None ()) pred seq
+
 mexpr
 
 utest head [2,3,5] with 2 in
 utest tail [2,4,8] with [4,8] in
+
+utest init [2,3,5] with [2,3] in
+utest last [2,4,8] with 8 in
+
+utest slice [1,3,5] 0 2 with [1,3] in
+utest slice [3,7,10,20] 1 3 with [7,10,20] in
+utest slice ['a','b'] 1 10 with ['b'] in
+utest slice [1,3] 2 10 with [] in
 
 utest mapi (lam i. lam x. i) [3,4,8,9,20] with [0,1,2,3,4] in
 utest mapi (lam i. lam x. i) [] with [] in
@@ -154,8 +204,16 @@ utest filter (lam x. gti x 2) [3,5,234,1,43] with [3,5,234,43] in
 utest find (lam x. eqi x 2) [4,1,2] with Some 2 in
 utest find (lam x. lti x 1) [4,1,2] with None () in
 
+utest findAssoc (eqi 1) [(2,3), (1,4)] with Some 4 in
+utest findAssoc (eqi 3) [(2,3), (1,4)] with None () in
+
 utest partition (lam x. gti x 3) [4,5,78,1] with ([4,5,78],[1]) in
 utest partition (lam x. gti x 0) [4,5,78,1] with ([4,5,78,1],[]) in
+
+utest distinct eqi [] with [] in
+utest distinct eqi [42,42] with [42] in
+utest distinct eqi [1,1,2] with [1,2] in
+utest distinct eqi [1,1,5,1,2,3,4,5,0] with [1,5,2,3,4,0] in
 
 utest sort (lam l. lam r. subi l r) [3,4,8,9,20] with [3,4,8,9,20] in
 utest sort (lam l. lam r. subi l r) [9,8,4,20,3] with [3,4,8,9,20] in
@@ -171,5 +229,11 @@ utest max (lam l. lam r. subi l r) [9,8,4,20,3] with Some 20 in
 
 utest unfoldr (lam b. if eqi b 10 then None () else Some (b, addi b 1)) 0
 with [0,1,2,3,4,5,6,7,8,9] in
+
+utest index (lam x. eqi (length x) 2) [[1,2,3], [1,2], [3], [1,2], [], [1]] with Some 1 in
+utest index (lam x. null x) [[1,2,3], [1,2], [3], [1,2], [], [1]] with Some 4 in
+
+utest lastIndex (lam x. eqi (length x) 2) [[1,2,3], [1,2], [3], [1,2], [], [1]] with Some 3 in
+utest lastIndex (lam x. null x) [[1,2,3], [1,2], [3], [1,2], [], [1]] with Some 4 in
 
 ()

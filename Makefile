@@ -19,6 +19,15 @@ test:
 install:
 	@./make install
 
+externals:
+	@./make externals
+
+externals-test:
+	@./make externals-test
+
+externals-install:
+	@./make externals-install
+
 clean:
 	@./make clean
 

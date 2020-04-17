@@ -13,6 +13,9 @@ recursive
            else false
 end
 
+let str2upper = lam s. map char2upper s
+let str2lower = lam s. map char2lower s
+
 let string2int = lam s.
   recursive
   let string2int_rechelper = lam s.
@@ -21,7 +24,7 @@ let string2int = lam s.
     if eqi len 0
     then 0
     else
-      let lsd = subi (char2int (nth s last)) (char2int '0') in
+      let lsd = subi (char2int (get s last)) (char2int '0') in
       let rest = muli 10 (string2int_rechelper (slice s 0 last)) in
       addi rest lsd
   in

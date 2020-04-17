@@ -163,8 +163,9 @@ let translate_cases f target cases =
     | (VarPattern (fi, x), handler) ->
       TmLet(fi, x, target, handler)
   in
-  let msg = List.map (fun c -> TmConst(NoInfo,CChar(c)))
-            (ustring2list (us"No matching case for function " ^. f))
+  let msg = Mseq.map (fun c -> TmConst(NoInfo,CChar(c)))
+              ((us"No matching case for function " ^. f)
+               |> Mseq.of_ustring)
   in
   let no_match =
     let_ (us"_")
@@ -238,8 +239,8 @@ let rec desugar_tm nss env =
     let rec desugar_pat env = function
        | PatNamed(fi,name) -> name |> desugar_pname env |> map_right (fun n -> PatNamed(fi,n))
        | PatSeq(fi,pats,seqMT) ->
-         let (env', pats') = List.fold_right (fun p (env, pats) -> desugar_pat env p |> map_right
-             (fun p -> p::pats)) pats (env, []) in
+         let (env', pats') = Mseq.fold_right (fun p (env, pats) -> desugar_pat env p |> map_right
+             (fun p -> Mseq.cons p pats)) pats (env, Mseq.empty) in
          let (env'',seqMT') = match seqMT with
            | SeqMatchPrefix(n) -> n |> desugar_pname env' |> map_right (fun n -> SeqMatchPrefix(n))
            | SeqMatchPostfix(n) -> n |> desugar_pname env' |> map_right (fun n -> SeqMatchPostfix(n))
@@ -261,7 +262,7 @@ let rec desugar_tm nss env =
       | Some ns -> desugar_tm nss (merge_env_overwrite env ns) body)
   (* Simple recursions *)
   | TmApp(fi, a, b) -> TmApp(fi, desugar_tm nss env a, desugar_tm nss env b)
-  | TmSeq(fi, tms) -> TmSeq(fi, List.map (desugar_tm nss env) tms)
+  | TmSeq(fi, tms) -> TmSeq(fi, Mseq.map (desugar_tm nss env) tms)
   | TmTuple(fi, tms) -> TmTuple(fi, List.map (desugar_tm nss env) tms)
   | TmRecord(fi, tms) -> TmRecord(fi, List.map (desugar_tm nss env |> map_right) tms)
   | TmProj(fi, tm, lab) -> TmProj(fi, desugar_tm nss env tm, lab)
@@ -274,7 +275,7 @@ let rec desugar_tm nss env =
 (* add namespace to nss (overwriting) if relevant, prepend a tm -> tm function to stack, return updated tuple. Should use desugar_tm, as well as desugar both sem and syn *)
 let desugar_top (nss, (stack : (tm -> tm) list)) = function
   | TopLang (Lang(_, langName, includes, decls)) ->
-     let add_lang ns lang = USMap.find_opt lang nss |> Option.value ~default:emptyMlangEnv |> merge_env_overwrite ns in
+     let add_lang ns lang = USMap.find_opt lang nss |> Option.default emptyMlangEnv |> merge_env_overwrite ns in
      let previous_ns = List.fold_left add_lang emptyMlangEnv includes in
      (* compute the namespace *)
      let mangle str = langName ^. us"_" ^. str in
@@ -287,7 +288,7 @@ let desugar_top (nss, (stack : (tm -> tm) list)) = function
      let ns = List.fold_left add_decl previous_ns decls in
      (* wrap in "con"s *)
      let wrap_con ty_name (CDecl(fi, cname, ty)) tm =
-       TmCondef(fi, mangle cname, TyArrow(TyCon ty_name, ty), tm) in (* TODO(vipa): the type will likely be incorrect once we start doing product extensions of constructors *)
+       TmCondef(fi, mangle cname, TyArrow(ty, TyCon ty_name), tm) in (* TODO(vipa): the type will likely be incorrect once we start doing product extensions of constructors *)
      let wrap_data decl tm = match decl with (* TODO(vipa): this does not declare the type itself *)
        | Data(_, name, cdecls) -> List.fold_right (wrap_con name) cdecls tm
        | _ -> tm in
