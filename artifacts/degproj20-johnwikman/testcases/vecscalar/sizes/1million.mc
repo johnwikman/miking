@@ -1,5 +1,9 @@
--- Vector size of with 1 million elements
+-- Array of 1 million elements
 
 include "../../lib/macros.mc"
 
-let defsize_ = let_ "vecsize" (tyint_) (int_ 1000000)
+let var_vecsize = let_ "vecsize" (tyint_) (int_ 1000000)
+
+let defsize_ = bindall_ [
+  var_vecsize
+]
