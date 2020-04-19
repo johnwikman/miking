@@ -13,7 +13,7 @@ include "../../lib/benchmark-utils.mc"
 include "_size_.mc"
 
 -- This should provide the specific method of performing the ATAx
--- Should define the variables matATA and vecATAx which contain the respective results
+-- Should define the variable vecATAx which contain the result
 -- Should be included by defspecific_
 include "_specific_.mc"
 
@@ -91,21 +91,10 @@ let prog = bind_ prog defcommon_ in
 ---------------------------------------------------------------
 
 ------- Output Verification -------
---let prog = bind_ prog (let_ "matATA_rows" (tyint_) (var_ "matA_cols")) in
---let prog = bind_ prog (let_ "matATA_cols" (tyint_) (var_ "matA_cols")) in
---
---let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nmatATA:\n"))) in
---let prog = bind_ prog (let_ "_" (tyunit_) (
---    app3f_ (var_ "printMatrixf")
---           (var_ "matATA_rows")
---           (var_ "matATA_cols")
---           (var_ "matATA")
---  )) in
---
---let prog = bind_ prog (let_ "vecATAx_rows" (tyint_) (var_ "matATA_rows")) in
+--let prog = bind_ prog (let_ "vecATAx_rows" (tyint_) (var_ "matA_rows")) in
 --let prog = bind_ prog (let_ "vecATAx_cols" (tyint_) (var_ "vecX_cols")) in
 --
---let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "\nvecATAx:\n"))) in
+--let prog = bind_ prog (let_ "_" (tyunit_) (print_ (str_ "vecATAx:\n"))) in
 --let prog = bind_ prog (let_ "_" (tyunit_) (
 --    app3f_ (var_ "printMatrixf")
 --           (var_ "vecATAx_rows")

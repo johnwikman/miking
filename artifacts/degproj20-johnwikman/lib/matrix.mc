@@ -530,6 +530,55 @@ let func_matrixATAfWorker =
     )
   )
 
+-- Matrix multiplication with the left argument transposed
+let func_matrixMulTransposeLhsfWorker =
+  let_ "matrixMulTransposeLhsfWorker" (tyarrows_ [tyint_, tyint_, tyint_, tyint_, tymatrixf_, tymatrixf_, tyint_, tyfloat_]) (
+    lam_ "a_rows" (tyint_) (
+      lam_ "a_cols" (tyint_) (
+        lam_ "b_rows" (tyint_) (
+          lam_ "b_cols" (tyint_) (
+            lam_ "a" (tymatrixf_) (
+              lam_ "b" (tymatrixf_) (
+                lam_ "idx" (tyint_) (
+                  bindall_ [
+                    let_ "row" (tyint_) (divi_ (var_ "idx") (var_ "b_cols")),
+                    let_ "col" (tyint_) (modi_ (var_ "idx") (var_ "b_cols")),
+                    let_ "aT_start_offset" (tyint_) (var_ "row"),
+                    let_ "b_start_offset" (tyint_) (var_ "col"),
+                    reclets_add "dotprodTransposeLhs" (tyarrows_ [tyfloat_, tyint_, tyint_, tyint_, tyfloat_]) (
+                      lam_ "acc" (tyfloat_) (
+                        lam_ "p" (tyint_) (
+                          lam_ "aT_offset" (tyint_) (
+                            lam_ "b_offset" (tyint_) (
+                              if_ (eqi_ (var_ "p") (var_ "b_rows"))
+                                  (var_ "acc")
+                                  (app4f_ (var_ "dotprodTransposeLhs")
+                                          (addf_ (var_ "acc")
+                                                 (mulf_ (nth_ (var_ "a") (var_ "aT_offset"))
+                                                        (nth_ (var_ "b") (var_ "b_offset"))))
+                                          (addi_ (var_ "p") (int_ 1))
+                                          (addi_ (var_ "aT_offset") (var_ "a_cols"))
+                                          (addi_ (var_ "b_offset") (var_ "b_cols")))
+                            )
+                          )
+                        )
+                      )
+                    ) (reclets_empty),
+                    app4f_ (var_ "dotprodTransposeLhs")
+                           (float_ 0.0)
+                           (int_ 0)
+                           (var_ "aT_start_offset")
+                           (var_ "b_start_offset")
+                  ]
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+
 let libmatrixi_ = bindall_ [
   func_matrixMki,
   func_matrixGeti,
@@ -547,5 +596,6 @@ let libmatrixf_ = bindall_ [
   func_matrix2strf,
   func_printMatrixf,
   func_matrixMulfWorker,
-  func_matrixATAfWorker
+  func_matrixATAfWorker,
+  func_matrixMulTransposeLhsfWorker
 ]
