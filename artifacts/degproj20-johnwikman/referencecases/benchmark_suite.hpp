@@ -45,10 +45,10 @@
             std::cout << "points = [" << (a[0] * 1000.0);                         \
             for (i = 1; i < (int) a.size(); ++i) {                                \
                 std::cout << ", " << (a[i]);                                      \
-                variance += (avg - (a[i] * 1000.0)) * (avg - (a[i] * 1000.0))     \
+                variance += (avg - (a[i] * 1000.0)) * (avg - (a[i] * 1000.0));    \
             }                                                                     \
             std::cout << "]" << std::endl;                                        \
-            variance /= (double) (a.size() - 1)                                   \
+            variance /= (double) (a.size() - 1);                                  \
             std::cout << "variance_ms = " << variance << std::endl;               \
         } while (0)
 
