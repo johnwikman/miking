@@ -222,6 +222,66 @@ let benchmark_ = lam params : BMParams. lam ast.
   let bm_max = bm_minmax "bm_max" gti_ in
   let bm_min = bm_minmax "bm_min" lti_ in
 
+  let bm_variance =
+    let_ "bm_variance" (tyarrows_ [tyfloat_, tyseq_ tyfloat_, tyfloat_]) (
+      lam_ "avg" (tyfloat_) (
+        lam_ "arr" (tyseq_ tyfloat_) (
+          bindall_ [
+            let_ "n" (tyint_) (length_ (var_ "arr")),
+            reclets_add "work" (tyarrows_ [tyint_, tyfloat_, tyfloat_]) (
+              lam_ "i" (tyint_) (
+                lam_ "acc" (tyfloat_) (
+                  if_ (eqi_ (var_ "i") (var_ "n"))
+                      (var_ "acc")
+                      (app2f_ (var_ "work")
+                              (addi_ (var_ "i") (int_ 1))
+                              (addf_ (var_ "acc")
+                                     (mulf_ (subf_ (var_ "avg")
+                                                   (nth_ (var_ "arr") (var_ "i")))
+                                            (subf_ (var_ "avg")
+                                                   (nth_ (var_ "arr") (var_ "i"))))))
+                )
+              )
+            ) (reclets_empty),
+            app2f_ (var_ "work")
+                   (int_ 1)
+                   (mulf_ (subf_ (var_ "avg")
+                                 (nth_ (var_ "arr") (int_ 0)))
+                          (subf_ (var_ "avg")
+                                 (nth_ (var_ "arr") (int_ 0))))
+          ]
+        )
+      )
+    )
+  in
+
+  let bm_printarr =
+    let_ "bm_printarr" (tyarrows_ [tyseq_ tyfloat_, tyunit_]) (
+      lam_ "arr" (tyseq_ tyfloat_) (
+        bindall_ [
+          let_ "n" (tyint_) (length_ (var_ "arr")),
+          reclets_add "work" (tyarrows_ [tyint_, tyunit_]) (
+            lam_ "i" (tyint_) (
+              if_ (eqi_ (var_ "i") (var_ "n"))
+                  (unit_)
+                  (bindall_ [
+                    let_ "_" (tyunit_) (print_ (str_ ", ")),
+                    let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
+                                                       (nth_ (var_ "arr") (var_ "i")))),
+                    app1f_ (var_ "work") (addi_ (var_ "i") (int_ 1))
+                  ])
+            )
+          ) (reclets_empty),
+          let_ "_" (tyunit_) (print_ (str_ "[")),
+          let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
+                                             (nth_ (var_ "arr") (int_ 0)))),
+          let_ "_" (tyunit_) (app1f_ (var_ "work") (int_ 1)),
+          print_ (str_ "]")
+        ]
+      )
+    )
+  in
+
   let bm_dist =
     let_ "bm_dist" (tyarrows_ [tyfloat_, tyfloat_, tyfloat_]) (
       lam_ "a" (tyfloat_) (
@@ -254,13 +314,7 @@ let benchmark_ = lam params : BMParams. lam ast.
         let_ "avg" (tyfloat_) (divf_ (var_ "sum") (float_ (int2float params.iters))),
         let_ "max" (tyfloat_) (app1f_ (var_ "bm_max") (var_ "bmres_iters")),
         let_ "min" (tyfloat_) (app1f_ (var_ "bm_min") (var_ "bmres_iters")),
-        let_ "variance" (tyfloat_) (app1f_ (var_ "bm_max")
-                                           (seq_ [app2f_ (var_ "bm_dist")
-                                                         (var_ "avg")
-                                                         (var_ "max"),
-                                                  app2f_ (var_ "bm_dist")
-                                                         (var_ "avg")
-                                                         (var_ "min")])),
+        let_ "variance" (tyfloat_) (app2f_ (var_ "bm_variance") (var_ "avg") (var_ "bmres_iters")),
 
         let_ "median" (tyfloat_) (mulf_ (var_ "median") (float_ 1000.0)),
         let_ "sum" (tyfloat_) (mulf_ (var_ "sum") (float_ 1000.0)),
@@ -294,6 +348,11 @@ let benchmark_ = lam params : BMParams. lam ast.
                                            (var_ "avg"))),
         let_ "_" (tyunit_) (print_ (str_ "\n")),
 
+        let_ "_" (tyunit_) (print_ (str_ "points = ")),
+        let_ "_" (tyunit_) (app1f_ (var_ "bm_printarr")
+                                   (var_ "bmres_iters")),
+        let_ "_" (tyunit_) (print_ (str_ "\n")),
+
         let_ "_" (tyunit_) (print_ (str_ "variance_ms = ")),
         let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
                                            (var_ "variance"))),
@@ -306,13 +365,7 @@ let benchmark_ = lam params : BMParams. lam ast.
         let_ "avg" (tyfloat_) (divf_ (var_ "sum") (float_ (int2float params.warmups))),
         let_ "max" (tyfloat_) (app1f_ (var_ "bm_max") (var_ "bmres_warmup")),
         let_ "min" (tyfloat_) (app1f_ (var_ "bm_min") (var_ "bmres_warmup")),
-        let_ "variance" (tyfloat_) (app1f_ (var_ "bm_max")
-                                           (seq_ [app2f_ (var_ "bm_dist")
-                                                         (var_ "avg")
-                                                         (var_ "max"),
-                                                  app2f_ (var_ "bm_dist")
-                                                         (var_ "avg")
-                                                         (var_ "min")])),
+        let_ "variance" (tyfloat_) (app2f_ (var_ "bm_variance") (var_ "avg") (var_ "bmres_warmup")),
 
         let_ "median" (tyfloat_) (mulf_ (var_ "median") (float_ 1000.0)),
         let_ "sum" (tyfloat_) (mulf_ (var_ "sum") (float_ 1000.0)),
@@ -346,6 +399,11 @@ let benchmark_ = lam params : BMParams. lam ast.
                                            (var_ "avg"))),
         let_ "_" (tyunit_) (print_ (str_ "\n")),
 
+        let_ "_" (tyunit_) (print_ (str_ "points = ")),
+        let_ "_" (tyunit_) (app1f_ (var_ "bm_printarr")
+                                   (var_ "bmres_warmup")),
+        let_ "_" (tyunit_) (print_ (str_ "\n")),
+
         let_ "_" (tyunit_) (print_ (str_ "variance_ms = ")),
         let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
                                            (var_ "variance"))),
@@ -362,6 +420,8 @@ let benchmark_ = lam params : BMParams. lam ast.
     bm_sum,
     bm_max,
     bm_min,
+    bm_variance,
+    bm_printarr,
     bm_dist,
     warmupprint,
     bmres_warmup,
