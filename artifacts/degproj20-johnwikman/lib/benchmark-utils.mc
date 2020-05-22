@@ -228,27 +228,31 @@ let benchmark_ = lam params : BMParams. lam ast.
         lam_ "arr" (tyseq_ tyfloat_) (
           bindall_ [
             let_ "n" (tyint_) (length_ (var_ "arr")),
+            let_ "avg_co" (tyfloat_) (mulf_ (var_ "avg") (float_ 1000.0)),
             reclets_add "work" (tyarrows_ [tyint_, tyfloat_, tyfloat_]) (
               lam_ "i" (tyint_) (
                 lam_ "acc" (tyfloat_) (
                   if_ (eqi_ (var_ "i") (var_ "n"))
                       (var_ "acc")
-                      (app2f_ (var_ "work")
-                              (addi_ (var_ "i") (int_ 1))
-                              (addf_ (var_ "acc")
-                                     (mulf_ (subf_ (var_ "avg")
-                                                   (nth_ (var_ "arr") (var_ "i")))
-                                            (subf_ (var_ "avg")
-                                                   (nth_ (var_ "arr") (var_ "i"))))))
+                      (bindall_ [
+                        let_ "elem" (tyfloat_) (mulf_ (nth_ (var_ "arr") (var_ "i"))
+                                                      (float_ 1000.0)),
+                        let_ "subres" (tyfloat_) (subf_ (var_ "avg_co") (var_ "elem")),
+                        app2f_ (var_ "work")
+                               (addi_ (var_ "i") (int_ 1))
+                               (addf_ (var_ "acc")
+                                      (mulf_ (var_ "subres") (var_ "subres")))
+                      ])
                 )
               )
             ) (reclets_empty),
-            app2f_ (var_ "work")
-                   (int_ 1)
-                   (mulf_ (subf_ (var_ "avg")
-                                 (nth_ (var_ "arr") (int_ 0)))
-                          (subf_ (var_ "avg")
-                                 (nth_ (var_ "arr") (int_ 0))))
+            let_ "elem" (tyfloat_) (mulf_ (nth_ (var_ "arr") (int_ 0))
+                                          (float_ 1000.0)),
+            let_ "subres" (tyfloat_) (subf_ (var_ "avg_co") (var_ "elem")),
+            let_ "res" (tyfloat_) (app2f_ (var_ "work")
+                                          (int_ 1)
+                                          (mulf_ (var_ "subres") (var_ "subres"))),
+            divf_ (var_ "res") (int2float_ (subi_ (var_ "n") (int_ 1)))
           ]
         )
       )
@@ -267,14 +271,16 @@ let benchmark_ = lam params : BMParams. lam ast.
                   (bindall_ [
                     let_ "_" (tyunit_) (print_ (str_ ", ")),
                     let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
-                                                       (nth_ (var_ "arr") (var_ "i")))),
+                                                       (mulf_ (nth_ (var_ "arr") (var_ "i"))
+                                                              (float_ 1000.0)))),
                     app1f_ (var_ "work") (addi_ (var_ "i") (int_ 1))
                   ])
             )
           ) (reclets_empty),
           let_ "_" (tyunit_) (print_ (str_ "[")),
           let_ "_" (tyunit_) (print_ (app1f_ (var_ "float2string")
-                                             (nth_ (var_ "arr") (int_ 0)))),
+                                             (mulf_ (nth_ (var_ "arr") (int_ 0))
+                                                    (float_ 1000.0)))),
           let_ "_" (tyunit_) (app1f_ (var_ "work") (int_ 1)),
           print_ (str_ "]")
         ]
