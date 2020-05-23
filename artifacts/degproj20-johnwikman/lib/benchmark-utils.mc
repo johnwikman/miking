@@ -327,7 +327,6 @@ let benchmark_ = lam params : BMParams. lam ast.
         let_ "avg" (tyfloat_) (mulf_ (var_ "avg") (float_ 1000.0)),
         let_ "max" (tyfloat_) (mulf_ (var_ "max") (float_ 1000.0)),
         let_ "min" (tyfloat_) (mulf_ (var_ "min") (float_ 1000.0)),
-        let_ "variance" (tyfloat_) (mulf_ (var_ "variance") (float_ 1000.0)),
 
         let_ "_" (tyunit_) (print_ (str_ "[iteration_results]\n")),
         let_ "_" (tyunit_) (print_ (str_ "no_of_iterations = ")),
@@ -378,7 +377,6 @@ let benchmark_ = lam params : BMParams. lam ast.
         let_ "avg" (tyfloat_) (mulf_ (var_ "avg") (float_ 1000.0)),
         let_ "max" (tyfloat_) (mulf_ (var_ "max") (float_ 1000.0)),
         let_ "min" (tyfloat_) (mulf_ (var_ "min") (float_ 1000.0)),
-        let_ "variance" (tyfloat_) (mulf_ (var_ "variance") (float_ 1000.0)),
 
         let_ "_" (tyunit_) (print_ (str_ "\n\n[warmup_results]\n")),
         let_ "_" (tyunit_) (print_ (str_ "no_of_iterations = ")),
