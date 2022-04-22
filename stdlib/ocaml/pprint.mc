@@ -83,14 +83,14 @@ lang OCamlTypePrettyPrint =
       -- determines the OCaml C-interface deserialization.
       let orderedFields : [(SID, Type)] =
         printLn (join ["argv[0] = ", get argv 0]);
-        if eqString (get argv 0) "mi-lite" then
+        if eqString (get argv 0) "./mi-lite" then
           mapToSeq t.fields
         else
           map (lam sid : SID.
                 (sid, mapLookupOrElse
-                        (lam. infoErrorExit t.info (join [
+                        (lam. /-infoErrorExit t.info (join [
                           "Internal lookup error on \"",
-                          sidToString sid, "\""]))
+                          sidToString sid, "\""]);-/ TyUnknown {info = NoInfo ()})
                         sid t.fields)
               ) t.labels
       in
