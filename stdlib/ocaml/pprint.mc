@@ -83,7 +83,8 @@ lang OCamlTypePrettyPrint =
       -- determines the OCaml C-interface deserialization.
       let orderedFields : [(SID, Type)] =
         dprintLn t;
-        map (lam sid: SID. (sid, tyunknown_)) t.labels
+        mapBindings t.fields
+        --map (lam sid: SID. (sid, tyunknown_)) t.labels
       in
       let fieldStrs =
         match record2tuple t.fields with Some tupleFields then
