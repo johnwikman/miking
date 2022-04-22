@@ -111,6 +111,7 @@ lang OCamlTypePrettyPrint =
         --  in
         --  (label, ty)
         --) t.labels
+        dPrintLn t;
         map (lam sid: SID. (sid, tyunknown_)) t.labels
       in
       let fieldStrs =
