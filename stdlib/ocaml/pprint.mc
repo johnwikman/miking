@@ -86,7 +86,7 @@ lang OCamlTypePrettyPrint =
           match mapLookup sid fieldAcc with Some _ then
             fieldAcc
           else
-            mapInsert sid (TyUnknown ()) fieldAcc
+            mapInsert sid (TyUnknown {info = NoInfo ()}) fieldAcc
         ) t.fields t.labels
       in
       -- NOTE(johnwikman, 2022-04-22): This is crucial as the label order
