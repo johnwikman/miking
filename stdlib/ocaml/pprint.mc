@@ -84,7 +84,7 @@ lang OCamlTypePrettyPrint =
       let orderedFields : [(SID, Type)] =
         --printLn (join ["argv[0] = ", get argv 0]);
         --if eqString (get argv 0) "./mi-lite" then
-          mapBindings t.fields
+        --  mapBindings t.fields
         --else
         --  map (lam sid : SID.
         --        (sid, mapLookupOrElse
@@ -93,6 +93,13 @@ lang OCamlTypePrettyPrint =
         --                  sidToString sid, "\""]);-/ TyUnknown {info = NoInfo ()})
         --                sid t.fields)
         --      ) t.labels
+        map (lam label : SID.
+          let ty : Type =
+            mapFindOrElse (lam. TyUnknown {info = NoInfo ()})
+                          label t.fields
+          in
+          (label, ty)
+        ) t.labels
       in
       let fieldStrs =
         match record2tuple t.fields with Some tupleFields then
