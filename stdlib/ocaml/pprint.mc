@@ -93,10 +93,21 @@ lang OCamlTypePrettyPrint =
         --                  sidToString sid, "\""]);-/ TyUnknown {info = NoInfo ()})
         --                sid t.fields)
         --      ) t.labels
-        map (lam label : SID.
-          let ty : Type =
-            mapFindOrElse (lam. TyUnknown {info = NoInfo ()})
-                          label t.fields
+        --map (lam label : SID.
+        --  let ty : Type =
+        --    mapFindOrElse (lam. TyUnknown {info = NoInfo ()})
+        --                  label t.fields
+        --  in
+        --  (label, ty)
+        --) t.labels
+        let bindings = mapBindings t.fields in
+        map (lam label: SID.
+          let ty = foldl (lam acc: Type. lam pivot: (SID, Type).
+            if eqSID label pivot.0 then
+              pivot.1
+            else
+              acc
+          ) (TyUnknown {info = NoInfo ()})
           in
           (label, ty)
         ) t.labels
