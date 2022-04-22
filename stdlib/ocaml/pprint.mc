@@ -100,14 +100,14 @@ lang OCamlTypePrettyPrint =
         --  in
         --  (label, ty)
         --) t.labels
-        let bindings = mapBindings t.fields in
+        let bindings: [(SID, Type)] = mapBindings t.fields in
         map (lam label: SID.
           let ty = foldl (lam acc: Type. lam pivot: (SID, Type).
             if eqSID label pivot.0 then
               pivot.1
             else
               acc
-          ) (TyUnknown {info = NoInfo ()})
+          ) (TyUnknown {info = NoInfo ()}) bindings
           in
           (label, ty)
         ) t.labels
