@@ -92,7 +92,7 @@ lang OCamlTypePrettyPrint =
         match record2tuple t.fields with Some _ then
           mapi (lam i. lam x : (SID, Type). (int2string i, x.1)) orderedFields
         else
-          map (lam x. (sidToString x.0, x.1)) orderedFields
+          map (lam x : (SID, Type). (sidToString x.0, x.1)) orderedFields
       in
       match mapAccumL f env fieldStrs with (env, fields) in
       (env, join ["{", strJoin ";" fields, "}"])
