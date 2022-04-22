@@ -79,6 +79,16 @@ lang OCamlTypePrettyPrint =
         let str = pprintLabelString str in
         (env, join [str, ": ", ty])
       in
+      -- TEMP(johnwikman, 2022-04-22): Labels are not always populated in the
+      -- absence of a type checker. This is to allow bootstrapping of the
+      -- compiler.
+      let tempFields = foldl (lam fieldAcc: Map SID Type. lam sid: SID.
+          match mapLookup sid fieldAcc with Some _ then
+            fieldAcc
+          else
+            mapInsert sid (TyUnknown ()) fieldAcc
+        ) t.fields t.labels
+      in
       -- NOTE(johnwikman, 2022-04-22): This is crucial as the label order
       -- determines the OCaml C-interface deserialization.
       let orderedFields : [(SID, Type)] =
@@ -87,11 +97,11 @@ lang OCamlTypePrettyPrint =
                       (infoErrorExit t.info (join [
                         "Internal lookup error on \"",
                         sidToString sid, "\""]))
-                      sid t.fields)
+                      sid tempFields)
             ) t.labels
       in
       let fieldStrs =
-        match record2tuple t.fields with Some _ then
+        match record2tuple tempFields with Some _ then
           mapi (lam i. lam x : (SID, Type). (int2string i, x.1)) orderedFields
         else
           map (lam x : (SID, Type). (sidToString x.0, x.1)) orderedFields
