@@ -82,9 +82,7 @@ lang OCamlTypePrettyPrint =
       -- NOTE(johnwikman, 2022-04-22): This is crucial as the label order
       -- determines the OCaml C-interface deserialization.
       let orderedFields : [(SID, Type)] =
-        --map (lam l: SID. (l, mapLookupOrElse (lam. tyunknown_) l t.fields)) t.labels /-
-        -- If uncomment the above expr, then I get code 11 exit
-        mapBindings t.fields -- -/
+        map (lam l: SID. (l, mapLookupOrElse (lam. tyunknown_) l t.fields)) t.labels
       in
       let fieldStrs =
         match record2tuple t.fields with Some tupleFields then
