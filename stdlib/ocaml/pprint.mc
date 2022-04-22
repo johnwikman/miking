@@ -94,7 +94,7 @@ lang OCamlTypePrettyPrint =
       let orderedFields : [(SID, Type)] =
         map (lam sid : SID.
               (sid, mapLookupOrElse
-                      (infoErrorExit t.info (join [
+                      (lam. infoErrorExit t.info (join [
                         "Internal lookup error on \"",
                         sidToString sid, "\""]))
                       sid tempFields)
