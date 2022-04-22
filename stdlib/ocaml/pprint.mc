@@ -82,21 +82,21 @@ lang OCamlTypePrettyPrint =
       -- NOTE(johnwikman, 2022-04-22): This is crucial as the label order
       -- determines the OCaml C-interface deserialization.
       let orderedFields : [(SID, Type)] =
-        printLn (join ["argv[0] = ", get argv 0]);
-        if eqString (get argv 0) "./mi-lite" then
-          mapToSeq t.fields
-        else
-          map (lam sid : SID.
-                (sid, mapLookupOrElse
-                        (lam. /-infoErrorExit t.info (join [
-                          "Internal lookup error on \"",
-                          sidToString sid, "\""]);-/ TyUnknown {info = NoInfo ()})
-                        sid t.fields)
-              ) t.labels
+        --printLn (join ["argv[0] = ", get argv 0]);
+        --if eqString (get argv 0) "./mi-lite" then
+          mapBindings t.fields
+        --else
+        --  map (lam sid : SID.
+        --        (sid, mapLookupOrElse
+        --                (lam. /-infoErrorExit t.info (join [
+        --                  "Internal lookup error on \"",
+        --                  sidToString sid, "\""]);-/ TyUnknown {info = NoInfo ()})
+        --                sid t.fields)
+        --      ) t.labels
       in
       let fieldStrs =
-        match record2tuple t.fields with Some _ then
-          mapi (lam i. lam x : (SID, Type). (int2string i, x.1)) orderedFields
+        match record2tuple t.fields with Some tupleFields then
+          mapi (lam i. lam x : Type. (int2string i, x.1)) tupleFields
         else
           map (lam x : (SID, Type). (sidToString x.0, x.1)) orderedFields
       in
