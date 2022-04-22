@@ -96,7 +96,7 @@ lang OCamlTypePrettyPrint =
       in
       let fieldStrs =
         match record2tuple t.fields with Some tupleFields then
-          mapi (lam i. lam x : Type. (int2string i, x.1)) tupleFields
+          mapi (lam i. lam x : Type. (int2string i, x)) tupleFields
         else
           map (lam x : (SID, Type). (sidToString x.0, x.1)) orderedFields
       in
