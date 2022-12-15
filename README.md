@@ -5,24 +5,14 @@ creating languages and generating efficient compilers.
 
 ## Getting started
 
-Before you can use the Miking system, you need to install
-[OCaml](https://ocaml.org/) and the
-[OPAM](https://opam.ocaml.org/) package manager.
+Before you can use the Miking system, you need to install the
+[OPAM](https://opam.ocaml.org/) package manager. See instructions for
+installing OPAM and the other necessary dependencies on the Install page on the
+Miking website:
 
-After the installation, you need to install the OCaml compiler by
-running the following:
-```
-opam update
-opam switch create miking-ocaml 5.0.0~rc1
-eval $(opam env)
-```
+ * [Install Miking (miking.org)](https://miking.org/install)
 
-After this, you need to install the `opam` packages `dune` and `linenoise` by
-running the following:
-
-```
-opam install dune linenoise
-```
+After the installation, should have the `miking-ocaml` as a switch on OPAM.
 
 Note that the `opam switch` command lets you have several OCaml installations on
 your system. When using the Miking system, you need to use the `miking-ocaml`
@@ -118,6 +108,7 @@ number of editors:
 - [Emacs](https://github.com/miking-lang/miking-emacs)
 - [Vim](https://github.com/miking-lang/miking-vim)
 - [Sublime](https://github.com/miking-lang/miking-sublime-text)
+- [VSCode](https://github.com/miking-lang/miking-vscode)
 
 If you create an editing mode of your own, please send a pull
 request to update this list!
