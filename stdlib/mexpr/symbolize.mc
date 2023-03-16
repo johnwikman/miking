@@ -26,6 +26,9 @@ include "type.mc"
 type SymEnv = {
   varEnv: Map String Name,
   conEnv: Map String Name,
+  -- TODO(johnwikman, 2023-03-14): Move langEnv out once we have support for
+  -- row-type polymorhpism
+  langEnv: Map String Name,
   tyVarEnv: Map String (Name, Level),
   tyConEnv: Map String (Name, [Name], Type),
   currentLvl : Level,
@@ -37,6 +40,7 @@ type SymEnv = {
 let symEnvEmpty = {
   varEnv = mapEmpty cmpString,
   conEnv = mapEmpty cmpString,
+  langEnv = mapEmpty cmpString,
   tyVarEnv = mapEmpty cmpString,
 
   -- Built-in type constructors
@@ -53,6 +57,17 @@ let symEnvEmpty = {
   ignoreExternals = false
 }
 
+-- Overrides the lookups in the old SymEnv with the lookups in the new SymEnv
+let symEnvOverride = lam old: SymEnv. lam new: SymEnv.
+  -- union of maps with right precedence
+  let unionRight = mapUnionWith (lam. lam r. r) in
+  {old with varEnv = unionRight old.varEnv new.varEnv,
+            conEnv = unionRight old.conEnv new.conEnv,
+            langEnv = unionRight old.langEnv new.langEnv,
+            tyVarEnv = unionRight old.tyVarEnv new.tyVarEnv,
+            tyConEnv = unionRight old.tyConEnv new.tyConEnv}
+
+
 -----------
 -- TERMS --
 -----------
@@ -66,13 +81,6 @@ lang Sym = Ast
   | t ->
     let t = smap_Expr_Expr (symbolizeExpr env) t in
     withType (symbolizeType env (tyTm t)) t
-
-  -- Same as symbolizeExpr, but also return an env with all names bound at the
-  -- top-level
-  sem symbolizeTopExpr (env : SymEnv) =
-  | t ->
-    let t = symbolizeExpr env t in
-    addTopNames env t
 
   sem addTopNames (env : SymEnv) =
   | t -> env
@@ -91,18 +99,6 @@ lang Sym = Ast
   | expr ->
     let env = symEnvEmpty in
     symbolizeExpr env expr
-
-  sem symbolizeTop =
-  | expr ->
-    let env = symEnvEmpty in
-    symbolizeTopExpr env expr
-
-  -- Symbolize with builtin environment and ignore errors
-  sem symbolizeAllowFree =
-  | expr ->
-    let env = { symEnvEmpty with allowFree = true } in
-    symbolizeExpr env expr
-
 end
 
 lang VarSym = Sym + VarAst
@@ -557,6 +553,12 @@ end
 -- To test that the symbolization works as expected, we define functions that
 -- verify all names in the AST have been symbolized.
 lang TestLang = MExprSym + MExprPrettyPrint
+  -- Symbolize with builtin environment and ignore errors
+  sem symbolizeAllowFree =
+  | expr ->
+    let env = { symEnvEmpty with allowFree = true } in
+    symbolizeExpr env expr
+
   sem isFullySymbolized : Expr -> Bool
   sem isFullySymbolized =
   | ast -> isFullySymbolizedExpr true ast

@@ -67,7 +67,7 @@ let decl_lang_ = use MLangAst in
 
 let decl_nsynn_ = use MLangAst in
   lam n. lam ndefs: [(Name, Type)].
-  DeclSyn {ident = n,
+  DeclSyn {ident = n, extends = [],
            defs = map (lam t. {ident = t.0, tyIdent = t.1}) ndefs,
            info = NoInfo {}}
 
@@ -86,8 +86,8 @@ let decl_syn_ = use MLangAst in
 
 let decl_nsemty_ = use MLangAst in
   lam n. lam ty.
-  DeclSem {ident = n, tyAnnot = ty,
-           tyBody = tyunknown_,
+  DeclSem {ident = n, extends = [],
+           tyAnnot = ty, tyBody = tyunknown_,
            args = [], cases = [], info = NoInfo {}}
 
 let decl_semty_ = use MLangAst in
@@ -96,8 +96,8 @@ let decl_semty_ = use MLangAst in
 
 let decl_nsem_ = use MLangAst in
   lam n. lam nargs: [(Name, Type)]. lam cases: [(Pat, Expr)].
-  DeclSem {ident = n, tyAnnot = tyunknown_,
-           tyBody = tyunknown_,
+  DeclSem {ident = n, extends = [],
+           tyAnnot = tyunknown_, tyBody = tyunknown_,
            args = map (lam t. {ident = t.0, tyAnnot = t.1}) nargs,
            cases = map (lam t. {pat = t.0, thn = t.1}) cases,
            info = NoInfo {}}
