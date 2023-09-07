@@ -165,6 +165,18 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
   -- productions (labels) that cause the shift to be allowed.
   | LRConflict {lookahead : [TokenRepr], reducingProductions : [label], shiftAllowed : Bool}
 
+  sem pprintLRError : all label. (label -> String) -> LRError label -> String
+  sem pprintLRError pprintLabel =
+  -- TODO(vipa, 2023-09-09): Actually print useful things
+  | ConflictingProductionTypes _ -> "ConflictingProductionTypes"
+  | ActionArgLengthMismatch _ -> "ActionArgLengthMismatch"
+  | UnknownNTType _ -> "UnknownNTType"
+  | TermTypeMismatch _ -> "TermTypeMismatch"
+  | UndefinedTerm _ -> "UndefinedTerm"
+  | MissingEOFTokenType _ -> "MissingEOFTokenType"
+  | FirstSetUndefined _ -> "FirstSetUndefined"
+  | LRConflict _ -> "LRConflict"
+
   /-
   -- Generate the LR(k) parse table.
   --
@@ -436,7 +448,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
 
     let lines = snoc lines (concat (make indent ' ') "Productions:") in
     let ruleIndent = addi (addi indent 2) (length (int2string (length lrtable.syntaxDef.productions))) in
-    let lines = foldli (lam lines. lam prodIdx. lam prod: Production.
+    let lines = foldli (lam lines. lam prodIdx. lam prod: Production label.
       let rulenum = int2string prodIdx in
       snoc lines (join [
         make (subi ruleIndent (length rulenum)) ' ', rulenum, ": ",
@@ -485,8 +497,8 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
     ) lines lrtable.gotos in
 
     let lines = snoc lines (concat (make indent ' ') "Reductions:") in
-    let lines = mapFoldWithKey (lam lines. lam stateIdx: Int. lam stateReductions: [{lookahead: [TokenRepr], prodIdx: Int}].
-      foldl (lam lines. lam red: {lookahead: [TokenRepr], prodIdx: Int}.
+    let lines = mapFoldWithKey (lam lines. lam stateIdx: Int. lam stateReductions: [{lookahead: [TokenRepr], prodIdx: Int, prodLabel: label}].
+      foldl (lam lines. lam red: {lookahead: [TokenRepr], prodIdx: Int, prodLabel : label}.
         snoc lines (join [
           make (addi indent 2) ' ',
           "in state ", int2string stateIdx,
@@ -1100,7 +1112,10 @@ end in
 type LRTestCase = {
   tokenConTypes: Map TokenRepr {conIdent: Name, conArg: Type},
   name: String,
-  syntaxDef: SyntaxDef,
+  -- TODO(vipa, 2023-09-09): It might be better to have actual
+  -- information in the label, to test that part of the implementation
+  -- too
+  syntaxDef: SyntaxDef (),
   isLR1: Bool,
   parseTests: [LRParseTest]
 } in
@@ -1118,26 +1133,26 @@ let testcases: [LRTestCase] = [
     tokenConTypes = allTokenConTypes,
     name = "LR1 Example (from Tiger Book)",
     syntaxDef = {
-      entrypoint = _S,
+      entrypoint = (_S, ()),
       productions = [
-        {nt = _S, terms = [nt_V, t_Semi, nt_E],
+        {nt = _S, terms = [nt_V, t_Semi, nt_E], label = (),
          action = withType (tyarrows_ [tyunknown_, tystr_, tokEmptyTy, tystr_, tystr_])
                            (ulams_ ["actionState", "a1_V", "a2_Semi", "a3_S"]
                                    (appf1_ (var_ "join")
                                            (seq_ [var_ "a1_V", str_ " = ", var_ "a3_S"])))},
-        {nt = _S, terms = [nt_E],
+        {nt = _S, terms = [nt_E], label = (),
          action = withType (tyarrows_ [tyunknown_, tystr_, tystr_])
                            (ulams_ ["actionState", "a1_E"]
                                    (var_ "a1_E"))},
-        {nt = _E, terms = [nt_V],
+        {nt = _E, terms = [nt_V], label = (),
          action = withType (tyarrows_ [tyunknown_, tystr_, tystr_])
                            (ulams_ ["actionState", "a1_V"]
                                    (var_ "a1_V"))},
-        {nt = _V, terms = [t_LIdent],
+        {nt = _V, terms = [t_LIdent], label = (),
          action = withType (tyarrows_ [tyunknown_, tokStrvalTy, tystr_])
                            (ulams_ ["actionState", "a1_LIdent"]
                                    (recordproj_ "val" (var_ "a1_LIdent")))},
-        {nt = _V, terms = [t_Comma, nt_E],
+        {nt = _V, terms = [t_Comma, nt_E], label = (),
          action = withType (tyarrows_ [tyunknown_, tokEmptyTy, tystr_, tystr_])
                            (ulams_ ["actionState", "a1_Comma", "a2_E"]
                                    (cons_ (char_ '*') (var_ "a2_E")))}
@@ -1174,9 +1189,9 @@ let testcases: [LRTestCase] = [
     tokenConTypes = allTokenConTypes,
     name = "LR2 Example",
     syntaxDef = {
-      entrypoint = _S,
+      entrypoint = (_S, ()),
       productions = [
-        {nt = _S, terms = [nt_R, nt_S],
+        {nt = _S, terms = [nt_R, nt_S], label = (),
          action = withType (tyarrows_ [tyunknown_, tystr_, tystr_, tystr_])
                            (ulams_ ["actionState", "a1_R", "a2_S"]
                                    (appf1_ (var_ "join") (seq_ [
@@ -1184,11 +1199,11 @@ let testcases: [LRTestCase] = [
                                       str_ " | ",
                                       var_ "a2_S"
                                     ])))},
-        {nt = _S, terms = [nt_R],
+        {nt = _S, terms = [nt_R], label = (),
          action = withType (tyarrows_ [tyunknown_, tystr_, tystr_])
                            (ulams_ ["actionState", "a1_R"]
                                    (var_ "a1_R"))},
-        {nt = _R, terms = [t_LIdent, t_Semi, nt_T],
+        {nt = _R, terms = [t_LIdent, t_Semi, nt_T], label = (),
          action = withType (tyarrows_ [tyunknown_, tokStrvalTy, tokEmptyTy, tyseq_ tystr_, tystr_])
                            (ulams_ ["actionState", "a1_LIdent", "a2_Semi", "a3_T"]
                                    (appf1_ (var_ "join") (seq_ [
@@ -1197,16 +1212,16 @@ let testcases: [LRTestCase] = [
                                       appf2_ (var_ "strJoin") (str_ ", ") (var_ "a3_T"),
                                       str_ "]"
                                     ])))},
-        {nt = _T, terms = [t_LIdent, nt_T],
+        {nt = _T, terms = [t_LIdent, nt_T], label = (),
          action = withType (tyarrows_ [tyunknown_, tokStrvalTy, tyseq_ tystr_, tyseq_ tystr_])
                            (ulams_ ["actionState", "a1_LIdent", "a2_T"]
                                    (cons_ (recordproj_ "val" (var_ "a1_LIdent")) (var_ "a2_T")))},
-        {nt = _T, terms = [t_Int],
+        {nt = _T, terms = [t_Int], label = (),
          action = withType (tyarrows_ [tyunknown_, tokIntvalTy, tyseq_ tystr_])
                            (ulams_ ["actionState", "a1_Int"]
                                    (seq_ [appf1_ (var_ "int2string")
                                                  (recordproj_ "val" (var_ "a1_Int"))]))},
-        {nt = _T, terms = [],
+        {nt = _T, terms = [], label = (),
          action = withType (tyarrows_ [tyunknown_, tyseq_ tystr_])
                            (ulams_ ["actionState"]
                                    (seq_ []))}
@@ -1237,21 +1252,21 @@ let testcases: [LRTestCase] = [
     tokenConTypes = allTokenConTypes,
     name = "non-LL Example (more left parentheses than right parentheses)",
     syntaxDef = {
-      entrypoint = _LeftOnly,
+      entrypoint = (_LeftOnly, ()),
       productions = [
-        {nt = _LeftOnly, terms = [t_LParen, nt_LeftOnly],
+        {nt = _LeftOnly, terms = [t_LParen, nt_LeftOnly], label = (),
          action = withType (tyarrows_ [tyunit_, tokEmptyTy, tystr_, tystr_])
                            (ulams_ ["actionState", "lparen", "lprod"]
                                    (cons_ (char_ '(') (var_ "lprod")))},
-        {nt = _LeftOnly, terms = [nt_LeftRight],
+        {nt = _LeftOnly, terms = [nt_LeftRight], label = (),
          action = withType (tyarrows_ [tyunit_, tystr_, tystr_])
                            (ulams_ ["actionState", "lrprod"]
                                    (cons_ (char_ '|') (var_ "lrprod")))},
-        {nt = _LeftRight, terms = [t_LParen, nt_LeftRight, t_RParen],
+        {nt = _LeftRight, terms = [t_LParen, nt_LeftRight, t_RParen], label = (),
          action = withType (tyarrows_ [tyunit_, tokEmptyTy, tystr_, tokEmptyTy, tystr_])
                            (ulams_ ["actionState", "lparen", "middle", "rparen"]
                                    (cons_ (char_ '(') (snoc_ (var_ "middle") (char_ ')'))))},
-        {nt = _LeftRight, terms = [],
+        {nt = _LeftRight, terms = [], label = (),
          action = withType (tyarrows_ [tyunit_, tystr_])
                            (ulams_ ["actionState"]
                                    (str_ "e"))}
@@ -1290,12 +1305,12 @@ let tprintLn = lam s. if suppressPrints then () else printLn s in
 foldl (lam. lam tc: LRTestCase.
   tprintLn (join ["Running testcase ", tc.name, " "]);
 
-  let isLR1_table = match lrCreateParseTable 1 tc.tokenConTypes tc.syntaxDef with ResultOk _ then true else false in
+  let isLR1_table = match lrCreateParseTable {k = 1, tokenConTypes = tc.tokenConTypes, syntaxDef = tc.syntaxDef} with ResultOk _ then true else false in
   utest isLR1_table with tc.isLR1 in
 
   let k = if tc.isLR1 then 1 else 2 in
 
-  switch lrCreateParseTable k tc.tokenConTypes tc.syntaxDef
+  switch lrCreateParseTable {k = k, tokenConTypes = tc.tokenConTypes, syntaxDef = tc.syntaxDef}
   case ResultOk {value = lrtable} then
     tprintLn (lrtable2string 2 lrtable);
     tprintLn "";
@@ -1310,7 +1325,7 @@ foldl (lam. lam tc: LRTestCase.
       "include \"parser/lexer.mc\"",
       "mexpr",
       "use Lexer in",
-      "let wrappedNextToken = lam s. result.ok (nextToken s) in",
+      "let wrappedNextToken = lam s. result.mapWE identity (lam. (NoInfo (), [])) (nextToken s) in",
       expr2str (bindall_ [
         -- Wrap the generated expression in lambdas
         let n_stream = nameSym "stream" in
@@ -1388,7 +1403,7 @@ foldl (lam. lam tc: LRTestCase.
     tprintLn "";
     ()
   case ResultErr {errors = errors} then
-    tprintLn (strJoin "\n" (mapValues errors));
+    tprintLn (strJoin "\n" (map (pprintLRError (lam. "()")) (mapValues errors)));
     utest tc.name with "I should not fail!" in ()
   end
 
