@@ -837,6 +837,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
                   matchex_ (nvar_ lamLookahead) (pseqtot_ matchCons) (
                     -- case [TokenX _, TokenY _, ...] then
                     --   <if reduce>
+                    --   -- Following these semantics, but a bit more compact
                     --   let stackA = stacks.stackA in -- extract the relevant stacks for this reduce
                     --   let stackB = stacks.stackB in
                     --   let stackC = stacks.stackC in
@@ -860,6 +861,34 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
                     let stackLabels = map (lam ty. mapLookupOrElse (lam. error "internal error (3)") ty stackTypeLabel) termTypes in
                     let stackVars = map (lam lbl. (var_ (concat "var" lbl), lbl)) (distinct eqString stackLabels) in
 
+                    -- The expressions that correspond to the stack
+                    let stackLabelExprs: Map String Expr = mapEmpty cmpString in
+                    -- map (lam lbl: String.
+                    --  recordproj_ lbl (nvar_ lamStacks)
+                    --) (distinct eqString (cons returnLabel stackLabels)) in
+
+                    -- Extract values from the stack in reverse order (note the reverse on stackLabels)
+                    let termExprs = mapAccumL (
+                      lam acc: {bindings: [Expr], stackLabelExprs: Map String Expr}.
+                      lam lbl: String.
+                      match mapLookup lbl acc.stackLabelExprs with Some expr then
+                        -- Already extracted from this stack, should save the state to a variable
+                        let n = nameSym (cons 'v' lbl) in
+                        let binding = nulet_ n expr in
+                        ({acc with bindings = snoc acc.bindings binding,
+                                   stackLabelExprs = mapInsert lbl (tail_ (nvar_ n)) acc.stackLabelExprs},
+                         head_ (nvar_ n))
+                      else
+                        -- Found nothing, we are the first to extract from this stack
+                        let expr = recordproj_ lbl (nvar_ lamStacks) in
+                        ({acc with stackLabelExprs = mapInsert lbl (tail_ expr) acc.stackLabelExprs},
+                         head_ expr)
+                    ) {bindings = [], stackLabelExprs = mapEmpty cmpString} (reverse stackLabels) in
+
+                    -- revArgs contains the stack arguments to the semantic action in reverse order
+                    match termExprs with ({bindings = preSemanticBindings, stackLabelExprs = stackLabelExprs}, revArgs) in
+                    let semanticArgs = cons (nvar_ varActionState) (reverse revArgs) in
+
                     let actionRetType =
                       recursive let work = lam ty. match ty with TyArrow t then work t.to else ty in
                       work (tyTm rule.action)
@@ -869,39 +898,33 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
                     let vsTokenValue = mapi (lam i. lam. nameSym (join ["tv", int2string i])) stackLabels in
                     let vNewProduce = nameSym "newProduce" in
                     bindall_ [
-                      -- extract all stacks to variables
-                      bindall_ (map (lam lbl: String.
-                        ulet_ (concat "var" lbl) (recordproj_ lbl (nvar_ lamStacks))
-                      ) (distinct eqString (cons returnLabel stackLabels))),
-
-                      -- extract all values from the stacks and pop that value from the stack
-                      -- and create the new production
-                      bindall_ (snoc
-                        -- Stack semantics, so we pop in reverse order
-                        (reverse (mapi (lam i. lam lbl.
-                        bindall_ [
-                          nulet_ (get vsTokenValue i) (head_ (var_ (concat "var" lbl))),
-                          ulet_ (concat "var" lbl) (tail_ (var_ (concat "var" lbl)))
-                        ]
-                        ) stackLabels))
-                        (nulet_ vNewProduce (appSeq_ rule.action (cons (nvar_ varActionState) (map nvar_ vsTokenValue))))
-                      ),
+                      -- Any necessary bindings and apply the semantive action
+                      bindall_ (snoc preSemanticBindings (
+                        nulet_ vNewProduce (appSeq_ rule.action semanticArgs)
+                      )),
 
                       -- If we reduce on the entrypoint rule, then we return. Otherwise push to the stack and run the GOTO action
                       if eqi reduction.prodIdx table.entrypointProdIdx then (
                         #var"global: result.ok" (nvar_ vNewProduce)
                       ) else (
+                        -- Put the returned expression back on the stack
+                        let stackLabelExprs =
+                          -- (cons retval <modified stack>) or (cons retval stack.retlabel)
+                          mapInsertWith (lam prev. lam v. cons_ (nvar_ vNewProduce) prev)
+                                        returnLabel (cons_ (nvar_ vNewProduce) (recordproj_ returnLabel (nvar_ lamStacks)))
+                                        stackLabelExprs
+                        in
                         let vNewStacks = nameSym "nss" in
                         let vPrevStateTrace = nameSym "pst" in
                         let vPrevState = nameSym "ps" in
                         let vNewStateTrace = nameSym "nst" in
                         let vNextState = nameSym "nse" in
                         bindall_ [
-                          ulet_ (concat "var" returnLabel) (cons_ (nvar_ vNewProduce) (var_ (concat "var" returnLabel))),
                           -- Update the stack state with the modified stacks
-                          nulet_ vNewStacks (foldl (lam rec. lam lbl.
-                            recordupdate_ rec lbl (var_ (concat "var" lbl))
-                          ) (nvar_ lamStacks) (distinct eqString (cons returnLabel stackLabels))),
+                          nulet_ vNewStacks (foldl (lam rec. lam lblexpr: (String, Expr).
+                            match lblexpr with (lbl, newStackExpr) in
+                            recordupdate_ rec lbl newStackExpr
+                          ) (nvar_ lamStacks) (mapBindings stackLabelExprs)),
 
                           -- Go back to the state trace of how it looked at the tokens involved in this reduce were pushed to the stack
                           nulet_ vPrevStateTrace (subsequence_ (nvar_ lamStateTrace) (int_ (length stackLabels)) (length_ (nvar_ lamStateTrace))),
