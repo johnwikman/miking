@@ -679,7 +679,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
     -- Check non-terminal types
     let stackTypeLabel = mapFoldWithKey (lam stlAcc: Map Type String. lam. lam ty: Type.
       match mapLookup ty stlAcc with None () then
-        let label = join ["typeStack", int2string (mapLength stlAcc)] in
+        let label = join ["ts", int2string (mapLength stlAcc)] in
         mapInsert ty label stlAcc
       else
         stlAcc
@@ -687,7 +687,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
     -- Check token types
     let stackTypeLabel = mapFoldWithKey (lam stlAcc: Map Type String. lam. lam c: {conIdent: Name, conArg: Type}.
       match mapLookup c.conArg stlAcc with None () then
-        let label = join ["typeStack", int2string (mapLength stlAcc)] in
+        let label = join ["ts", int2string (mapLength stlAcc)] in
         mapInsert c.conArg label stlAcc
       else
         stlAcc
@@ -740,10 +740,10 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
     let parseFunctionIdent = nameSym "parseLoop" in
     let parseFunctionBody =
       nreclets_ [(parseFunctionIdent, tyunknown_,
-        let lamStacks = nameSym "stacks" in
-        let lamLexerState = nameSym "lexerState" in
-        let lamStateTrace = nameSym "stateTrace" in
-        let lamLookahead = nameSym "lookahead" in
+        let lamStacks = nameSym "st" in
+        let lamLexerState = nameSym "ls" in
+        let lamStateTrace = nameSym "st" in
+        let lamLookahead = nameSym "lh" in
         nlams_ [(lamStacks, tyunknown_),
                 (lamLexerState, lexerStreamType),
                 (lamStateTrace, tyseq_ tyint_),
@@ -751,7 +751,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
           -- Recursive function body here:
 
           -- match stateTrace with [currentState] ++ _
-          let varCurrentState = nameSym "currentState" in
+          let varCurrentState = nameSym "cs" in
           match_ (nvar_ lamStateTrace)
                  (pseqedgew_ [npvar_ varCurrentState] []) (
             -- then
@@ -765,7 +765,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
                 let shiftMatches = map (lam shift: {lookahead: [TokenRepr], toIdx: Int}.
                   let lhCons: [{conIdent: Name, conArg: Type}] = map (lam repr. mapLookupOrElse (lam. error "malformed parse table! (1)") repr table.tokenConTypes) shift.lookahead in
                   -- We only need value for the first lookahead token when shifting
-                  let v = nameSym "shiftValue" in
+                  let v = nameSym "sv" in
                   let h = head lhCons in
                   let hCon = npcon_ h.conIdent (npvar_ v) in
                   let restCons = map (lam lh. npcon_ lh.conIdent pvarw_) (tail lhCons) in
@@ -784,26 +784,36 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
                     --     result.err errors
                     --   else never
                     let stackLabel = mapLookupOrElse (lam. error "internal error (2)") h.conArg stackTypeLabel in
+                    let vShiftStack = nameSym "ss" in
+                    let vNewTypeStack = nameSym "nts" in
+                    let vNewStacks = nameSym "ns" in
+                    let vNextTokenResult = nameSym "ntr" in
                     bindall_ [
-                      ulet_ "shiftStack" (recordproj_ stackLabel (nvar_ lamStacks)),
-                      ulet_ "newTypeStack" (cons_ (nvar_ v) (var_ "shiftStack")),
-                      ulet_ "newStacks" (recordupdate_ (nvar_ lamStacks) stackLabel (var_ "newTypeStack")),
-                      ulet_ "nextTokenResult" (appf1_ (binds.v_nextToken) (nvar_ lamLexerState)),
+                      nulet_ vShiftStack (recordproj_ stackLabel (nvar_ lamStacks)),
+                      nulet_ vNewTypeStack (cons_ (nvar_ v) (nvar_ vShiftStack)),
+                      nulet_ vNewStacks (recordupdate_ (nvar_ lamStacks) stackLabel (nvar_ vNewTypeStack)),
+                      nulet_ vNextTokenResult (appf1_ (binds.v_nextToken) (nvar_ lamLexerState)),
                       matchall_ [
-                        matchex_ (var_ "nextTokenResult") (npcon_ (binds.c_ResultOk) (prec_ [("value", pvar_ "lexres")])) (
+                        let pvLexres = nameSym "lr" in
+                        matchex_ (nvar_ vNextTokenResult) (npcon_ (binds.c_ResultOk) (prec_ [("value", npvar_ pvLexres)])) (
+                          let vNewLookahead = nameSym "nlh" in
+                          let vNewLexerState = nameSym "nls" in
+                          let vNewStateTrace = nameSym "nst" in
                           bindall_ [
-                            ulet_ "newLookahead" (snoc_ (nvar_ varRest) (recordproj_ "token" (var_ "lexres"))),
-                            ulet_ "newLexerState" (recordproj_ "stream" (var_ "lexres")),
-                            ulet_ "newStateTrace" (cons_ (int_ shift.toIdx) (nvar_ lamStateTrace)),
+                            nulet_ vNewLookahead (snoc_ (nvar_ varRest) (recordproj_ "token" (nvar_ pvLexres))),
+                            nulet_ vNewLexerState (recordproj_ "stream" (nvar_ pvLexres)),
+                            nulet_ vNewStateTrace (cons_ (int_ shift.toIdx) (nvar_ lamStateTrace)),
                             appf4_ (nvar_ parseFunctionIdent)
-                                   (var_ "newStacks")
-                                   (var_ "newLexerState")
-                                   (var_ "newStateTrace")
-                                   (var_ "newLookahead")
+                                   (nvar_ vNewStacks)
+                                   (nvar_ vNewLexerState)
+                                   (nvar_ vNewStateTrace)
+                                   (nvar_ vNewLookahead)
                           ]
                         ),
-                        matchex_ (var_ "nextTokenResult") (npcon_ (binds.c_ResultErr) (prec_ [("errors", pvar_ "errors"), ("warnings", pvar_ "warnings")])) (
-                          nconapp_ (binds.c_ResultErr) (urecord_ [("errors", var_ "errors"), ("warnings", var_ "warnings")])
+                        let vErrors = nameSym "e" in
+                        let vWarnings = nameSym "w" in
+                        matchex_ (nvar_ vNextTokenResult) (npcon_ (binds.c_ResultErr) (prec_ [("errors", npvar_ vErrors), ("warnings", npvar_ vWarnings)])) (
+                          nconapp_ (binds.c_ResultErr) (urecord_ [("errors", nvar_ vErrors), ("warnings", nvar_ vWarnings)])
                         )
                       ]
                     ]
@@ -855,8 +865,10 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
                       work (tyTm rule.action)
                     in
                     let returnLabel = mapLookupOrElse (lam. error "internal error (4)") actionRetType stackTypeLabel in
-                    bindall_ [
 
+                    let vsTokenValue = mapi (lam i. lam. nameSym (join ["tv", int2string i])) stackLabels in
+                    let vNewProduce = nameSym "newProduce" in
+                    bindall_ [
                       -- extract all stacks to variables
                       bindall_ (map (lam lbl: String.
                         ulet_ (concat "var" lbl) (recordproj_ lbl (nvar_ lamStacks))
@@ -868,35 +880,43 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
                         -- Stack semantics, so we pop in reverse order
                         (reverse (mapi (lam i. lam lbl.
                         bindall_ [
-                          ulet_ (join ["tokenValue", int2string i]) (head_ (var_ (concat "var" lbl))),
+                          nulet_ (get vsTokenValue i) (head_ (var_ (concat "var" lbl))),
                           ulet_ (concat "var" lbl) (tail_ (var_ (concat "var" lbl)))
                         ]
                         ) stackLabels))
-                        (ulet_ "newProduce" (appSeq_ rule.action (cons (nvar_ varActionState) (mapi (lam i. lam. var_ (join ["tokenValue", int2string i])) stackLabels))))
+                        (nulet_ vNewProduce (appSeq_ rule.action (cons (nvar_ varActionState) (map nvar_ vsTokenValue))))
                       ),
 
                       -- If we reduce on the entrypoint rule, then we return. Otherwise push to the stack and run the GOTO action
                       if eqi reduction.prodIdx table.entrypointProdIdx then (
-                        #var"global: result.ok" (var_ "newProduce")
-                      ) else (bindall_ [
-                        ulet_ (concat "var" returnLabel) (cons_ (var_ "newProduce") (var_ (concat "var" returnLabel))),
-                        -- Update the stack state
-                        ulet_ "newStacks" (foldl (lam rec. lam lbl.
-                          recordupdate_ rec lbl (var_ (concat "var" lbl))
-                        ) (nvar_ lamStacks) (distinct eqString (cons returnLabel stackLabels))),
-                        ulet_ "newStateTrace" (subsequence_ (nvar_ lamStateTrace) (int_ (length stackLabels)) (length_ (nvar_ lamStateTrace))),
-                        ulet_ "currentState" (head_ (var_ "newStateTrace")),
+                        #var"global: result.ok" (nvar_ vNewProduce)
+                      ) else (
+                        let vNewStacks = nameSym "nss" in
+                        let vPrevStateTrace = nameSym "pst" in
+                        let vPrevState = nameSym "ps" in
+                        let vNewStateTrace = nameSym "nst" in
+                        let vNextState = nameSym "nse" in
+                        bindall_ [
+                          ulet_ (concat "var" returnLabel) (cons_ (nvar_ vNewProduce) (var_ (concat "var" returnLabel))),
+                          -- Update the stack state with the modified stacks
+                          nulet_ vNewStacks (foldl (lam rec. lam lbl.
+                            recordupdate_ rec lbl (var_ (concat "var" lbl))
+                          ) (nvar_ lamStacks) (distinct eqString (cons returnLabel stackLabels))),
 
-                        let varLookupName = mapLookupOrElse (lam. error "malformed parse table! (5)") rule.nt gotoLookupVarNames in
-                        ulet_ "nextState" (get_ (nvar_ varLookupName) (var_ "currentState")),
-                        ulet_ "newStateTrace" (cons_ (var_ "nextState") (var_ "newStateTrace")),
+                          -- Go back to the state trace of how it looked at the tokens involved in this reduce were pushed to the stack
+                          nulet_ vPrevStateTrace (subsequence_ (nvar_ lamStateTrace) (int_ (length stackLabels)) (length_ (nvar_ lamStateTrace))),
+                          nulet_ vPrevState (head_ (nvar_ vPrevStateTrace)),
 
-                        appf4_ (nvar_ parseFunctionIdent)
-                               (var_ "newStacks")
-                               (nvar_ lamLexerState)
-                               (var_ "newStateTrace")
-                               (nvar_ lamLookahead)
-                      ])
+                          let varLookupName = mapLookupOrElse (lam. error "malformed parse table! (5)") rule.nt gotoLookupVarNames in
+                          nulet_ vNextState (get_ (nvar_ varLookupName) (nvar_ vPrevState)),
+                          nulet_ vNewStateTrace (cons_ (nvar_ vNextState) (nvar_ vPrevStateTrace)),
+
+                          appf4_ (nvar_ parseFunctionIdent)
+                                 (nvar_ vNewStacks)
+                                 (nvar_ lamLexerState)
+                                 (nvar_ vNewStateTrace)
+                                 (nvar_ lamLookahead)
+                        ])
                     ]
                   )
                 ) stateReductions in
