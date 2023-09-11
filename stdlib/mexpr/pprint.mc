@@ -353,14 +353,18 @@ lang RecordPrettyPrint = PrettyPrint + RecordAst
         mapMapAccum
           (lam env. lam k. lam v.
              match pprintCode innerIndent env v with (env, str) in
-             (env,
-              join [pprintLabelString k, " =", pprintNewline innerIndent,
-                    str]))
+             if lti (addi (lengthSID k) (length str)) env.optSingleLineLimit then
+               (env, join [pprintLabelString k, " = ", str])
+             else
+               (env, join [pprintLabelString k, " =", pprintNewline innerIndent, str]))
            env bindings
       with (env, bindMap) in
       let binds = mapValues bindMap in
       let merged =
-        strJoin (concat "," (pprintNewline (pprintIncr indent))) binds
+        if lti (foldl addi 0 (map length binds)) env.optSingleLineLimit then
+          strJoin ", " binds
+        else
+          strJoin (concat "," (pprintNewline (pprintIncr indent))) binds
       in
       (env,join ["{ ", merged, " }"])
 
