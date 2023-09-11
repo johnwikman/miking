@@ -93,20 +93,23 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
   sem lrClosure: all label. Int -> SyntaxDef label -> Map Term (Set [TokenRepr]) -> Set (LRStateItem label) -> Set (LRStateItem label)
   sem lrClosure k syntaxDef firstMap =
   | inSet ->
-    -- OPT(johnwikman, 2023-01-14): This performs a bunch of unnecessary checks
-    -- on new iterations, as it only needs to check the latest items that were
-    -- added to the set. But to keep things simple initially, I didn't bother
-    -- to implement this optimization.
-    recursive let iterate = lam inSet: Set (LRStateItem label).
-      let resultSet = setFold (lam accSet: Set (LRStateItem label). lam item: (LRStateItem label).
+    recursive let iterate = lam inSet: Set (LRStateItem label). lam toCheck: [LRStateItem label].
+      if null toCheck then inSet -- no new items to check
+      else --continue
+      let result = foldl (lam acc: (Set (LRStateItem label), [LRStateItem label]).
+                          lam item: (LRStateItem label).
         match subsequence item.terms item.stackPointer (length item.terms)
         with [NonTerminal x] ++ b then
           let bL: [Term] = concat b (map (lam t. Terminal t) item.lookahead) in
           let firstK_bL: Set [TokenRepr] = cfgComposeFirst k firstMap bL in
-          foldli (lam accSet: Set (LRStateItem label). lam prodIdx: Int. lam prod: Production label.
+          foldli (lam acc: (Set (LRStateItem label), [LRStateItem label]).
+                  lam prodIdx: Int.
+                  lam prod: Production label.
             if nameEq x prod.nt then
               -- Process this production
-              setFold (lam accSet: Set (LRStateItem label). lam w: [TokenRepr].
+              setFold (lam acc: (Set (LRStateItem label), [LRStateItem label]).
+                       lam w: [TokenRepr].
+                match acc with (accSet, newChecks) in
                 let newItem: LRStateItem label = {
                   nt = x,
                   terms = prod.terms,
@@ -115,20 +118,21 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
                   prodIdx = prodIdx,
                   prodLabel = prod.label
                 } in
-                setInsert newItem accSet
-              ) accSet firstK_bL
+                if setMem newItem accSet then
+                  acc
+                else
+                  (setInsert newItem accSet, cons newItem newChecks)
+              ) acc firstK_bL
             else
-              accSet
-          ) accSet syntaxDef.productions
+              acc
+          ) acc syntaxDef.productions
         else
-          accSet
-      ) inSet inSet in
-      if setEq resultSet inSet then
-        resultSet
-      else
-        iterate resultSet
+          acc
+      ) (inSet, []) toCheck in
+      match result with (resultSet, newChecks) in
+      iterate resultSet newChecks
     in
-    iterate inSet
+    iterate inSet (setToSeq inSet)
 
 
   -- GOTO(I, X) =
