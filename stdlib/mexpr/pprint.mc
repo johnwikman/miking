@@ -58,6 +58,9 @@ type PprintEnv = {
   --     then
   optCompactMatchElse: Bool,
 
+  optCompactRecordCreation: Bool,
+  optCompactRecordUpdate: Bool,
+
   optSingleLineLimit: Int,
   optSingleLineConstSeq: Bool
 }
@@ -68,6 +71,8 @@ let pprintEnvEmpty = { nameMap = mapEmpty nameCmp,
                        count = mapEmpty cmpString,
                        strings = setEmpty cmpString,
                        optCompactMatchElse = true,
+                       optCompactRecordCreation = true,
+                       optCompactRecordUpdate = true,
                        optSingleLineLimit = 60,
                        optSingleLineConstSeq = true }
 
@@ -362,12 +367,34 @@ lang RecordPrettyPrint = PrettyPrint + RecordAst
   | TmRecordUpdate t ->
     let i = pprintIncr indent in
     let ii = pprintIncr i in
-    match pprintCode i env t.rec with (env,rec) in
-      match pprintCode ii env t.value with (env,value) in
-        (env,join ["{ ", rec, pprintNewline i,
-                   "with", pprintNewline i,
-                   pprintLabelString t.key, " =", pprintNewline ii, value,
-                   " }"])
+    let chain =
+      if env.optCompactRecordUpdate then
+        recursive let accumUpdates = lam keyacc. lam valacc. lam recExpr.
+          match recExpr with TmRecordUpdate t2 then
+            accumUpdates (cons t2.key keyacc) (cons t2.value valacc) t2.rec
+          else
+            (recExpr, keyacc, valacc)
+        in
+        accumUpdates [t.key] [t.value] t.rec
+      else
+        (t.rec, [t.key], [t.value])
+    in
+    match chain with (crec, ckeys, cvalues) in
+    match pprintCode i env crec with (env,rec) in
+      match mapAccumL (pprintCode ii) env cvalues with (env, values) in
+        let strBindings = zipWith (lam k. lam v.
+          if lti (addi (lengthSID k) (length v)) env.optSingleLineLimit then
+            join [pprintLabelString k, " = ", v]
+          else
+            join [pprintLabelString k, " =", pprintNewline ii, v]
+        ) ckeys values in
+        if lti (foldl addi (length rec) (map length strBindings)) env.optSingleLineLimit then
+          (env, join ["{ ", rec, " with ", strJoin ", " strBindings, " }"])
+        else
+          (env,join ["{ ", rec, pprintNewline i,
+                     "with", pprintNewline i,
+                     strJoin (cons ',' (pprintNewline ii)) strBindings,
+                     " }"])
 end
 
 lang LetPrettyPrint = PrettyPrint + LetAst + UnknownTypeAst
