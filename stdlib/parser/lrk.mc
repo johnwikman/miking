@@ -20,6 +20,7 @@ include "mexpr/ast.mc"
 include "mexpr/ast-builder.mc"
 include "mexpr/boot-parser.mc"
 include "mexpr/cmp.mc"
+include "mexpr/constant-fold.mc"
 include "mexpr/info.mc"
 include "mexpr/shallow-patterns.mc"
 include "mexpr/type-check.mc"
@@ -28,7 +29,8 @@ include "ocaml/mcore.mc"
 include "grammar.mc"
 include "lexer.mc"
 
-lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
+lang LRParser = ContextFreeGrammar + TokenReprEOF +
+                MExprAst + MExprCmp + MExprConstantFold
   type LRStateItem label = {
     nt: Name,
     terms: [Term],
@@ -900,7 +902,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF + MExprAst + MExprCmp
                     bindall_ [
                       -- Any necessary bindings and apply the semantive action
                       bindall_ (snoc preSemanticBindings (
-                        nulet_ vNewProduce (appSeq_ rule.action semanticArgs)
+                        nulet_ vNewProduce (constantfold (appSeq_ rule.action semanticArgs))
                       )),
 
                       -- If we reduce on the entrypoint rule, then we return. Otherwise push to the stack and run the GOTO action
