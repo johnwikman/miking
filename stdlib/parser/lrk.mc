@@ -870,9 +870,6 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
 
                     -- The expressions that correspond to the stack
                     let stackLabelExprs: Map String Expr = mapEmpty cmpString in
-                    -- map (lam lbl: String.
-                    --  recordproj_ lbl (nvar_ lamStacks)
-                    --) (distinct eqString (cons returnLabel stackLabels)) in
 
                     -- Extract values from the stack in reverse order (note the reverse on stackLabels)
                     let termExprs = mapAccumL (
