@@ -364,17 +364,20 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
                                       Map (Set (LRStateItem label)) Int,
                                       Set {lookahead: [TokenRepr], toIdx: Int},
                                       Set {nt: Name, toIdx: Int},
-                                      Set Term).
+                                      Map Term (Set (LRStateItem label))).
                             lam item: LRStateItem label.
-        match acc with (table, stateIdxLookup, stateShifts, stateGotos, visitedTerms) in
+        match acc with (table, stateIdxLookup, stateShifts, stateGotos, computedGotos) in
         match subsequence item.terms item.stackPointer (length item.terms)
         with ([x] ++ b) & postStackTerms then
           -- Check if we have already computed GOTO(I, X) on this X
-          if setMem x visitedTerms then acc
-          else --continue
-          let visitedTerms = setInsert x visitedTerms in
-
-          let j = lrGoto k syntaxDef firstK state x in
+          match
+            match mapLookup x computedGotos with Some j then
+              (j, computedGotos) -- reuse the GOTO(I, X)
+            else
+              let j = lrGoto k syntaxDef firstK state x in
+              let computedGotos = mapInsert x j computedGotos in
+              (j, computedGotos)
+          with (j, computedGotos) in
 
           let jInsertResult =
             match mapLookup j stateIdxLookup with Some jIdx then
@@ -393,15 +396,15 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
             -- This is a shift action
             let possibleLookaheads = cfgComposeFirst k firstK (concat postStackTerms (map (lam t2. Terminal t2) item.lookahead)) in
             let stateShifts = setFold (lam acc. lam lh. setInsert {lookahead = lh, toIdx = jIdx} acc) stateShifts possibleLookaheads in
-            (table, stateIdxLookup, stateShifts, stateGotos, visitedTerms)
+            (table, stateIdxLookup, stateShifts, stateGotos, computedGotos)
           case NonTerminal n then
             -- This is a Goto action
             let stateGotos = setInsert {nt = n, toIdx = jIdx} stateGotos in
-            (table, stateIdxLookup, stateShifts, stateGotos, visitedTerms)
+            (table, stateIdxLookup, stateShifts, stateGotos, computedGotos)
           end
         else
           acc
-      ) (table, stateIdxLookup, setEmpty cmpShift, setEmpty cmpGoto, setEmpty cfgTermCmp) state in
+      ) (table, stateIdxLookup, setEmpty cmpShift, setEmpty cmpGoto, mapEmpty cfgTermCmp) state in
       match result with (table, stateIdxLookup, stateShifts, stateGotos, _) in
 
       -- Only keep track of unique state transitions
