@@ -236,8 +236,6 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
     match nonTerminalTypes with (nonTermRes, nonTerminalTypes) in
     match result.toOption nonTermRes with None _ then result.map (lam. never) nonTermRes else
 
-    let #var"" = printLn (cfg2string syntaxDef) in
-
     -- Type-check the type signature, make sure the production function
     -- correspond to the types of the symbols that it consumes
     let ruleArgTypesResult = foldli (lam errs. lam prodIdx: Int. lam prod: Production label.
@@ -380,6 +378,11 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
               let computedGotos = mapInsert x j computedGotos in
               (j, computedGotos, false)
           with (j, computedGotos, alreadyComputed) in
+
+          -- In the case of k = 1, we don't need to consider the firstK
+          -- composition since we only shift if x is actually a token.
+          if and alreadyComputed (eqi k 1) then acc
+          else --continue
 
           let jInsertResult =
             match mapLookup j stateIdxLookup with Some jIdx then
