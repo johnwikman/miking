@@ -93,6 +93,9 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
   sem lrClosure: all label. Int -> SyntaxDef label -> Map Term (Set [TokenRepr]) -> Set (LRStateItem label) -> Set (LRStateItem label)
   sem lrClosure k syntaxDef firstMap =
   | inSet ->
+    let ntProdIdxLookup: Map Name [Int] = foldli (lam acc. lam prodIdx: Int. lam prod: Production label.
+      mapInsertWith concat prod.nt [prodIdx] acc
+    ) (mapEmpty nameCmp) syntaxDef.productions in
     recursive let iterate = lam inSet: Set (LRStateItem label). lam toCheck: [LRStateItem label].
       if null toCheck then inSet -- no new items to check
       else --continue
@@ -102,30 +105,27 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
         with [NonTerminal x] ++ b then
           let bL: [Term] = concat b (map (lam t. Terminal t) item.lookahead) in
           let firstK_bL: Set [TokenRepr] = cfgComposeFirst k firstMap bL in
-          foldli (lam acc: (Set (LRStateItem label), [LRStateItem label]).
+          foldl (lam acc: (Set (LRStateItem label), [LRStateItem label]).
                   lam prodIdx: Int.
-                  lam prod: Production label.
-            if nameEq x prod.nt then
-              -- Process this production
-              setFold (lam acc: (Set (LRStateItem label), [LRStateItem label]).
-                       lam w: [TokenRepr].
-                match acc with (accSet, newChecks) in
-                let newItem: LRStateItem label = {
-                  nt = x,
-                  terms = prod.terms,
-                  stackPointer = 0,
-                  lookahead = w,
-                  prodIdx = prodIdx,
-                  prodLabel = prod.label
-                } in
-                if setMem newItem accSet then
-                  acc
-                else
-                  (setInsert newItem accSet, cons newItem newChecks)
-              ) acc firstK_bL
-            else
-              acc
-          ) acc syntaxDef.productions
+            let prod = get syntaxDef.productions prodIdx in
+            -- Process this production
+            setFold (lam acc: (Set (LRStateItem label), [LRStateItem label]).
+                     lam w: [TokenRepr].
+              match acc with (accSet, newChecks) in
+              let newItem: LRStateItem label = {
+                nt = x,
+                terms = prod.terms,
+                stackPointer = 0,
+                lookahead = w,
+                prodIdx = prodIdx,
+                prodLabel = prod.label
+              } in
+              if setMem newItem accSet then
+                acc
+              else
+                (setInsert newItem accSet, cons newItem newChecks)
+            ) acc firstK_bL
+          ) acc (mapLookupOr [] x ntProdIdxLookup)
         else
           acc
       ) (inSet, []) toCheck in
@@ -360,7 +360,8 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
         else subi lhs.toIdx rhs.toIdx
       in
 
-      let result = setFold (lam acc: (LRParseTable label, Map (Set (LRStateItem label)) Int, Set {lookahead: [TokenRepr], toIdx: Int}, Set {nt: Name, toIdx: Int}). lam item: LRStateItem label.
+      let result = setFold (lam acc: (LRParseTable label, Map (Set (LRStateItem label)) Int, Set {lookahead: [TokenRepr], toIdx: Int}, Set {nt: Name, toIdx: Int}).
+                            lam item: LRStateItem label.
         match acc with (table, stateIdxLookup, stateShifts, stateGotos) in
         match subsequence item.terms item.stackPointer (length item.terms)
         with ([x] ++ b) & postStackTerms then

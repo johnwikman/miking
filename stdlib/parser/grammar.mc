@@ -66,10 +66,17 @@ lang ContextFreeGrammar = TokenReprBase + MExprAst + MExprCmp
     initActionState: Expr
   }
 
+  sem cfgNTName2string : Name -> String
+  sem cfgNTName2string =
+  | n ->
+    let str = nameGetStr n in
+    optionMapOr str (lam sym. join [str, "_", (int2string (sym2hash sym))])
+                    (nameGetSym n)
+
   sem cfgTerm2string : Term -> String
   sem cfgTerm2string =
   | Terminal t -> tokReprToStr t
-  | NonTerminal n -> join (["NT(", nameGetStr n, ")"])
+  | NonTerminal n -> join (["NT(", cfgNTName2string n, ")"])
 
   sem cfgTermCmp2 : (Term, Term) -> Int
   sem cfgTermCmp2 =
@@ -86,7 +93,8 @@ lang ContextFreeGrammar = TokenReprBase + MExprAst + MExprCmp
   | t -> eqi (cfgTermCmp other t) 0
 
   -- Comparison between two grammars. This ignores the order in which
-  -- productions are specified, but is strict in the naming equivalence.
+  -- productions are specified, but is strict in the naming equivalence, except
+  -- for labels which are annotations without any impact on the semantics.
   sem cfgCmp2 : all label. (SyntaxDef label, SyntaxDef label) -> Int
   sem cfgCmp2 =
   | (l, r) ->
@@ -131,7 +139,7 @@ lang ContextFreeGrammar = TokenReprBase + MExprAst + MExprCmp
       let lines = if null lines then lines else snoc lines "" in
       -- <name> ::= TERMS
       --          | TERMS
-      let firstLinePrefix = join [nameGetStr name, " ::= "] in
+      let firstLinePrefix = join [cfgNTName2string name, " ::= "] in
       let nextLinePrefix = join [make (subi (length firstLinePrefix) 2) ' ', "| "] in
       foldli (lam lines. lam i. lam prod.
         let prodStr = strJoin " " (map cfgTerm2string prod.terms) in
