@@ -674,6 +674,11 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
   sem lrGenerateParser: all label. LRGeneratorBindings -> LRParseTable label -> Expr
   sem lrGenerateParser binds =
   | table ->
+    -- This panic is only used during the generation process and will not be
+    -- part of the generated LR(k) parser.
+    let _PANIC = lam. error "PANIC. Internal parser generator logic error" in
+    let mapLookupOrPANIC = mapLookupOrElse _PANIC in
+
     /---- Assumed to exist "public" identifiers ----/
     let #var"global: result.err" = lam v. appf1_ binds.v_result_err v in
     let #var"global: result.ok" = lam v. appf1_ binds.v_result_ok v in
@@ -736,7 +741,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
     in
 
     /---- Set up the GOTO lists ----/
-    let missingGOTO = 200000 in -- using a large number here since MCore cannot parse negative numbers yet
+    let missingGOTO = negi 1 in
 
     let gotoLookup: Map Name (Map Int Int) = mapFoldWithKey (lam acc. lam nt. lam.
       mapInsert nt (mapEmpty subi) acc
@@ -745,8 +750,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
       foldl (lam acc. lam stateGoto: {nt: Name, toIdx: Int}.
         mapInsert stateGoto.nt
                   (mapInsert fromIdx stateGoto.toIdx
-                             (mapLookupOrElse (lam. error "PANIC. Internal parser generator logic error")
-                                              stateGoto.nt acc))
+                             (mapLookupOrPANIC stateGoto.nt acc))
                   acc
       ) acc stateGotos
     ) gotoLookup table.gotos in
@@ -759,6 +763,95 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
       let lookupName = nameSym (join ["gotoLookup", int2string (mapLength acc), "_", nameGetStr nt]) in
       mapInsert nt lookupName acc
     ) (mapEmpty nameCmp) gotoLookupVarExpressions in
+
+    /---- Set up the names for the state functions to be performed ----/
+    let stateLookupFuncNames: Map Int Name = foldli (lam acc. lam i: Int. lam state.
+      let funcName = nameSym (join ["lrkState", int2string i]) in
+      mapInsert i funcName acc
+    ) (mapEmpty subi) table.states in
+
+    let vStateLookup = nameSym "stateLookup" in
+    let stateLookupExpression = seq_ (make (lam i. nvar_ (mapLookupOrPANIC i stateLookupFuncNames))) in
+
+    /--- Function body creator for states ---/
+    let createStateFunction = lam stateIdx.
+      let state = get table.states stateIdx in
+      --mapLookupOrPANIC (lam. error "PANIC. Internal parser generator logic error") stateIdx table
+      -- "match on lookahead"
+      -- "on shift, do tail recursive call on statically known function"
+      -- "on goto, lookup function to do tail recursive call on"
+      let stateShifts: [{lookahead: [TokenRepr], toIdx: Int}] = mapLookupOrElse (lam. []) stateIdx table.shifts in
+      let stateReductions: [{lookahead: [TokenRepr], prodIdx: Int, prodLabel: label}] = mapLookupOrElse (lam. []) stateIdx table.reductions in
+      let lamStacks = nameSym "st" in
+      let lamLexerState = nameSym "ls" in
+      let lamStateTrace = nameSym "st" in
+      let lamLookahead = nameSym "lh" in
+      nlams_ [(lamStacks, tyunknown_),
+              (lamLexerState, lexerStreamType),
+              (lamStateTrace, tyseq_ tyint_),
+              (lamLookahead, tyseq_ tokenType)] (
+
+        let shiftMatches = map (lam shift: {lookahead: [TokenRepr], toIdx: Int}.
+          let lhCons: [{conIdent: Name, conArg: Type}] = map (lam repr. mapLookupOrPANIC repr table.tokenConTypes) shift.lookahead in
+          -- We only need value for the first lookahead token when shifting
+          let v = nameSym "sv" in
+          let h = head lhCons in
+          let hCon = npcon_ h.conIdent (npvar_ v) in
+          let restCons = map (lam lh. npcon_ lh.conIdent pvarw_) (tail lhCons) in
+          let matchCons = cons hCon restCons in
+          -- Name for the "tail", to avoid naming conflict with tail
+          let varRest = nameSym "rest" in
+          matchex_ (nvar_ lamLookahead) (pand_ (pseqtot_ matchCons) (pseqedgen_ [pvarw_] varRest [])) (
+            -- case [TokenX x, TokenY y, ...] & ([_] ++ rest) then
+            --   <if shift>
+            --   let stacks = {stacks with stackX = cons x stacks.stackX} in
+            --   let stateTrace = cons <shiftIdx> stateStrace in
+            --   let nextTokenResult = nextToken lexerState in
+            --   match nextTokenResult with ResultOk {value = lexres} then
+            --     parseLoop stacks lexres.stream stateTrace (snoc lookahead lexres.token)
+            --   else match nextTokenResult with ResultErr {errors = errors} then
+            --     result.err errors
+            --   else never
+            let stackLabel = mapLookupOrPANIC h.conArg stackTypeLabel in
+            let vShiftStack = nameSym "ss" in
+            let vNewTypeStack = nameSym "nts" in
+            let vNewStacks = nameSym "ns" in
+            let vNextTokenResult = nameSym "ntr" in
+            bindall_ [
+              nulet_ vShiftStack (recordproj_ stackLabel (nvar_ lamStacks)),
+              nulet_ vNewTypeStack (cons_ (nvar_ v) (nvar_ vShiftStack)),
+              nulet_ vNewStacks (recordupdate_ (nvar_ lamStacks) stackLabel (nvar_ vNewTypeStack)),
+              nulet_ vNextTokenResult (appf1_ (binds.v_nextToken) (nvar_ lamLexerState)),
+              matchall_ [
+                let pvLexres = nameSym "lr" in
+                matchex_ (nvar_ vNextTokenResult) (npcon_ (binds.c_ResultOk) (prec_ [("value", npvar_ pvLexres)])) (
+                  let vNewLookahead = nameSym "nlh" in
+                  let vNewLexerState = nameSym "nls" in
+                  let vNewStateTrace = nameSym "nst" in
+                  let vNextStateFunction = mapLookupOrPANIC shift.toIdx stateLookupFuncNames in
+                  bindall_ [
+                    nulet_ vNewLookahead (snoc_ (nvar_ varRest) (recordproj_ "token" (nvar_ pvLexres))),
+                    nulet_ vNewLexerState (recordproj_ "stream" (nvar_ pvLexres)),
+                    nulet_ vNewStateTrace (cons_ (int_ shift.toIdx) (nvar_ lamStateTrace)),
+                    appf4_ (nvar_ vNextStateFunction)
+                           (nvar_ vNewStacks)
+                           (nvar_ vNewLexerState)
+                           (nvar_ vNewStateTrace)
+                           (nvar_ vNewLookahead)
+                  ]
+                ),
+                let vErrors = nameSym "e" in
+                let vWarnings = nameSym "w" in
+                matchex_ (nvar_ vNextTokenResult) (npcon_ (binds.c_ResultErr) (prec_ [("errors", npvar_ vErrors), ("warnings", npvar_ vWarnings)])) (
+                  nconapp_ (binds.c_ResultErr) (urecord_ [("errors", nvar_ vErrors), ("warnings", nvar_ vWarnings)])
+                )
+              ]
+            ]
+          )
+        ) stateShifts in
+      )
+      ()
+    in
 
     /---- Set up the tail-recursive parsing function ----/
     let parseFunctionIdent = nameSym "parseLoop" in
@@ -786,74 +879,16 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
                 let stateShifts: [{lookahead: [TokenRepr], toIdx: Int}] = mapLookupOrElse (lam. []) i table.shifts in
                 let stateReductions: [{lookahead: [TokenRepr], prodIdx: Int, prodLabel: label}] = mapLookupOrElse (lam. []) i table.reductions in
 
-                let shiftMatches = map (lam shift: {lookahead: [TokenRepr], toIdx: Int}.
-                  let lhCons: [{conIdent: Name, conArg: Type}] = map (lam repr. mapLookupOrElse (lam. error "malformed parse table! (1)") repr table.tokenConTypes) shift.lookahead in
-                  -- We only need value for the first lookahead token when shifting
-                  let v = nameSym "sv" in
-                  let h = head lhCons in
-                  let hCon = npcon_ h.conIdent (npvar_ v) in
-                  let restCons = map (lam lh. npcon_ lh.conIdent pvarw_) (tail lhCons) in
-                  let matchCons = cons hCon restCons in
-                  -- Name for the "tail", to avoid naming conflict with tail
-                  let varRest = nameSym "rest" in
-                  matchex_ (nvar_ lamLookahead) (pand_ (pseqtot_ matchCons) (pseqedgen_ [pvarw_] varRest [])) (
-                    -- case [TokenX x, TokenY y, ...] & ([_] ++ rest) then
-                    --   <if shift>
-                    --   let stacks = {stacks with stackX = cons x stacks.stackX} in
-                    --   let stateTrace = cons <shiftIdx> stateStrace in
-                    --   let nextTokenResult = nextToken lexerState in
-                    --   match nextTokenResult with ResultOk {value = lexres} then
-                    --     parseLoop stacks lexres.stream stateTrace (snoc lookahead lexres.token)
-                    --   else match nextTokenResult with ResultErr {errors = errors} then
-                    --     result.err errors
-                    --   else never
-                    let stackLabel = mapLookupOrElse (lam. error "internal error (2)") h.conArg stackTypeLabel in
-                    let vShiftStack = nameSym "ss" in
-                    let vNewTypeStack = nameSym "nts" in
-                    let vNewStacks = nameSym "ns" in
-                    let vNextTokenResult = nameSym "ntr" in
-                    bindall_ [
-                      nulet_ vShiftStack (recordproj_ stackLabel (nvar_ lamStacks)),
-                      nulet_ vNewTypeStack (cons_ (nvar_ v) (nvar_ vShiftStack)),
-                      nulet_ vNewStacks (recordupdate_ (nvar_ lamStacks) stackLabel (nvar_ vNewTypeStack)),
-                      nulet_ vNextTokenResult (appf1_ (binds.v_nextToken) (nvar_ lamLexerState)),
-                      matchall_ [
-                        let pvLexres = nameSym "lr" in
-                        matchex_ (nvar_ vNextTokenResult) (npcon_ (binds.c_ResultOk) (prec_ [("value", npvar_ pvLexres)])) (
-                          let vNewLookahead = nameSym "nlh" in
-                          let vNewLexerState = nameSym "nls" in
-                          let vNewStateTrace = nameSym "nst" in
-                          bindall_ [
-                            nulet_ vNewLookahead (snoc_ (nvar_ varRest) (recordproj_ "token" (nvar_ pvLexres))),
-                            nulet_ vNewLexerState (recordproj_ "stream" (nvar_ pvLexres)),
-                            nulet_ vNewStateTrace (cons_ (int_ shift.toIdx) (nvar_ lamStateTrace)),
-                            appf4_ (nvar_ parseFunctionIdent)
-                                   (nvar_ vNewStacks)
-                                   (nvar_ vNewLexerState)
-                                   (nvar_ vNewStateTrace)
-                                   (nvar_ vNewLookahead)
-                          ]
-                        ),
-                        let vErrors = nameSym "e" in
-                        let vWarnings = nameSym "w" in
-                        matchex_ (nvar_ vNextTokenResult) (npcon_ (binds.c_ResultErr) (prec_ [("errors", npvar_ vErrors), ("warnings", npvar_ vWarnings)])) (
-                          nconapp_ (binds.c_ResultErr) (urecord_ [("errors", nvar_ vErrors), ("warnings", nvar_ vWarnings)])
-                        )
-                      ]
-                    ]
-                  )
-                ) stateShifts in
-
                 let reductionMatches = map (lam reduction: {lookahead: [TokenRepr], prodIdx: Int, prodLabel: label}.
-                  let lhCons: [{conIdent: Name, conArg: Type}] = map (lam repr. mapLookupOrElse (lam. error "malformed parse table! (2)") repr table.tokenConTypes) reduction.lookahead in
+                  let lhCons: [{conIdent: Name, conArg: Type}] = map (lam repr. mapLookupOrPANIC repr table.tokenConTypes) reduction.lookahead in
                   let rule = get table.syntaxDef.productions reduction.prodIdx in
                   let termTypes = map (lam term: Term.
                     switch term
                     case Terminal repr then
-                      let contype = mapLookupOrElse (lam. error "malformed parse table! (3)") repr table.tokenConTypes in
+                      let contype = mapLookupOrPANIC repr table.tokenConTypes in
                       contype.conArg
                     case NonTerminal name then
-                      mapLookupOrElse (lam. error "malformed parse table! (4)") name table.nonTerminalTypes
+                      mapLookupOrPANIC name table.nonTerminalTypes
                     end
                   ) rule.terms in
                   -- We don't need any value information here, so all variables can be wildcards
@@ -882,7 +917,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
                     --     let nextState = get currentState gotoLookup_<nt_idx>_<nt> in
                     --     let stateTrace = cons nextState stateTrace in
                     --     parseLoop stacks lexerState stateTrace lookahead
-                    let stackLabels = map (lam ty. mapLookupOrElse (lam. error "internal error (3)") ty stackTypeLabel) termTypes in
+                    let stackLabels = map (lam ty. mapLookupOrPANIC ty stackTypeLabel) termTypes in
                     let stackVars = map (lam lbl. (var_ (concat "var" lbl), lbl)) (distinct eqString stackLabels) in
 
                     -- The expressions that correspond to the stack
@@ -914,7 +949,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
                       recursive let work = lam ty. match ty with TyArrow t then work t.to else ty in
                       work (tyTm rule.action)
                     in
-                    let returnLabel = mapLookupOrElse (lam. error "internal error (4)") actionRetType stackTypeLabel in
+                    let returnLabel = mapLookupOrPANIC actionRetType stackTypeLabel in
 
                     let vsTokenValue = mapi (lam i. lam. nameSym (join ["tv", int2string i])) stackLabels in
                     let vNewProduce = nameSym "newProduce" in
@@ -951,7 +986,7 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
                           nulet_ vPrevStateTrace (subsequence_ (nvar_ lamStateTrace) (int_ (length stackLabels)) (length_ (nvar_ lamStateTrace))),
                           nulet_ vPrevState (head_ (nvar_ vPrevStateTrace)),
 
-                          let varLookupName = mapLookupOrElse (lam. error "malformed parse table! (5)") rule.nt gotoLookupVarNames in
+                          let varLookupName = mapLookupOrPANIC rule.nt gotoLookupVarNames in
                           nulet_ vNextState (get_ (nvar_ varLookupName) (nvar_ vPrevState)),
                           nulet_ vNewStateTrace (cons_ (nvar_ vNextState) (nvar_ vPrevStateTrace)),
 
@@ -1035,8 +1070,8 @@ lang LRParser = ContextFreeGrammar + TokenReprEOF +
     let expr = bindall_ [
       -- Set up the goto lookups and the initial action state
       bindall_ (snoc (map (lam nt: Name.
-          let expr = mapLookupOrElse (lam. error "lrk PANIC") nt gotoLookupVarExpressions in
-          let binding = mapLookupOrElse (lam. error "lrk PANIC") nt gotoLookupVarNames in
+          let expr = mapLookupOrPANIC nt gotoLookupVarExpressions in
+          let binding = mapLookupOrPANIC nt gotoLookupVarNames in
           nulet_ binding expr
         ) (mapKeys gotoLookupVarNames))
         (nulet_ varActionState table.syntaxDef.initActionState)
